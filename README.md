@@ -57,10 +57,10 @@ Une plateforme innovante qui combine **Intelligence Artificielle**, **Temps Rée
 <div align="center">
 
 ### Interface Fan App
-<img src="https://via.placeholder.com/800x450/1e293b/22c55e?text=Fan+Dashboard+Screenshot" alt="Fan Dashboard" width="800"/>
+<img src="src/assets/fan.png" alt="Fan Dashboard" width="800"/>
 
 ### Admin Console
-<img src="https://via.placeholder.com/800x450/1e293b/a855f7?text=Admin+Dashboard+Screenshot" alt="Admin Dashboard" width="800"/>
+<img src="src/assets/admin.png" alt="Admin Dashboard" width="800"/>
 
 </div>
 
