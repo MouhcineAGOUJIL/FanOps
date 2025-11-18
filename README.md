@@ -459,7 +459,7 @@ docker run -p 8080:80 can2025-frontend
 <sub>☁️ M1 - Azure</sub>
 </td>
 <td align="center">
-<img src="https://avatars.githubusercontent.com/u/65139234?v=4" width="100px;" alt="https://github.com/medlamziouaq"/>
+<img src="https://github.com/teammate4.png" width="100px;" alt=""/>
 <br />
 <sub><b>Personne 2</b></sub>
 <br />
@@ -473,9 +473,9 @@ docker run -p 8080:80 can2025-frontend
 <sub>🤖 M3 - GCP ML</sub>
 </td>
 <td align="center">
-<img src="https://github.com/teammate4.png" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/65139234?v=4" width="100px;" alt="https://github.com/medlamziouaq"/>
 <br />
-<sub><b>Personne 4</b></sub>
+<sub><b>Mohamed LAMZIOUAQ</b></sub>
 <br />
 <sub>🎯 M4 - GCP AI</sub>
 </td>
