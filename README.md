@@ -52,15 +52,32 @@ Une plateforme innovante qui combine **Intelligence Artificielle**, **Temps Rée
 
 ---
 
+## 🗂️ Repository Layout
+
+```
+FanOps/
+├── frontend/   # React + Vite app (current project)
+├── M1/         # Placeholder for Azure flow controller
+├── M2/         # Placeholder for AWS Secure-Gates
+├── M3/         # Placeholder for GCP forecast service
+├── M4/         # Placeholder for GCP sponsor AI
+└── README.md   # This file
+```
+
+> Tip: keep working inside `frontend/` for the React app. The other folders are ready for backend services when you add them.  
+> Unless stated otherwise, run all `npm` commands from the `frontend/` directory.
+
+---
+
 ## 🎬 Démo Visuelle
 
 <div align="center">
 
 ### Interface Fan App
-<img src="src/assets/fan.png" alt="Fan Dashboard" width="800"/>
+<img src="frontend/src/assets/fan.png" alt="Fan Dashboard" width="800"/>
 
 ### Admin Console
-<img src="src/assets/admin.png" alt="Admin Dashboard" width="800"/>
+<img src="frontend/src/assets/admin.png" alt="Admin Dashboard" width="800"/>
 
 </div>
 
@@ -144,7 +161,7 @@ Git
 ```bash
 # 1️⃣ Cloner le repository
 git clone https://github.com/yourusername/can2025-fanops-frontend.git
-cd can2025-fanops-frontend
+cd can2025-fanops-frontend/frontend
 
 # 2️⃣ Installer les dépendances
 npm install
@@ -167,11 +184,14 @@ VITE_WS_URL=wss://ws.can2025-fanops.com
 
 # Mode
 VITE_MOCK_MODE=true
+VITE_USE_TEST_DATA=false
 
 # Stadium
 VITE_STADIUM_ID=AGADIR
 VITE_MATCH_ID=CAN2025-MAR-G1
 ```
+
+> Passez `VITE_USE_TEST_DATA=true` pour charger automatiquement les JSON de démonstration situés dans `frontend/public/test/`.
 
 ---
 
