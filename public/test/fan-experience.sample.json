@@ -1,0 +1,30 @@
+{
+  "dashboard": {
+    "stadiumId": "AGADIR",
+    "metrics": [
+      { "label": "Fan Flow", "value": 32400, "unit": "supporters", "delta": "+2.3%" },
+      { "label": "Average Wait", "value": 8, "unit": "min", "delta": "-0.5" },
+      { "label": "Active Promotions", "value": 3, "delta": "+1" }
+    ],
+    "gates": [
+      { "gateId": "N1", "name": "North Apex", "status": "open", "queueLength": 120, "waitTime": 6 },
+      { "gateId": "N2", "name": "Atlas Entry", "status": "busy", "queueLength": 180, "waitTime": 9 },
+      { "gateId": "VIP", "name": "Royal Suite", "status": "open", "queueLength": 40, "waitTime": 4 },
+      { "gateId": "S4", "name": "Sahara Gate", "status": "closed", "queueLength": 0, "waitTime": 0 }
+    ]
+  },
+  "promotions": [
+    {
+      "title": "Yalla! Ticket Upgrade",
+      "description": "Random fans at Gate N1 receive instant upgrades to club seats.",
+      "validUntil": "2025-11-15T18:00:00Z",
+      "sponsor": "TotalEnergies"
+    },
+    {
+      "title": "Moroccan Heritage Night",
+      "description": "Fans wearing national colors get merch discounts at Atlas Plaza.",
+      "validUntil": "2025-11-16T20:00:00Z",
+      "sponsor": "Inwi"
+    }
+  ]
+}

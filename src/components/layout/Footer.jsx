@@ -1,17 +1,16 @@
 export const Footer = () => {
   return (
-    <footer 
-      className="bg-slate-800/50 backdrop-blur-sm border-t border-white/10 p-4 text-center text-white/50 text-sm"
+    <footer
       style={{
-        background: 'rgba(30, 41, 59, 0.5)',
-        borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-        padding: '16px',
+        marginTop: 'auto',
+        padding: '32px 0 48px',
         textAlign: 'center',
-        color: 'rgba(255, 255, 255, 0.5)',
-        fontSize: '14px'
+        color: 'rgba(255,255,255,0.55)',
+        fontSize: '0.9rem',
+        letterSpacing: '0.08em',
       }}
     >
-      © 2025 CAN 2025 FanOps Platform
+      <p>© 2025 CAN 2025 FanOps Platform · Built for CAF Morocco LOC</p>
     </footer>
   );
 };

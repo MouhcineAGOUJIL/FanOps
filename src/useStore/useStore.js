@@ -19,6 +19,16 @@ export const useStore = create((set) => ({
   // Promotions
   activePromo: null,
   setActivePromo: (promo) => set({ activePromo: promo }),
+  promotions: [],
+  setPromotions: (promotions) => set({ promotions }),
+
+  // Fan metrics (for dashboard hero)
+  fanMetrics: [],
+  setFanMetrics: (fanMetrics) => set({ fanMetrics }),
+
+  // Operations suite sample data
+  operationsData: null,
+  setOperationsData: (operationsData) => set({ operationsData }),
   
   // Loading states
   isLoading: false,

@@ -2,17 +2,24 @@ import { useEffect, useState } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp } from 'lucide-react';
 import { forecastService } from '../../services/forecastService';
+import { useStore } from '../../useStore/useStore';
 
 export default function ForecastView() {
-  const [forecast, setForecast] = useState([]);
+  const { operationsData } = useStore();
+  const [forecast, setForecast] = useState(operationsData?.forecast?.series ?? []);
 
   useEffect(() => {
+    if (operationsData?.forecast?.series) {
+      setForecast(operationsData.forecast.series);
+      return;
+    }
+
     const fetchForecast = async () => {
       const data = await forecastService.getAttendanceForecast('CAN2025-MAR-G1');
       setForecast(data.series);
     };
     fetchForecast();
-  }, []);
+  }, [operationsData]);
 
   return (
     <div className="space-y-6">

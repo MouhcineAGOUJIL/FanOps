@@ -1,0 +1,45 @@
+{
+  "dashboard": {
+    "metrics": [
+      { "label": "Active Gates", "value": 24, "trend": "+6%", "status": "stable" },
+      { "label": "Avg Wait", "value": 8, "unit": "min", "trend": "-2m", "status": "good" },
+      { "label": "Fan Flow", "value": 32400, "unit": "supporters/hr", "trend": "+11%", "status": "watch" },
+      { "label": "Incidents", "value": 3, "trend": "-1", "status": "alert" }
+    ]
+  },
+  "gateMonitoring": [
+    { "gateId": "N1", "name": "North Apex", "status": "open", "queueLength": 120, "waitTime": 6 },
+    { "gateId": "VIP", "name": "Royal Suite", "status": "busy", "queueLength": 45, "waitTime": 12 },
+    { "gateId": "S4", "name": "South Plaza", "status": "closed", "queueLength": 0, "waitTime": 0 },
+    { "gateId": "E2", "name": "Atlas Entry", "status": "open", "queueLength": 80, "waitTime": 5 }
+  ],
+  "ticketValidation": {
+    "recentScans": [
+      { "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI...GATE01", "gate": "N1", "valid": true, "timestamp": "2025-11-15T16:42:10Z" },
+      { "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI...VIP01", "gate": "VIP", "valid": false, "reason": "duplicate", "timestamp": "2025-11-15T16:38:02Z" },
+      { "jwt": "eyJhbGciOiJIUzI1NiIsInR5cCI...EAST", "gate": "E2", "valid": true, "timestamp": "2025-11-15T16:35:31Z" }
+    ]
+  },
+  "forecast": {
+    "matchId": "CAN2025-MAR-G1",
+    "series": [
+      { "t": "16:00", "yhat": 12000 },
+      { "t": "16:30", "yhat": 18000 },
+      { "t": "17:00", "yhat": 26000 },
+      { "t": "17:30", "yhat": 34000 },
+      { "t": "18:00", "yhat": 42000 }
+    ]
+  },
+  "sponsors": {
+    "topPartners": [
+      { "name": "TotalEnergies", "category": "Title Partner", "activation": "Fan Energy Zones" },
+      { "name": "Royal Air Maroc", "category": "Mobility", "activation": "Airlift + lounge" },
+      { "name": "Inwi", "category": "Connectivity", "activation": "5G Stadium coverage" }
+    ],
+    "inventory": {
+      "hospitality": { "packages": 12, "sold": 9 },
+      "branding": { "digital": 21, "physical": 14 },
+      "ads": { "spots": 38, "booked": 30 }
+    }
+  }
+}

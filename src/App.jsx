@@ -13,8 +13,6 @@ import AdminForecast from './pages/admin/ForecastView';
 import AdminSponsor from './pages/admin/SponsorAnalytics';
 
 function App() {
-  console.log('App component rendering');
-  
   return (
     <BrowserRouter>
       <Routes>

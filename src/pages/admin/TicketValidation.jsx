@@ -1,8 +1,11 @@
 import { useState } from 'react';
 import { Shield, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 import { securityService } from '../../services/securityService';
+import { useStore } from '../../useStore/useStore';
 
 export default function TicketValidation() {
+  const { operationsData } = useStore();
+  const recentScans = operationsData?.ticketValidation?.recentScans ?? [];
   const [ticketJWT, setTicketJWT] = useState('');
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -69,6 +72,33 @@ export default function TicketValidation() {
               </h3>
               <p className="text-white/60">Raison: {result.reason}</p>
             </div>
+          </div>
+        </div>
+      )}
+      {recentScans.length > 0 && (
+        <div className="glass rounded-2xl p-6">
+          <h2 className="text-white text-xl font-semibold mb-4 flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5 text-yellow-400" />
+            Recent Scans
+          </h2>
+          <div className="space-y-3">
+            {recentScans.map((scan) => (
+              <div key={scan.jwt} className="flex flex-col rounded-xl border border-white/10 p-4 text-white/80">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className="pill bg-white/10 border-white/20 text-white">{scan.gate}</span>
+                  <span className={`pill ${scan.valid ? 'bg-green-600/40' : 'bg-red-600/40'} border-white/10 text-white`}>
+                    {scan.valid ? 'Valid' : 'Rejected'}
+                  </span>
+                  <span className="text-xs uppercase tracking-[0.3em] text-white/50">{new Date(scan.timestamp).toLocaleTimeString()}</span>
+                </div>
+                <p className="mt-2 font-mono text-xs break-all text-white/60">{scan.jwt}</p>
+                {!scan.valid && (
+                  <p className="mt-1 text-sm text-red-300">
+                    Reason: {scan.reason || 'unknown'}
+                  </p>
+                )}
+              </div>
+            ))}
           </div>
         </div>
       )}
