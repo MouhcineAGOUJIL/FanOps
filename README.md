@@ -450,9 +450,9 @@ docker run -p 8080:80 can2025-frontend
 <sub>🎨 Frontend Lead</sub>
 </td>
 <td align="center">
-<img src="https://github.com/teammate1.png" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/150977408?v=4" width="100px;" alt="https://github.com/comehdi"/>
 <br />
-<sub><b>Personne 1</b></sub>
+<sub><b>El Mehdi OUGHEGI</b></sub>
 <br />
 <sub>☁️ M1 - Azure</sub>
 </td>
