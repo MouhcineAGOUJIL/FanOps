@@ -443,7 +443,7 @@ docker run -p 8080:80 can2025-frontend
 <table>
 <tr>
 <td align="center">
-<img src="https://github.com/yourusername.png" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/153530171?s=400&u=df36dfb21b22cd0e9a09b8f2620c891c5a78a5d4&v=4" width="100px;" alt="https://github.com/MouhcineAGOUJIL"/>
 <br />
 <sub><b>Ton Nom</b></sub>
 <br />
@@ -459,7 +459,7 @@ docker run -p 8080:80 can2025-frontend
 <sub>☁️ M1 - Azure</sub>
 </td>
 <td align="center">
-<img src="https://github.com/teammate2.png" width="100px;" alt=""/>
+<img src="https://avatars.githubusercontent.com/u/65139234?v=4" width="100px;" alt="https://github.com/medlamziouaq"/>
 <br />
 <sub><b>Personne 2</b></sub>
 <br />
