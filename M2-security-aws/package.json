@@ -1,0 +1,56 @@
+{
+  "name": "can2025-secure-gates-aws",
+  "version": "1.0.0",
+  "description": "M2 - Secure-Gates: Validation de billets JWT pour CAN 2025 (AWS Lambda)",
+  "main": "src/handlers/verifyTicket.js",
+  "scripts": {
+    "deploy": "serverless deploy",
+    "deploy:dev": "serverless deploy --stage dev",
+    "deploy:prod": "serverless deploy --stage prod",
+    "remove": "serverless remove",
+    "logs": "serverless logs -f verifyTicket --tail",
+    "invoke": "serverless invoke -f verifyTicket --data '{\"body\":\"{}\"}'",
+    "offline": "serverless offline start",
+    "test": "jest --verbose",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "generate-jwt": "node scripts/generateProperTestJWT.js",
+    "lint": "eslint src/**/*.js"
+  },
+  "keywords": [
+    "can2025",
+    "aws",
+    "lambda",
+    "serverless",
+    "jwt",
+    "security"
+  ],
+  "author": "Ton Nom",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.1500.0",
+    "jsonwebtoken": "^9.0.2",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.130",
+    "axios": "^1.6.2",
+    "dotenv": "^16.6.1",
+    "eslint": "^8.55.0",
+    "jest": "^29.7.0",
+    "serverless": "^3.40.0",
+    "serverless-dynamodb-local": "^0.2.40",
+    "serverless-offline": "^13.9.0"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coverageDirectory": "coverage",
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!src/**/*.test.js"
+    ],
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  }
+}

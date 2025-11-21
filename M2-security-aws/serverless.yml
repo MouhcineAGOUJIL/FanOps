@@ -1,0 +1,100 @@
+# serverless.yml
+service: can2025-secure-gates
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: eu-west-1
+  stage: ${opt:stage, 'dev'}
+  logRetentionInDays: 30
+  tracing:
+    lambda: true
+    apiGateway: true
+
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource:
+        - !GetAtt UsedJtiTable.Arn
+        - !GetAtt AuditTable.Arn
+    - Effect: Allow
+      Action:
+        - sqs:SendMessage
+      Resource: !GetAtt SecurityQueue.Arn
+  
+  environment:
+    JWT_SECRET: ${env:JWT_SECRET, 'can2025-secret-key-local'}
+    USED_JTI_TABLE: ${self:service}-${self:provider.stage}-used-jti
+    AUDIT_TABLE: ${self:service}-${self:provider.stage}-audit
+    SECURITY_QUEUE_URL: !Ref SecurityQueue
+
+functions:
+  verifyTicket:
+    handler: src/handlers/verifyTicket.handler
+    description: Vérification et validation des billets JWT
+    timeout: 10
+    memorySize: 256
+    events:
+      - http:
+          path: /security/verifyTicket
+          method: post
+          cors: true
+  
+  reportGate:
+    handler: src/handlers/reportGate.handler
+    description: Rapport de statut des portiques
+    timeout: 10
+    memorySize: 128
+    events:
+      - http:
+          path: /security/reportGate
+          method: post
+          cors: true
+
+plugins:
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    httpPort: 3000
+    lambdaPort: 3002
+    noPrependStageInUrl: false
+    printOutput: true
+
+resources:
+  Resources:
+    UsedJtiTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USED_JTI_TABLE}
+        AttributeDefinitions:
+          - AttributeName: jti
+            AttributeType: S
+        KeySchema:
+          - AttributeName: jti
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+
+    AuditTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.AUDIT_TABLE}
+        AttributeDefinitions:
+          - AttributeName: auditId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: auditId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    SecurityQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${self:provider.stage}-security-alerts
