@@ -33,16 +33,23 @@ provider:
         - !GetAtt UsersTable.Arn
     - Effect: Allow
       Action:
+        - kms:Decrypt
+        - ssm:GetParameter
+      Resource: '*'
+    - Effect: Allow
+      Action:
         - sqs:SendMessage
       Resource: !GetAtt SecurityQueue.Arn
   
   environment:
-    JWT_SECRET: ${env:JWT_SECRET, 'can2025-secret-key-local'}
-    USED_JTI_TABLE: ${self:service}-${self:provider.stage}-used-jti
-    AUDIT_TABLE: ${self:service}-${self:provider.stage}-audit
-    SOLD_TICKETS_TABLE: ${self:service}-${self:provider.stage}-sold-tickets
-    USERS_TABLE: ${self:service}-${self:provider.stage}-users
-    SECURITY_QUEUE_URL: !Ref SecurityQueue
+    IS_OFFLINE: ${env:IS_OFFLINE, 'false'}
+    USED_JTI_TABLE: ${self:service}-used-jti-${opt:stage, self:provider.stage}
+    AUDIT_TABLE: ${self:service}-audit-${opt:stage, self:provider.stage}
+    SECURITY_QUEUE_URL:
+      Ref: SecurityQueue
+    SOLD_TICKETS_TABLE: ${self:service}-sold-tickets-${opt:stage, self:provider.stage}
+    USERS_TABLE: ${self:service}-users-${opt:stage, self:provider.stage}
+    JWT_SECRET: ${ssm:/can2025/${opt:stage, self:provider.stage}/jwt-secret~true, 'can2025-secret-key-local'}
 
 functions:
   verifyTicket:
@@ -90,6 +97,24 @@ functions:
           type: dynamodb
           arn:
             Fn::GetAtt: [AuditTable, StreamArn]
+
+  rotateKey:
+    handler: src/handlers/rotateKey.handler
+    timeout: 60
+    environment:
+      SSM_PARAMETER_PATH: /can2025/${opt:stage, self:provider.stage}/jwt-secret
+    # In production, triggered by EventBridge (monthly cron)
+    # events:
+    #   - schedule: cron(0 0 1 * ? *)  # 1st of every month at midnight
+
+  getSecurityMetrics:
+    handler: src/handlers/getSecurityMetrics.handler
+    events:
+      - http:
+          path: security/metrics
+          method: get
+          cors: true
+
 
 plugins:
   - serverless-offline

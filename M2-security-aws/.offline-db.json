@@ -81,6 +81,16 @@
       "gatekeeperId": "GK-001",
       "result": "invalid_jwt",
       "error": "invalid signature"
+    },
+    {
+      "auditId": "a7a7d84c-6f80-4e7d-9ec3-3a69765d592a",
+      "timestamp": "2025-11-22T13:19:56.180Z",
+      "ticketJWT": "we5webn5w...",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "invalid_jwt",
+      "error": "jwt malformed"
     }
   ],
   "soldTickets": {
