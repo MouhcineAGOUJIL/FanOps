@@ -11,6 +11,7 @@ import AdminGateMonitoring from './pages/admin/GateMonitoring';
 import AdminTicketValidation from './pages/admin/TicketValidation';
 import AdminForecast from './pages/admin/ForecastView';
 import AdminSponsor from './pages/admin/SponsorAnalytics';
+import SecurityDashboard from './pages/admin/SecurityDashboard';
 
 import ScanPage from './pages/gatekeeper/ScanPage';
 import LoginPage from './pages/auth/LoginPage';
@@ -43,9 +44,9 @@ function App() {
         >
           <Route index element={<AdminDashboard />} />
           <Route path="gates" element={<AdminGateMonitoring />} />
-          <Route path="tickets" element={<AdminTicketValidation />} />
           <Route path="forecast" element={<AdminForecast />} />
           <Route path="sponsors" element={<AdminSponsor />} />
+          <Route path="security" element={<SecurityDashboard />} />
         </Route>
 
         {/* Gatekeeper Routes */}

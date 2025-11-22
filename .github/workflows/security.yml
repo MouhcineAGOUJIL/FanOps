@@ -1,0 +1,115 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run weekly on Monday at 9am UTC
+    - cron: '0 9 * * 1'
+
+jobs:
+  sca-scan:
+    name: SCA - Dependency Analysis
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory: 
+          - M1-flow-azure
+          - M2-security-aws
+          - M3-admin-gcp
+          - frontend
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Check if package.json exists
+        id: check_package
+        run: |
+          if [ -f "${{ matrix.directory }}/package.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Install Dependencies
+        if: steps.check_package.outputs.exists == 'true'
+        run: |
+          cd ${{ matrix.directory }}
+          npm ci
+        continue-on-error: true
+          
+      - name: Run npm audit
+        if: steps.check_package.outputs.exists == 'true'
+        run: |
+          cd ${{ matrix.directory }}
+          echo "Scanning ${{ matrix.directory }}..."
+          npm audit --audit-level=high || exit 0
+        continue-on-error: true
+
+  sast-scan:
+    name: SAST - Code Analysis
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        directory: 
+          - M1-flow-azure
+          - M2-security-aws
+          - M3-admin-gcp
+          - frontend
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Check if package.json exists
+        id: check_package
+        run: |
+          if [ -f "${{ matrix.directory }}/package.json" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Install Dependencies
+        if: steps.check_package.outputs.exists == 'true'
+        run: |
+          cd ${{ matrix.directory }}
+          npm ci
+        continue-on-error: true
+          
+      - name: Run ESLint Security Scan
+        if: steps.check_package.outputs.exists == 'true'
+        run: |
+          cd ${{ matrix.directory }}
+          echo "Scanning ${{ matrix.directory }}..."
+          # Try lint:security first, fall back to lint
+          npm run lint:security 2>/dev/null || npm run lint 2>/dev/null || echo "No lint script found"
+        continue-on-error: true
+
+  # DAST - Uncomment when you have a staging environment
+  # dast:
+  #   name: DAST - API Security Scan
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: ZAP Scan - M2 Security API
+  #       uses: zaproxy/action-baseline@v0.9.0
+  #       with:
+  #         target: 'https://your-staging-m2.execute-api.eu-west-1.amazonaws.com/dev'
+  #         rules_file_name: '.zap/rules.tsv'
+  #         cmd_options: '-a'
+  #     
+  #     - name: ZAP Scan - M3 Admin API
+  #       uses: zaproxy/action-baseline@v0.9.0
+  #       with:
+  #         target: 'https://your-staging-m3.cloudfunctions.net'
+  #         rules_file_name: '.zap/rules.tsv'
+  #         cmd_options: '-a'

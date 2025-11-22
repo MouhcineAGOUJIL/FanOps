@@ -1,7 +1,6 @@
-
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { authService } from '../../services/authService';
-import { LogOut } from 'lucide-react';
+import { LogOut, Shield, Home, MapPin, Ticket, TrendingUp, DollarSign, Scan } from 'lucide-react';
 
 export const Sidebar = ({ userType }) => {
   const location = useLocation();
@@ -18,11 +17,11 @@ export const Sidebar = ({ userType }) => {
   ];
 
   const adminRoutes = [
-    { path: '/admin', label: 'Dashboard' },
-    { path: '/admin/gates', label: 'Gate Monitoring' },
-    { path: '/admin/tickets', label: 'Ticket Validation' },
-    { path: '/admin/forecast', label: 'Forecast' },
-    { path: '/admin/sponsors', label: 'Sponsors' },
+    { path: '/admin', label: 'Dashboard', icon: Home },
+    { path: '/admin/gates', label: 'Gate Monitoring', icon: MapPin },
+    { path: '/admin/forecast', label: 'Forecast', icon: TrendingUp },
+    { path: '/admin/sponsors', label: 'Sponsors', icon: DollarSign },
+    { path: '/admin/security', label: 'Security', icon: Shield }
   ];
 
   const gatekeeperRoutes = [
