@@ -14,3 +14,7 @@ python-json-logger
 requests
 pydantic
 pydantic-settings
+onnxmltools
+simpy
+flask
+locust
