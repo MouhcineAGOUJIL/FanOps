@@ -1,7 +1,16 @@
-import { Link, useLocation } from 'react-router-dom';
+
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { authService } from '../../services/authService';
+import { LogOut } from 'lucide-react';
 
 export const Sidebar = ({ userType }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await authService.logout();
+    navigate('/login');
+  };
 
   const fanRoutes = [
     { path: '/fan', label: 'Dashboard' },
@@ -16,28 +25,37 @@ export const Sidebar = ({ userType }) => {
     { path: '/admin/sponsors', label: 'Sponsors' },
   ];
 
-  const routes = userType === 'admin' ? adminRoutes : fanRoutes;
+  const gatekeeperRoutes = [
+    { path: '/gatekeeper/scan', label: 'Scanner' },
+  ];
+
+  const routes = userType === 'admin' ? adminRoutes : (userType === 'gatekeeper' ? gatekeeperRoutes : fanRoutes);
 
   return (
     <aside
       style={{
         width: '260px',
-        background: 'linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.03))',
-        borderRadius: '24px',
-        border: '1px solid rgba(255,255,255,0.08)',
+        background: 'linear-gradient(180deg, #8B0000 0%, #4a0404 100%)',
+        borderRight: '1px solid rgba(255,255,255,0.1)',
         padding: '24px',
-        boxShadow: '0 25px 60px rgba(0,0,0,0.4)',
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        position: 'sticky',
+        top: 0,
+        boxShadow: '4px 0 24px rgba(0,0,0,0.4)'
       }}
     >
-      <div style={{ marginBottom: '18px' }}>
+      <div style={{ marginBottom: '48px' }}>
         <p style={{ textTransform: 'uppercase', fontSize: '0.75rem', letterSpacing: '0.4em', color: 'rgba(255,255,255,0.45)' }}>
           Access
         </p>
         <h3 style={{ fontSize: '1.35rem', fontWeight: 700, margin: '6px 0 0' }}>
-          {userType === 'admin' ? 'Operations Suite' : 'Fan Experience'}
+          {userType === 'admin' ? 'Operations Suite' : (userType === 'gatekeeper' ? 'Gate Access' : 'Fan Experience')}
         </h3>
       </div>
-      <nav style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+
+      <nav style={{ display: 'flex', flexDirection: 'column', gap: '8px', flex: 1 }}>
         {routes.map((route) => {
           const isActive = location.pathname === route.path;
           return (
@@ -45,20 +63,15 @@ export const Sidebar = ({ userType }) => {
               key={route.path}
               to={route.path}
               style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                padding: '14px 18px',
-                borderRadius: '16px',
+                display: 'block',
+                padding: '12px 16px',
+                borderRadius: '8px',
                 textDecoration: 'none',
-                fontWeight: 600,
-                color: isActive ? '#fff' : 'rgba(255,255,255,0.75)',
-                background: isActive
-                  ? 'linear-gradient(120deg, rgba(23, 166, 87, 0.95), rgba(16, 122, 65, 0.9))'
-                  : 'rgba(255,255,255,0.04)',
-                border: isActive ? 'none' : '1px solid rgba(255,255,255,0.06)',
-                boxShadow: isActive ? '0 18px 30px rgba(15, 128, 66, 0.45)' : 'none',
+                color: isActive ? '#fff' : 'rgba(255,255,255,0.7)',
+                backgroundColor: isActive ? 'rgba(255,255,255,0.2)' : 'transparent',
+                fontWeight: isActive ? 700 : 500,
                 transition: 'all 0.2s ease',
+                border: isActive ? '1px solid rgba(255,255,255,0.2)' : '1px solid transparent'
               }}
             >
               <span>{route.label}</span>
@@ -67,6 +80,14 @@ export const Sidebar = ({ userType }) => {
           );
         })}
       </nav>
+
+      <button
+        onClick={handleLogout}
+        className="mt-auto flex items-center gap-2 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors w-full text-left"
+      >
+        <LogOut size={20} />
+        <span>Sign Out</span>
+      </button>
     </aside>
   );
 };

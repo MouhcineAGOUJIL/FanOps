@@ -12,10 +12,19 @@ import AdminTicketValidation from './pages/admin/TicketValidation';
 import AdminForecast from './pages/admin/ForecastView';
 import AdminSponsor from './pages/admin/SponsorAnalytics';
 
+import ScanPage from './pages/gatekeeper/ScanPage';
+import LoginPage from './pages/auth/LoginPage';
+
+import HomePage from './pages/public/HomePage';
+import { ProtectedRoute } from './components/auth/ProtectedRoute';
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+
         {/* Fan Routes */}
         <Route path="/fan" element={<MainLayout userType="fan" />}>
           <Route index element={<FanDashboard />} />
@@ -24,7 +33,14 @@ function App() {
         </Route>
 
         {/* Admin Routes */}
-        <Route path="/admin" element={<MainLayout userType="admin" />}>
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute allowedRoles={['admin']}>
+              <MainLayout userType="admin" />
+            </ProtectedRoute>
+          }
+        >
           <Route index element={<AdminDashboard />} />
           <Route path="gates" element={<AdminGateMonitoring />} />
           <Route path="tickets" element={<AdminTicketValidation />} />
@@ -32,8 +48,21 @@ function App() {
           <Route path="sponsors" element={<AdminSponsor />} />
         </Route>
 
+        {/* Gatekeeper Routes */}
+        <Route
+          path="/gatekeeper"
+          element={
+            <ProtectedRoute allowedRoles={['gatekeeper']}>
+              <MainLayout userType="gatekeeper" />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<ScanPage />} />
+          <Route path="scan" element={<ScanPage />} />
+        </Route>
+
         {/* Redirect */}
-        <Route path="/" element={<Navigate to="/fan" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
   );
