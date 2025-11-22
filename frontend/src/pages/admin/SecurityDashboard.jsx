@@ -279,8 +279,8 @@ export default function SecurityDashboard() {
                             title="DAST"
                             description="Dynamic Application Security Testing"
                             tool="OWASP ZAP"
-                            checks={["API vulnerability scan", "Requires staging URL"]}
-                            status="manual"
+                            checks={["API vulnerability scan", "Weekly automated scans"]}
+                            status="automated"
                         />
                     </div>
 

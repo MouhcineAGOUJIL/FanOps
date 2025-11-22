@@ -1,0 +1,72 @@
+# ZAP Scanning Rules Configuration
+# This file defines which security checks to enable/disable for OWASP ZAP scans
+# Format: <rule-id> <action> [<instance-count>]
+# Actions: WARN, FAIL, IGNORE, INFO
+
+# Authentication & Session Management
+10010	WARN	# Cookie No HttpOnly Flag
+10011	WARN	# Cookie Without Secure Flag  
+10015	WARN	# Re-examine Cache-control Directives
+10017	WARN	# Cross-Domain JavaScript Source File Inclusion
+10021	WARN	# X-Content-Type-Options Header Missing
+10023	WARN	# Information Disclosure - Debug Error Messages
+10025	WARN	# Information Disclosure - Sensitive Information in URL
+10026	WARN	# HTTP Parameter Override
+10027	WARN	# Information Disclosure - Suspicious Comments
+10032	WARN	# Viewstate
+10033	WARN	# Directory Browsing
+10034	WARN	# Heartbleed OpenSSL Vulnerability
+10035	WARN	# Strict-Transport-Security Header Not Set
+10036	WARN	# HTTP Server Response Header
+10037	WARN	# Server Leaks Information via "X-Powered-By" HTTP Response Header Field(s)
+10040	FAIL	# Secure Pages Include Mixed Content
+10041	WARN	# HTTP to HTTPS Insecure Transition in Form Post
+10042	WARN	# HTTPS to HTTP Insecure Transition in Form Post  
+10043	WARN	# User Controllable JavaScript Event (XSS)
+10044	WARN	# Big Redirect Detected (Potential Sensitive Information Leak)
+10045	WARN	# Source Code Disclosure - /WEB-INF folder
+10047	WARN	# HTTPS Content Available via HTTP
+10048	WARN	# ShellShock
+10049	WARN	# Content Security Policy (CSP) Header Not Set
+10050	WARN	# Retrieved from Cache
+10051	WARN	# Relative Path Confusion
+10052	WARN	# X-ChromeLogger-Data (XCOLD) Header Information Leak
+10053	WARN	# Apache Range Header Denial of Service (CVE-2011-3192)
+10054	WARN	# Cookie Without SameSite Attribute
+10055	WARN	# CSP: Wildcard Directive
+10056	WARN	# X-Debug-Token Information Leak
+10057	WARN	# Username Hash Found
+10061	WARN	# X-AspNet-Version Response Header
+10062	WARN	# PII Disclosure
+10063	WARN	# Feature Policy Header Not Set
+10095	WARN	# Backup File Disclosure
+10096	WARN	# Timestamp Disclosure
+10097	WARN	# Hash Disclosure
+10098	WARN	# Cross-Domain Misconfiguration
+10099	WARN	# Source Code Disclosure
+
+# Injection Attacks
+40003	FAIL	# CRLF Injection
+40008	FAIL	# Parameter Tampering
+40009	FAIL	# Server Side Include
+40012	FAIL	# Cross Site Scripting (Reflected)
+40014	FAIL	# Cross Site Scripting (Persistent)
+40016	FAIL	# Cross Site Scripting (Persistent) - Prime
+40017	FAIL	# Cross Site Scripting (Persistent) - Spider
+40018	FAIL	# SQL Injection
+40019	FAIL	# SQL Injection - MySQL
+40020	FAIL	# SQL Injection - Hypersonic SQL
+40021	FAIL	# SQL Injection - Oracle
+40022	FAIL	# SQL Injection - PostgreSQL
+40023	FAIL	# Possible Username Enumeration
+40024	FAIL	# SQL Injection - SQLite
+40025	FAIL	# Proxy Disclosure
+40026	FAIL	# Cross Site Scripting (DOM Based)
+40027	FAIL	# SQL Injection - MsSQL
+40028	FAIL	# Buffer Overflow
+40029	FAIL	# Code Injection
+40031	FAIL	# NoSQL Injection - MongoDB
+
+# Ignore common false positives for development
+# 10015	IGNORE	# Cache-control (enable in production)
+# 10038	IGNORE	# Content Security Policy (CSP) Header Not Set (configure properly first)

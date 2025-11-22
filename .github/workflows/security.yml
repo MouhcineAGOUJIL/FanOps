@@ -95,21 +95,27 @@ jobs:
           npm run lint:security 2>/dev/null || npm run lint 2>/dev/null || echo "No lint script found"
         continue-on-error: true
 
-  # DAST - Uncomment when you have a staging environment
-  # dast:
-  #   name: DAST - API Security Scan
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - name: ZAP Scan - M2 Security API
-  #       uses: zaproxy/action-baseline@v0.9.0
-  #       with:
-  #         target: 'https://your-staging-m2.execute-api.eu-west-1.amazonaws.com/dev'
-  #         rules_file_name: '.zap/rules.tsv'
-  #         cmd_options: '-a'
-  #     
-  #     - name: ZAP Scan - M3 Admin API
-  #       uses: zaproxy/action-baseline@v0.9.0
-  #       with:
-  #         target: 'https://your-staging-m3.cloudfunctions.net'
-  #         rules_file_name: '.zap/rules.tsv'
-  #         cmd_options: '-a'
+  dast-scan:
+    name: DAST - Dynamic API Security Scan
+    runs-on: ubuntu-latest
+    # Run only on manual trigger or schedule (not on every push)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: ZAP Baseline Scan - Frontend
+        uses: zaproxy/action-baseline@v0.10.0
+        with:
+          target: ${{ vars.FRONTEND_STAGING_URL || 'http://localhost:5173' }}
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a -j'
+        continue-on-error: true
+      
+      - name: ZAP API Scan - M2 Security Service
+        uses: zaproxy/action-api-scan@v0.6.0
+        with:
+          target: ${{ vars.M2_STAGING_URL || 'https://trajgu9017.execute-api.eu-west-1.amazonaws.com/dev' }}
+          format: openapi
+          api_url: ${{ vars.M2_STAGING_URL || 'https://trajgu9017.execute-api.eu-west-1.amazonaws.com/dev' }}/swagger.json
+          cmd_options: '-a -j'
+        continue-on-error: true
