@@ -40,6 +40,16 @@ export default function LoginPage() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-red-950 via-red-900 to-black flex items-center justify-center p-4 relative overflow-hidden">
+            {/* Moroccan Tile Pattern */}
+            <div
+                className="absolute inset-0"
+                style={{
+                    backgroundImage: `url('/moroccan_zelij_red_1763840057262.png')`,
+                    backgroundSize: '400px 400px',
+                    backgroundRepeat: 'repeat',
+                    opacity: 0.15
+                }}
+            />
             {/* Background Effects */}
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-red-900/20 via-black to-black" />
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-red-600 to-red-900" />
