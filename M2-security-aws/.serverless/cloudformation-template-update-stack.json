@@ -213,7 +213,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/can2025-secure-gates/dev/1763754484802-2025-11-21T19:48:04.802Z/can2025-secure-gates.zip"
+          "S3Key": "serverless/can2025-secure-gates/dev/1763768393884-2025-11-21T23:39:53.884Z/can2025-secure-gates.zip"
         },
         "Handler": "src/handlers/verifyTicket.handler",
         "Runtime": "nodejs18.x",
@@ -252,7 +252,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/can2025-secure-gates/dev/1763754484802-2025-11-21T19:48:04.802Z/can2025-secure-gates.zip"
+          "S3Key": "serverless/can2025-secure-gates/dev/1763768393884-2025-11-21T23:39:53.884Z/can2025-secure-gates.zip"
         },
         "Handler": "src/handlers/reportGate.handler",
         "Runtime": "nodejs18.x",
@@ -284,25 +284,25 @@
         "ReportGateLogGroup"
       ]
     },
-    "VerifyTicketLambdaVersionbPyEoIthDrOj5zfg8NLXnZynP5afqhPf5XZ8KExLhw": {
+    "VerifyTicketLambdaVersiona3mEI2aKEvgCxT8zmWtQRcwSF00HQhlgX2nwit5v4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "VerifyTicketLambdaFunction"
         },
-        "CodeSha256": "MZ3OWTAgTxATZs0WaooIdoB2RqvOJjBapV29xe89aJg=",
+        "CodeSha256": "avcMPHOrfst/3NBSWf/BoQKWaL3CWQl3uYCb/TE57V8=",
         "Description": "Vérification et validation des billets JWT"
       }
     },
-    "ReportGateLambdaVersionX5xAYxIR5ZpihzQvs2ReFigBH1XsCyiWWF7oDwbs": {
+    "ReportGateLambdaVersionCrB08z9eiitlFyR3GV5ZBmkBY93rAasVSdjR3MMUL8": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ReportGateLambdaFunction"
         },
-        "CodeSha256": "MZ3OWTAgTxATZs0WaooIdoB2RqvOJjBapV29xe89aJg=",
+        "CodeSha256": "avcMPHOrfst/3NBSWf/BoQKWaL3CWQl3uYCb/TE57V8=",
         "Description": "Rapport de statut des portiques"
       }
     },
@@ -539,7 +539,7 @@
         "ReportGateLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1763754477512": {
+    "ApiGatewayDeployment1763768386709": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -675,6 +675,19 @@
       "Properties": {
         "QueueName": "can2025-secure-gates-dev-security-alerts"
       }
+    },
+    "SecurityTestInstance": {
+      "Type": "AWS::EC2::Instance",
+      "Properties": {
+        "InstanceType": "t3.micro",
+        "ImageId": "ami-0694d931cee176e7d",
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "can2025-secure-gates-dev-test-instance"
+          }
+        ]
+      }
     }
   },
   "Outputs": {
@@ -689,7 +702,7 @@
     "VerifyTicketLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "VerifyTicketLambdaVersionbPyEoIthDrOj5zfg8NLXnZynP5afqhPf5XZ8KExLhw"
+        "Ref": "VerifyTicketLambdaVersiona3mEI2aKEvgCxT8zmWtQRcwSF00HQhlgX2nwit5v4"
       },
       "Export": {
         "Name": "sls-can2025-secure-gates-dev-VerifyTicketLambdaFunctionQualifiedArn"
@@ -698,7 +711,7 @@
     "ReportGateLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReportGateLambdaVersionX5xAYxIR5ZpihzQvs2ReFigBH1XsCyiWWF7oDwbs"
+        "Ref": "ReportGateLambdaVersionCrB08z9eiitlFyR3GV5ZBmkBY93rAasVSdjR3MMUL8"
       },
       "Export": {
         "Name": "sls-can2025-secure-gates-dev-ReportGateLambdaFunctionQualifiedArn"

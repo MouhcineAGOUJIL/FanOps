@@ -9,24 +9,44 @@ const { v4: uuidv4 } = require('uuid');
 
 // Configure AWS SDK for offline development
 const isOffline = process.env.IS_OFFLINE || process.env.AWS_SAM_LOCAL;
-const JWT_SECRET = 'can2025-super-secret-key-for-local-development'; // Hardcoded
+const JWT_SECRET = process.env.JWT_SECRET || 'can2025-super-secret-key-for-local-development';
 // Mock storage for offline mode
 const mockStorage = {
   usedJTI: new Map(),
-  audit: []
+  audit: [],
+  soldTickets: new Map()
 };
 
 let dynamodb, sqs;
 
+const fs = require('fs');
+const path = require('path');
+const DB_FILE = path.join(__dirname, '../../.offline-db.json');
+
 if (isOffline) {
-  console.log('🔧 Running in OFFLINE mode - using mock services');
-  
-  // Mock DynamoDB
+  console.log('🔧 Running in OFFLINE mode - using File-based Mock DB');
+  console.log('📂 DB File:', DB_FILE);
+
+  // Helper to read/write DB
+  const getDB = () => {
+    try {
+      if (!fs.existsSync(DB_FILE)) return { usedJTI: {}, audit: [], soldTickets: {} };
+      return JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+    } catch (e) { return { usedJTI: {}, audit: [], soldTickets: {} }; }
+  };
+
+  const saveDB = (db) => fs.writeFileSync(DB_FILE, JSON.stringify(db, null, 2));
+
+  // Mock DynamoDB with File Persistence
   dynamodb = {
     get: (params) => ({
       promise: async () => {
+        const db = getDB();
         if (params.TableName.includes('used-jti')) {
-          const item = mockStorage.usedJTI.get(params.Key.jti);
+          const item = db.usedJTI[params.Key.jti];
+          return item ? { Item: item } : {};
+        } else if (params.TableName.includes('sold-tickets')) {
+          const item = db.soldTickets[params.Key.ticketId];
           return item ? { Item: item } : {};
         }
         return {};
@@ -34,11 +54,15 @@ if (isOffline) {
     }),
     put: (params) => ({
       promise: async () => {
+        const db = getDB();
         if (params.TableName.includes('used-jti')) {
-          mockStorage.usedJTI.set(params.Item.jti, params.Item);
+          db.usedJTI[params.Item.jti] = params.Item;
         } else if (params.TableName.includes('audit')) {
-          mockStorage.audit.push(params.Item);
+          db.audit.push(params.Item);
+        } else if (params.TableName.includes('sold-tickets')) {
+          db.soldTickets[params.Item.ticketId] = params.Item;
         }
+        saveDB(db);
         console.log(`📝 Mock DB: Saved to ${params.TableName}`);
         return {};
       }
@@ -62,18 +86,20 @@ if (isOffline) {
 
 const USED_JTI_TABLE = process.env.USED_JTI_TABLE || 'can2025-used-jti';
 const AUDIT_TABLE = process.env.AUDIT_TABLE || 'can2025-ticket-audit';
+const SOLD_TICKETS_TABLE = process.env.SOLD_TICKETS_TABLE || 'can2025-sold-tickets';
 const SECURITY_QUEUE_URL = process.env.SECURITY_QUEUE_URL;
 
 /**
  * Lambda Handler - Vérification de billet
  */
+exports.mockStorage = mockStorage;
 exports.handler = async (event) => {
   console.log('📨 Event received');
 
   try {
     // Parse le body
     const body = JSON.parse(event.body);
-    const { jwt: ticketJWT, gateId, deviceId } = body;
+    const { jwt: ticketJWT, gateId, deviceId, gatekeeperId } = body;
 
     // Validation des paramètres
     if (!ticketJWT || !gateId || !deviceId) {
@@ -95,6 +121,7 @@ exports.handler = async (event) => {
         ticketJWT: ticketJWT.substring(0, 50) + '...',
         gateId,
         deviceId,
+        gatekeeperId,
         result: 'invalid_jwt',
         error: error.message
       });
@@ -126,6 +153,7 @@ exports.handler = async (event) => {
         ticketId,
         gateId,
         deviceId,
+        gatekeeperId,
         result: 'expired',
         exp,
         now
@@ -138,7 +166,27 @@ exports.handler = async (event) => {
       });
     }
 
-    // 4. ANTI-REJEU : Vérifier si le JTI a déjà été utilisé
+    // 4. Vérifier si le billet a bien été VENDU (Base de référence)
+    const ticketStatus = await checkSoldTicket(ticketId);
+    if (!ticketStatus.valid) {
+      console.log('🚫 Unsold/Invalid ticket detected:', ticketId);
+      await logAudit({
+        ticketId,
+        gateId,
+        deviceId,
+        gatekeeperId,
+        result: 'invalid_ticket',
+        message: ticketStatus.message
+      });
+
+      return createResponse(200, {
+        ok: false,
+        reason: 'invalid_ticket',
+        message: ticketStatus.message
+      });
+    }
+
+    // 5. ANTI-REJEU : Vérifier si le JTI a déjà été utilisé
     const jtiExists = await checkJTIExists(jti);
     if (jtiExists) {
       console.log('🚫 Replay attack detected for JTI:', jti);
@@ -147,6 +195,7 @@ exports.handler = async (event) => {
         ticketId,
         gateId,
         deviceId,
+        gatekeeperId,
         result: 'replay_attack',
         message: 'Tentative de rejeu détectée'
       });
@@ -178,6 +227,7 @@ exports.handler = async (event) => {
       seatNumber: seatNumber || 'TEST-SEAT',
       gateId,
       deviceId,
+      gatekeeperId,
       result: 'valid',
       timestamp: new Date().toISOString()
     });
@@ -203,6 +253,40 @@ exports.handler = async (event) => {
       message: 'Erreur interne du serveur: ' + error.message
     });
   }
+
+  /**
+   * Vérifier si le billet existe dans la base des ventes
+   */
+  async function checkSoldTicket(ticketId) {
+    try {
+      const params = {
+        TableName: SOLD_TICKETS_TABLE,
+        Key: { ticketId }
+      };
+
+      const result = await dynamodb.get(params).promise();
+      const ticket = result.Item;
+
+      if (!ticket) {
+        return { valid: false, message: 'Billet inconnu (non vendu)' };
+      }
+
+      if (ticket.status !== 'active') {
+        return { valid: false, message: `Billet invalide (Statut: ${ticket.status})` };
+      }
+
+      return { valid: true };
+    } catch (error) {
+      console.error('Error checking sold ticket:', error.message);
+
+      if (isOffline) {
+        console.log('OFFLINE: Assuming ticket is sold and active');
+        return { valid: true };
+      }
+      // En cas d'erreur DB, on bloque par sécurité (fail-closed)
+      return { valid: false, message: 'Erreur de vérification des ventes' };
+    }
+  }
 };
 
 /**
@@ -219,7 +303,7 @@ async function checkJTIExists(jti) {
     return !!result.Item;
   } catch (error) {
     console.error('Error checking JTI:', error.message);
-    
+
     // In offline mode with mocks, this shouldn't fail
     if (isOffline) {
       console.log('OFFLINE: Assuming JTI does not exist');
@@ -249,7 +333,7 @@ async function markJTIAsUsed(jti, ticketId, gateId) {
     console.log('📌 JTI marked as used:', jti);
   } catch (error) {
     console.error('Error marking JTI:', error.message);
-    
+
     if (isOffline) {
       console.log('OFFLINE: JTI marking simulated');
     }
@@ -274,7 +358,7 @@ async function logAudit(data) {
     console.log('📊 Audit logged:', data.result);
   } catch (error) {
     console.error('Error logging audit:', error.message);
-    
+
     if (isOffline) {
       console.log('OFFLINE: Audit event simulated:', data.result);
     }

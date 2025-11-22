@@ -11,7 +11,15 @@ provider:
   logRetentionInDays: 30
   tracing:
     lambda: true
-    apiGateway: true
+    apiGateway:
+      usagePlan:
+        quota:
+          limit: 5000
+          offset: 2
+          period: MONTH
+        throttle:
+          burstLimit: 200
+          rateLimit: 100
 
   iamRoleStatements:
     - Effect: Allow
@@ -21,6 +29,8 @@ provider:
       Resource:
         - !GetAtt UsedJtiTable.Arn
         - !GetAtt AuditTable.Arn
+        - !GetAtt SoldTicketsTable.Arn
+        - !GetAtt UsersTable.Arn
     - Effect: Allow
       Action:
         - sqs:SendMessage
@@ -30,6 +40,8 @@ provider:
     JWT_SECRET: ${env:JWT_SECRET, 'can2025-secret-key-local'}
     USED_JTI_TABLE: ${self:service}-${self:provider.stage}-used-jti
     AUDIT_TABLE: ${self:service}-${self:provider.stage}-audit
+    SOLD_TICKETS_TABLE: ${self:service}-${self:provider.stage}-sold-tickets
+    USERS_TABLE: ${self:service}-${self:provider.stage}-users
     SECURITY_QUEUE_URL: !Ref SecurityQueue
 
 functions:
@@ -52,6 +64,22 @@ functions:
     events:
       - http:
           path: /security/reportGate
+          method: post
+          cors: true
+
+  login:
+    handler: src/handlers/auth.login
+    events:
+      - http:
+          path: auth/login
+          method: post
+          cors: true
+
+  logout:
+    handler: src/handlers/auth.logout
+    events:
+      - http:
+          path: auth/logout
           method: post
           cors: true
 
@@ -98,3 +126,12 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:service}-${self:provider.stage}-security-alerts
+
+    SecurityTestInstance:
+      Type: AWS::EC2::Instance
+      Properties:
+        InstanceType: t3.micro
+        ImageId: ami-0694d931cee176e7d # Ubuntu 22.04 LTS (eu-west-1)
+        Tags:
+          - Key: Name
+            Value: ${self:service}-${self:provider.stage}-test-instance
