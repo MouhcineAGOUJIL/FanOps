@@ -83,6 +83,14 @@ functions:
           method: post
           cors: true
 
+  logAnalyzer:
+    handler: src/handlers/logAnalyzer.handler
+    events:
+      - stream:
+          type: dynamodb
+          arn:
+            Fn::GetAtt: [AuditTable, StreamArn]
+
 plugins:
   - serverless-offline
 
@@ -121,6 +129,8 @@ resources:
           - AttributeName: auditId
             KeyType: HASH
         BillingMode: PAY_PER_REQUEST
+        StreamSpecification:
+          StreamViewType: NEW_IMAGE
 
     SecurityQueue:
       Type: AWS::SQS::Queue
