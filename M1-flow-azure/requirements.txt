@@ -1,0 +1,16 @@
+azure-functions
+azure-data-tables
+azure-storage-queue
+azure-storage-blob
+azure-identity
+azure-keyvault-secrets
+numpy
+pandas
+scikit-learn
+lightgbm
+onnxruntime
+boto3
+python-json-logger
+requests
+pydantic
+pydantic-settings
