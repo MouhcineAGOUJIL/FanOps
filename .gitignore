@@ -50,7 +50,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # Editor
-.vscode/
+
 .idea/
 *.swp
 *.swo
