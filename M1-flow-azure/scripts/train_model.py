@@ -41,9 +41,12 @@ def train_and_export():
     initial_types = [('float_input', FloatTensorType([None, len(features)]))]
     onnx_model = onnxmltools.convert_lightgbm(model, initial_types=initial_types)
     
-    # Ensure output directory exists
-    os.makedirs("../shared/ml/models", exist_ok=True)
-    output_path = "../shared/ml/models/wait_time_model.onnx"
+    # Ensure output directory exists (Robust Path)
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    output_dir = os.path.join(script_dir, "../shared/ml/models")
+    os.makedirs(output_dir, exist_ok=True)
+    
+    output_path = os.path.join(output_dir, "wait_time_model.onnx")
     onnxmltools.utils.save_model(onnx_model, output_path)
     print(f"Model saved to {output_path}")
     
@@ -54,7 +57,8 @@ def train_and_export():
         "metrics": {"rmse": rmse, "r2": r2},
         "features": features
     }
-    with open("../shared/ml/models/model_metadata.json", "w") as f:
+    metadata_path = os.path.join(output_dir, "model_metadata.json")
+    with open(metadata_path, "w") as f:
         json.dump(metadata, f, indent=2)
 
 if __name__ == "__main__":

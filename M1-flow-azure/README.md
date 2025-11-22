@@ -54,7 +54,7 @@ Create a `local.settings.json` for local development:
   "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "python",
-    "TABLE_NAME_GATES": "gate_status",
+    "TABLE_NAME_GATES": "gatestatus",
     "QUEUE_NAME_INFLOW": "gates-inflow",
     "QUEUE_NAME_CONTROL": "gates-control",
     "BLOB_CONTAINER_MODELS": "ml-models",

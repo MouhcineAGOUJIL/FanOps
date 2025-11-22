@@ -2,6 +2,8 @@ import os
 from pydantic_settings import BaseSettings
 from typing import Optional
 
+from pydantic import Field
+
 class Settings(BaseSettings):
     # Azure Common
     AZURE_TENANT_ID: Optional[str] = None
@@ -9,8 +11,8 @@ class Settings(BaseSettings):
     AZURE_CLIENT_SECRET: Optional[str] = None
     
     # Storage
-    STORAGE_CONNECTION_STRING: Optional[str] = os.getenv("AzureWebJobsStorage")
-    TABLE_NAME_GATES: str = "gate_status"
+    STORAGE_CONNECTION_STRING: str = Field(default="UseDevelopmentStorage=true", validation_alias="AzureWebJobsStorage")
+    TABLE_NAME_GATES: str = "gatestatus"
     QUEUE_NAME_INFLOW: str = "gates-inflow"
     QUEUE_NAME_CONTROL: str = "gates-control"
     BLOB_CONTAINER_MODELS: str = "ml-models"
