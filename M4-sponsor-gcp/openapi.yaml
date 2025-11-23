@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  title: FanOps M4 - Sponsor AI
+  description: AI-powered microservice for real-time sponsor recommendations during CAN 2025 matches.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080
+    description: Local Development Server
+  - url: https://REGION-PROJECT_ID.cloudfunctions.net/m4-sponsor-ai
+    description: Production Server (GCP)
+paths:
+  /:
+    post:
+      summary: Get Sponsor Recommendation
+      description: Returns the best sponsor advertisement based on match context, environment, and zone.
+      operationId: getSponsorRecommendation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - zone
+              properties:
+                match_minute:
+                  type: integer
+                  description: Current minute of the match (0-120)
+                  example: 45
+                score_diff:
+                  type: integer
+                  description: Score difference (Home - Away)
+                  example: 1
+                temperature:
+                  type: number
+                  description: Current temperature in Celsius
+                  example: 28.5
+                crowd_density:
+                  type: number
+                  description: Crowd density ratio (0.0 to 1.0)
+                  example: 0.85
+                zone:
+                  type: string
+                  description: Stadium zone identifier
+                  enum: [VIP, North, South, East, West]
+                  example: North
+                event:
+                  type: string
+                  description: Significant match event
+                  enum: [None, Goal, Card, VAR, Halftime, Kickoff, FinalWhistle]
+                  example: Halftime
+      responses:
+        '200':
+          description: Successful recommendation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  recommended_sponsor:
+                    type: string
+                    description: Name of the recommended sponsor
+                    example: Coca-Cola
+                  campaign_message:
+                    type: string
+                    description: Marketing message to display
+                    example: Savourez l'instant Coca-Cola !
+                  category:
+                    type: string
+                    description: Sponsor category
+                    example: Beverage
+                  confidence:
+                    type: number
+                    format: float
+                    description: Model confidence score (0.0 to 1.0)
+                    example: 0.92
+                  context_used:
+                    type: object
+                    description: The input context used for prediction
+        '400':
+          description: Invalid input
+        '500':
+          description: Server error

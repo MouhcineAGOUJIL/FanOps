@@ -1,0 +1,9 @@
+{
+    "description": "Scenario: The 'Ultimate Conflict' - High stakes, hot weather, VIP zone, late game.",
+    "temperature": 36,
+    "match_minute": 92,
+    "score_diff": 0,
+    "event": "Goal",
+    "zone": "VIP",
+    "crowd_density": 1.0
+}
