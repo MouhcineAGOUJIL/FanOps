@@ -1,0 +1,212 @@
+{
+    "info": {
+        "name": "M1 FanOps - Smart Stadium Flow Controller",
+        "description": "Complete API collection for testing M1 microservice endpoints including ML predictions, AI agent decisions, and RCA investigations",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "https://func-m1-fanops-yourname.azurewebsites.net",
+            "type": "string"
+        },
+        {
+            "key": "function_key",
+            "value": "YOUR_FUNCTION_KEY_HERE",
+            "type": "string"
+        },
+        {
+            "key": "stadium_id",
+            "value": "AGADIR",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "1. Ingest Gate Data (Normal)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/api/flow/ingest?code={{function_key}}",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "flow",
+                        "ingest"
+                    ],
+                    "query": [
+                        {
+                            "key": "code",
+                            "value": "{{function_key}}"
+                        }
+                    ]
+                },
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"stadiumId\": \"AGADIR\",\n  \"gateId\": \"G1\",\n  \"ts\": \"2025-07-14T17:00:00Z\",\n  \"perMinuteCount\": 30,\n  \"avgProcessingTime\": 4.0,\n  \"queueLength\": 50\n}"
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "2. Get Gate Status",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/api/flow/status?stadiumId={{stadium_id}}&code={{function_key}}",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "flow",
+                        "status"
+                    ],
+                    "query": [
+                        {
+                            "key": "stadiumId",
+                            "value": "{{stadium_id}}"
+                        },
+                        {
+                            "key": "code",
+                            "value": "{{function_key}}"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "3. Trigger Anomaly (High Queue)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/api/flow/ingest?code={{function_key}}",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "flow",
+                        "ingest"
+                    ],
+                    "query": [
+                        {
+                            "key": "code",
+                            "value": "{{function_key}}"
+                        }
+                    ]
+                },
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"stadiumId\": \"AGADIR\",\n  \"gateId\": \"G2\",\n  \"ts\": \"2025-07-14T17:35:00Z\",\n  \"perMinuteCount\": 80,\n  \"avgProcessingTime\": 5.0,\n  \"queueLength\": 200\n}"
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "4. Get AI Agent Insights",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/api/flow/ai-insights?stadium_id={{stadium_id}}&code={{function_key}}",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "flow",
+                        "ai-insights"
+                    ],
+                    "query": [
+                        {
+                            "key": "stadium_id",
+                            "value": "{{stadium_id}}"
+                        },
+                        {
+                            "key": "code",
+                            "value": "{{function_key}}"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "5. Query RCA Investigation",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{base_url}}/api/flow/investigation/INV_G2_TIMESTAMP?code={{function_key}}",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "flow",
+                        "investigation",
+                        "INV_G2_TIMESTAMP"
+                    ],
+                    "query": [
+                        {
+                            "key": "code",
+                            "value": "{{function_key}}"
+                        }
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "6. Send Multiple Gates",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/api/flow/ingest?code={{function_key}}",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "flow",
+                        "ingest"
+                    ],
+                    "query": [
+                        {
+                            "key": "code",
+                            "value": "{{function_key}}"
+                        }
+                    ]
+                },
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"stadiumId\": \"AGADIR\",\n  \"gateId\": \"G3\",\n  \"ts\": \"2025-07-14T17:15:00Z\",\n  \"perMinuteCount\": 45,\n  \"avgProcessingTime\": 3.5,\n  \"queueLength\": 75\n}"
+                }
+            },
+            "response": []
+        }
+    ]
+}

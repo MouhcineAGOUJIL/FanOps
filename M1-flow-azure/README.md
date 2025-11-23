@@ -358,3 +358,62 @@ A: System uses GPT-3.5-Turbo by default. Check `OPENAI_MODEL` setting.
 Part of the CAN 2025 FanOps Platform
 
 For questions or integration support, see `docs/integration_contracts.md`
+
+---
+
+## 🔗 Production API Endpoints (For M2/M3/M4 Integration)
+
+**Base URL**: `https://func-m1-fanops-comehdi-fwgeaxhwambjcsev.francecentral-01.azurewebsites.net`
+
+### Quick Reference
+
+#### **1. Ingest Gate Data**
+```
+POST /api/flow/ingest
+```
+
+#### **2. Get Gate Status** 
+```
+GET /api/flow/status?stadiumId={stadium_id}
+```
+
+#### **3. AI Agent Insights**
+```
+GET /api/flow/ai-insights?stadium_id={stadium_id}
+```
+
+#### **4. RCA Investigation**
+```
+GET /api/flow/investigation/{investigation_id}
+```
+
+### Stadium IDs
+- `AGADIR` - Agadir Stadium
+- `RABAT` - Rabat Stadium  
+- `CASABLANCA` - Casablanca Stadium
+
+### Example Usage (Python)
+```python
+import requests
+
+BASE_URL = "https://func-m1-fanops-comehdi-fwgeaxhwambjcsev.francecentral-01.azurewebsites.net"
+KEY = "ask-m1-team-for-key"
+
+# Get gate status
+status = requests.get(f"{BASE_URL}/api/flow/status?stadiumId=AGADIR").json()
+
+# Send gate data
+requests.post(
+    f"{BASE_URL}/api/flow/ingest?code={KEY}",
+    json={
+        "stadiumId": "AGADIR",
+        "gateId": "G1",
+        "ts": "2025-07-14T18:00:00Z",
+        "perMinuteCount": 45,
+        "avgProcessingTime": 3.2,
+        "queueLength": 120
+    }
+)
+```
+
+**For detailed API docs, see above or contact M1 team.**
