@@ -12,7 +12,6 @@ export const Sidebar = ({ userType }) => {
   const adminRoutes = [
     { path: '/admin', label: 'Dashboard', icon: Home },
     { path: '/admin/flow', label: 'Flow Management', icon: Activity },
-    { path: '/admin/gates', label: 'Gate Monitoring', icon: MapPin },
     { path: '/admin/forecast', label: 'Forecast', icon: TrendingUp },
     { path: '/admin/sponsors', label: 'Sponsors', icon: DollarSign },
     { path: '/admin/security', label: 'Security', icon: Shield }
