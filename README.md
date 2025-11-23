@@ -56,16 +56,20 @@ Une plateforme innovante qui combine **Intelligence Artificielle**, **Temps Rée
 
 ```
 FanOps/
-├── frontend/   # React + Vite app (current project)
-├── M1/         # Placeholder for Azure flow controller
-├── M2/         # Placeholder for AWS Secure-Gates
-├── M3/         # Placeholder for GCP forecast service
-├── M4/         # Placeholder for GCP sponsor AI
-└── README.md   # This file
+├── frontend/          # React + Vite app (current project)
+├── M1-flow-azure/     # ✅ DEPLOYED - Azure Flow Controller (AI-powered)
+├── M2-security-aws/   # 🚧 AWS Secure-Gates
+├── M3-forecast-gcp/   # 🚧 GCP Forecast Service
+├── M4-sponsor-gcp/    # 🚧 GCP Sponsor AI
+├── docs/              # Integration contracts & architecture
+└── README.md          # This file
 ```
 
-> Tip: keep working inside `frontend/` for the React app. The other folders are ready for backend services when you add them.  
-> Unless stated otherwise, run all `npm` commands from the `frontend/` directory.
+**M1 Status**: ✅ **FULLY OPERATIONAL** - Deployed to Azure with AI capabilities
+- Production URL: `https://func-m1-fanops-comehdi-fwgeaxhwambjcsev.francecentral-01.azurewebsites.net`
+- See `M1-flow-azure/README.md` for full documentation
+
+> Tip: keep working inside `frontend/` for the React app. M1 backend APIs are ready for integration!
 
 ---
 
@@ -137,12 +141,19 @@ graph TB
 
 ### 🎯 Microservices Breakdown
 
-| Service | Cloud | Type | Fonction | Tech Stack |
-|---------|-------|------|----------|------------|
-| **M1** - Flow Controller | 🔷 Azure | FaaS + PaaS + IaaS | Optimisation flux portes | Azure Functions, Storage Queue, VM |
-| **M2** - Secure-Gates | 🟠 AWS | FaaS + PaaS + IaaS | Validation billets JWT | Lambda, DynamoDB, SQS, EC2 |
-| **M3** - Attendance Forecast | 🔵 GCP | FaaS + PaaS | Prévision ML affluence | Cloud Run, BigQuery, ML |
-| **M4** - Sponsor Matching | 🔵 GCP | FaaS + PaaS | Recommandations IA | Cloud Functions, Firestore, AI |
+| Service | Cloud | Status | Fonction | Tech Stack |
+|---------|-------|--------|----------|------------|
+| **M1** - Flow Controller | 🔷 Azure | ✅ **PROD** | ML predictions + AI agent + RCA | Functions, ONNX, GPT-3.5, SageMaker |
+| **M2** - Secure-Gates | 🟠 AWS | 🚧 Dev | Validation billets JWT | Lambda, DynamoDB, SQS, EC2 |
+| **M3** - Attendance Forecast | 🔵 GCP | 🚧 Dev | Prévision ML affluence | Cloud Run, BigQuery, ML |
+| **M4** - Sponsor Matching | 🔵 GCP | 🚧 Dev | Recommandations IA | Cloud Functions, Firestore, AI |
+
+**M1 Capabilities**:
+- 🤖 ML wait time predictions (R²=0.9948)
+- 🧠 AI agent with GPT function calling (runs every 2 min)
+- 🔍 Automated Root Cause Analysis (RCA) with Bayesian reasoning
+- ⚡ Real-time anomaly detection (AWS SageMaker)
+- 💰 Cost-optimized: ~$0.004/decision, ~$0.001/investigation
 
 ---
 

@@ -49,7 +49,32 @@ def get_investigation(req: func.HttpRequest) -> func.HttpResponse:
         
         entity = entities[0]
         
-        # Format response
+        # Parse JSON fields if they exist
+        import json as json_module
+        
+        all_hypotheses = []
+        tested_hypotheses = []
+        bayesian_analysis = {}
+        
+        try:
+            if entity.get('all_hypotheses'):
+                all_hypotheses = json_module.loads(entity['all_hypotheses'])
+        except:
+            pass
+            
+        try:
+            if entity.get('tested_hypotheses'):
+                tested_hypotheses = json_module.loads(entity['tested_hypotheses'])
+        except:
+            pass
+            
+        try:
+            if entity.get('bayesian_analysis'):
+                bayesian_analysis = json_module.loads(entity['bayesian_analysis'])
+        except:
+            pass
+        
+        # Format response with full details
         response_data = {
             "investigation_id": investigation_id,
             "stadium_id": entity['PartitionKey'],
@@ -57,13 +82,19 @@ def get_investigation(req: func.HttpRequest) -> func.HttpResponse:
             "timestamp": entity.get('Timestamp', '').isoformat() if hasattr(entity.get('Timestamp', ''), 'isoformat') else str(entity.get('Timestamp', '')),
             "diagnosis": {
                 "root_cause": entity.get('root_cause', ''),
-                "confidence": entity.get('confidence', 0.0)
+                "confidence": entity.get('confidence', 0.0),
+                "reasoning": entity.get('reasoning', '')
             },
             "anomaly_score": entity.get('anomaly_score', 0.0),
+            "all_hypotheses": all_hypotheses,
+            "tested_hypotheses": tested_hypotheses,
+            "bayesian_analysis": bayesian_analysis,
             "mitigation": {
-                "priority": entity.get('mitigation_priority', 'unknown')
+                "priority": entity.get('mitigation_priority', 'unknown'),
+                "actions": entity.get('mitigation_actions', '').split('\n') if entity.get('mitigation_actions') else []
             },
-            "status": entity.get('status', 'unknown')
+            "status": entity.get('status', 'unknown'),
+            "execution_time_ms": entity.get('execution_time_ms', 0)
         }
         
         return func.HttpResponse(

@@ -42,6 +42,8 @@ class AnomalyInvestigator:
         
         investigation_id = f"INV_{anomaly_data.get('gate_id')}_{int(datetime.utcnow().timestamp())}"
         
+        start_time = datetime.utcnow()
+        
         try:
             # Step 1: Generate hypotheses
             logger.info("Step 1: Generating hypotheses")
@@ -72,6 +74,9 @@ class AnomalyInvestigator:
                 diagnosis.get("final_confidence", 0.5)
             )
             
+            # Calculate execution time
+            execution_time = (datetime.utcnow() - start_time).total_seconds() * 1000
+            
             # Build investigation report
             report = {
                 "investigation_id": investigation_id,
@@ -88,7 +93,8 @@ class AnomalyInvestigator:
                 "hypotheses_tested": len(tested_hypotheses),
                 "all_hypotheses": tested_hypotheses,
                 "mitigation_plan": mitigation_plan,
-                "status": "completed"
+                "status": "completed",
+                "execution_time_ms": int(execution_time)
             }
             
             # Store investigation
@@ -97,7 +103,7 @@ class AnomalyInvestigator:
             # Cache result
             self._cache_result(cache_key, report)
             
-            logger.info(f"Investigation {investigation_id} completed: {diagnosis['name']}")
+            logger.info(f"Investigation {investigation_id} completed: {diagnosis['name']} in {execution_time:.0f}ms")
             
             return report
         
@@ -134,16 +140,29 @@ class AnomalyInvestigator:
         try:
             table_client = storage_client.get_table_client(settings.TABLE_NAME_INVESTIGATION_LOGS)
             
+            # Store all details including hypotheses and evidence
             entity = {
                 "PartitionKey": report["stadium_id"],
                 "RowKey": report["investigation_id"],
                 "gate_id": report["gate_id"],
                 "root_cause": report["diagnosis"]["root_cause"],
                 "confidence": report["diagnosis"]["confidence"],
+                "reasoning": report["diagnosis"].get("description", ""),
                 "anomaly_score": report["anomaly_score"],
                 "mitigation_priority": report["mitigation_plan"].get("priority", "unknown"),
+                "mitigation_actions": "\n".join(report["mitigation_plan"].get("actions", [])),
                 "timestamp": datetime.utcnow(),
-                "status": "completed"
+                "status": "completed",
+                
+                # Store detailed investigation data as JSON strings
+                "all_hypotheses": json.dumps(report.get("all_hypotheses", [])),
+                "tested_hypotheses": json.dumps(report.get("all_hypotheses", [])),  # Same as all_hypotheses for now
+                "bayesian_analysis": json.dumps({
+                    "total_hypotheses": len(report.get("all_hypotheses", [])),
+                    "hypotheses_tested": report.get("hypotheses_tested", 0),
+                    "confidence": report["diagnosis"]["confidence"]
+                }),
+                "execution_time_ms": report.get("execution_time_ms", 0)
             }
             
             table_client.upsert_entity(entity)
