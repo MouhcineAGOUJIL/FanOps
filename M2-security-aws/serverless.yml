@@ -11,15 +11,16 @@ provider:
   logRetentionInDays: 30
   tracing:
     lambda: true
-    apiGateway:
-      usagePlan:
-        quota:
-          limit: 5000
-          offset: 2
-          period: MONTH
-        throttle:
-          burstLimit: 200
-          rateLimit: 100
+    apiGateway: true
+  apiGateway:
+    usagePlan:
+      quota:
+        limit: 5000
+        offset: 2
+        period: MONTH
+      throttle:
+        burstLimit: 200
+        rateLimit: 100
 
   iamRoleStatements:
     - Effect: Allow
@@ -161,6 +162,30 @@ resources:
       Type: AWS::SQS::Queue
       Properties:
         QueueName: ${self:service}-${self:provider.stage}-security-alerts
+
+    SoldTicketsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.SOLD_TICKETS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: ticketId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: ticketId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
+
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USERS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        BillingMode: PAY_PER_REQUEST
 
     SecurityTestInstance:
       Type: AWS::EC2::Instance

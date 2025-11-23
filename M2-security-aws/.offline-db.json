@@ -730,14 +730,41 @@
       "status": "active",
       "purchaseDate": "2025-11-23T15:51:20.205Z",
       "price": 50
+    },
+    "123e5833-66d5-46bd-8977-7583397277f9": {
+      "ticketId": "123e5833-66d5-46bd-8977-7583397277f9",
+      "userId": "USER-29",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "A-42",
+      "status": "active",
+      "purchaseDate": "2025-11-23T21:21:17.994Z",
+      "price": 50
+    },
+    "d361a9c8-3cd5-4b5d-a065-fa64b3767f80": {
+      "ticketId": "d361a9c8-3cd5-4b5d-a065-fa64b3767f80",
+      "userId": "USER-206",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "VIP-10",
+      "status": "active",
+      "purchaseDate": "2025-11-23T21:21:17.996Z",
+      "price": 200
+    },
+    "c12cc04e-2068-49c3-9f7a-87d371bfda1d": {
+      "ticketId": "c12cc04e-2068-49c3-9f7a-87d371bfda1d",
+      "userId": "USER-119",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "B-12",
+      "status": "active",
+      "purchaseDate": "2025-11-23T21:21:17.996Z",
+      "price": 50
     }
   },
   "users": {
     "admin": {
       "username": "admin",
-      "passwordHash": "$2b$10$Mk8NH023MypH/9MtVqhIje9zGFcfp2M9OMkuAMBelK1SZAg4qK3Su",
+      "passwordHash": "$2b$10$6hLfGOQIJMoDnBV/a19mDe7UmWR7EHxgsl2iaNuoA/ShYHqF98Xs2",
       "role": "admin",
-      "createdAt": "2025-11-22T22:49:58.632Z"
+      "createdAt": "2025-11-23T21:21:17.249Z"
     },
     "gk1": {
       "username": "gk1",
@@ -748,10 +775,10 @@
     },
     "gatekeeper1": {
       "username": "gatekeeper1",
-      "passwordHash": "$2b$10$46hyfPL9GcXnIHS4Zes6KeV5iwJKdkk0WfkTTJi6Sw3adb7CoMvqe",
+      "passwordHash": "$2b$10$ajyheEa9gs2C9bsinkqftePydkeKfAiV48IaO8tqBLl1tJ6JUlcEG",
       "role": "gatekeeper",
       "gateId": "G1",
-      "createdAt": "2025-11-22T22:49:58.632Z"
+      "createdAt": "2025-11-23T21:21:17.249Z"
     }
   }
 }

@@ -85,6 +85,41 @@
         "RetentionInDays": 30
       }
     },
+    "LoginLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/can2025-secure-gates-dev-login",
+        "RetentionInDays": 30
+      }
+    },
+    "LogoutLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/can2025-secure-gates-dev-logout",
+        "RetentionInDays": 30
+      }
+    },
+    "LogAnalyzerLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/can2025-secure-gates-dev-logAnalyzer",
+        "RetentionInDays": 30
+      }
+    },
+    "RotateKeyLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/can2025-secure-gates-dev-rotateKey",
+        "RetentionInDays": 30
+      }
+    },
+    "GetSecurityMetricsLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/can2025-secure-gates-dev-getSecurityMetrics",
+        "RetentionInDays": 30
+      }
+    },
     "IamRoleLambdaExecution": {
       "Type": "AWS::IAM::Role",
       "Properties": {
@@ -161,8 +196,28 @@
                         "AuditTable",
                         "Arn"
                       ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "SoldTicketsTable",
+                        "Arn"
+                      ]
+                    },
+                    {
+                      "Fn::GetAtt": [
+                        "UsersTable",
+                        "Arn"
+                      ]
                     }
                   ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "kms:Decrypt",
+                    "ssm:GetParameter"
+                  ],
+                  "Resource": "*"
                 },
                 {
                   "Effect": "Allow",
@@ -184,6 +239,23 @@
                   ],
                   "Resource": [
                     "*"
+                  ]
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "dynamodb:GetRecords",
+                    "dynamodb:GetShardIterator",
+                    "dynamodb:DescribeStream",
+                    "dynamodb:ListStreams"
+                  ],
+                  "Resource": [
+                    {
+                      "Fn::GetAtt": [
+                        "AuditTable",
+                        "StreamArn"
+                      ]
+                    }
                   ]
                 }
               ]
@@ -213,7 +285,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/can2025-secure-gates/dev/1763768393884-2025-11-21T23:39:53.884Z/can2025-secure-gates.zip"
+          "S3Key": "serverless/can2025-secure-gates/dev/1763932494098-2025-11-23T21:14:54.098Z/can2025-secure-gates.zip"
         },
         "Handler": "src/handlers/verifyTicket.handler",
         "Runtime": "nodejs18.x",
@@ -226,12 +298,15 @@
         },
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "can2025-secret-key-local",
-            "USED_JTI_TABLE": "can2025-secure-gates-dev-used-jti",
-            "AUDIT_TABLE": "can2025-secure-gates-dev-audit",
+            "IS_OFFLINE": "false",
+            "USED_JTI_TABLE": "can2025-secure-gates-used-jti-dev",
+            "AUDIT_TABLE": "can2025-secure-gates-audit-dev",
             "SECURITY_QUEUE_URL": {
               "Ref": "SecurityQueue"
-            }
+            },
+            "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
+            "USERS_TABLE": "can2025-secure-gates-users-dev",
+            "JWT_SECRET": "can2025-secret-key-local"
           }
         },
         "Role": {
@@ -252,7 +327,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/can2025-secure-gates/dev/1763768393884-2025-11-21T23:39:53.884Z/can2025-secure-gates.zip"
+          "S3Key": "serverless/can2025-secure-gates/dev/1763932494098-2025-11-23T21:14:54.098Z/can2025-secure-gates.zip"
         },
         "Handler": "src/handlers/reportGate.handler",
         "Runtime": "nodejs18.x",
@@ -265,12 +340,15 @@
         },
         "Environment": {
           "Variables": {
-            "JWT_SECRET": "can2025-secret-key-local",
-            "USED_JTI_TABLE": "can2025-secure-gates-dev-used-jti",
-            "AUDIT_TABLE": "can2025-secure-gates-dev-audit",
+            "IS_OFFLINE": "false",
+            "USED_JTI_TABLE": "can2025-secure-gates-used-jti-dev",
+            "AUDIT_TABLE": "can2025-secure-gates-audit-dev",
             "SECURITY_QUEUE_URL": {
               "Ref": "SecurityQueue"
-            }
+            },
+            "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
+            "USERS_TABLE": "can2025-secure-gates-users-dev",
+            "JWT_SECRET": "can2025-secret-key-local"
           }
         },
         "Role": {
@@ -284,26 +362,282 @@
         "ReportGateLogGroup"
       ]
     },
-    "VerifyTicketLambdaVersiona3mEI2aKEvgCxT8zmWtQRcwSF00HQhlgX2nwit5v4": {
+    "LoginLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/can2025-secure-gates/dev/1763932494098-2025-11-23T21:14:54.098Z/can2025-secure-gates.zip"
+        },
+        "Handler": "src/handlers/auth.login",
+        "Runtime": "nodejs18.x",
+        "FunctionName": "can2025-secure-gates-dev-login",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "TracingConfig": {
+          "Mode": "Active"
+        },
+        "Environment": {
+          "Variables": {
+            "IS_OFFLINE": "false",
+            "USED_JTI_TABLE": "can2025-secure-gates-used-jti-dev",
+            "AUDIT_TABLE": "can2025-secure-gates-audit-dev",
+            "SECURITY_QUEUE_URL": {
+              "Ref": "SecurityQueue"
+            },
+            "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
+            "USERS_TABLE": "can2025-secure-gates-users-dev",
+            "JWT_SECRET": "can2025-secret-key-local"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "LoginLogGroup"
+      ]
+    },
+    "LogoutLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/can2025-secure-gates/dev/1763932494098-2025-11-23T21:14:54.098Z/can2025-secure-gates.zip"
+        },
+        "Handler": "src/handlers/auth.logout",
+        "Runtime": "nodejs18.x",
+        "FunctionName": "can2025-secure-gates-dev-logout",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "TracingConfig": {
+          "Mode": "Active"
+        },
+        "Environment": {
+          "Variables": {
+            "IS_OFFLINE": "false",
+            "USED_JTI_TABLE": "can2025-secure-gates-used-jti-dev",
+            "AUDIT_TABLE": "can2025-secure-gates-audit-dev",
+            "SECURITY_QUEUE_URL": {
+              "Ref": "SecurityQueue"
+            },
+            "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
+            "USERS_TABLE": "can2025-secure-gates-users-dev",
+            "JWT_SECRET": "can2025-secret-key-local"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "LogoutLogGroup"
+      ]
+    },
+    "LogAnalyzerLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/can2025-secure-gates/dev/1763932494098-2025-11-23T21:14:54.098Z/can2025-secure-gates.zip"
+        },
+        "Handler": "src/handlers/logAnalyzer.handler",
+        "Runtime": "nodejs18.x",
+        "FunctionName": "can2025-secure-gates-dev-logAnalyzer",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "TracingConfig": {
+          "Mode": "Active"
+        },
+        "Environment": {
+          "Variables": {
+            "IS_OFFLINE": "false",
+            "USED_JTI_TABLE": "can2025-secure-gates-used-jti-dev",
+            "AUDIT_TABLE": "can2025-secure-gates-audit-dev",
+            "SECURITY_QUEUE_URL": {
+              "Ref": "SecurityQueue"
+            },
+            "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
+            "USERS_TABLE": "can2025-secure-gates-users-dev",
+            "JWT_SECRET": "can2025-secret-key-local"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "LogAnalyzerLogGroup"
+      ]
+    },
+    "RotateKeyLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/can2025-secure-gates/dev/1763932494098-2025-11-23T21:14:54.098Z/can2025-secure-gates.zip"
+        },
+        "Handler": "src/handlers/rotateKey.handler",
+        "Runtime": "nodejs18.x",
+        "FunctionName": "can2025-secure-gates-dev-rotateKey",
+        "MemorySize": 1024,
+        "Timeout": 60,
+        "TracingConfig": {
+          "Mode": "Active"
+        },
+        "Environment": {
+          "Variables": {
+            "IS_OFFLINE": "false",
+            "USED_JTI_TABLE": "can2025-secure-gates-used-jti-dev",
+            "AUDIT_TABLE": "can2025-secure-gates-audit-dev",
+            "SECURITY_QUEUE_URL": {
+              "Ref": "SecurityQueue"
+            },
+            "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
+            "USERS_TABLE": "can2025-secure-gates-users-dev",
+            "JWT_SECRET": "can2025-secret-key-local",
+            "SSM_PARAMETER_PATH": "/can2025/dev/jwt-secret"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "RotateKeyLogGroup"
+      ]
+    },
+    "GetSecurityMetricsLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/can2025-secure-gates/dev/1763932494098-2025-11-23T21:14:54.098Z/can2025-secure-gates.zip"
+        },
+        "Handler": "src/handlers/getSecurityMetrics.handler",
+        "Runtime": "nodejs18.x",
+        "FunctionName": "can2025-secure-gates-dev-getSecurityMetrics",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "TracingConfig": {
+          "Mode": "Active"
+        },
+        "Environment": {
+          "Variables": {
+            "IS_OFFLINE": "false",
+            "USED_JTI_TABLE": "can2025-secure-gates-used-jti-dev",
+            "AUDIT_TABLE": "can2025-secure-gates-audit-dev",
+            "SECURITY_QUEUE_URL": {
+              "Ref": "SecurityQueue"
+            },
+            "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
+            "USERS_TABLE": "can2025-secure-gates-users-dev",
+            "JWT_SECRET": "can2025-secret-key-local"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "GetSecurityMetricsLogGroup"
+      ]
+    },
+    "VerifyTicketLambdaVersionH97O9aDsz5VdUGMTKiSRbI4RRvOJiSWsDMyQtbZZg": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "VerifyTicketLambdaFunction"
         },
-        "CodeSha256": "avcMPHOrfst/3NBSWf/BoQKWaL3CWQl3uYCb/TE57V8=",
+        "CodeSha256": "gy76psj+Sc0xJdB353Rm8gIFL+Za00aQ9j+DH06gPGo=",
         "Description": "Vérification et validation des billets JWT"
       }
     },
-    "ReportGateLambdaVersionCrB08z9eiitlFyR3GV5ZBmkBY93rAasVSdjR3MMUL8": {
+    "ReportGateLambdaVersionyafJ6QsbR40b8K483E8rpnvSGGB4bpk8OYruu5WNt0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ReportGateLambdaFunction"
         },
-        "CodeSha256": "avcMPHOrfst/3NBSWf/BoQKWaL3CWQl3uYCb/TE57V8=",
+        "CodeSha256": "gy76psj+Sc0xJdB353Rm8gIFL+Za00aQ9j+DH06gPGo=",
         "Description": "Rapport de statut des portiques"
+      }
+    },
+    "LoginLambdaVersionjkY8IALdNiOZ0Dse8ltPbvlxhjCpsvjS11UaoMZ4xtE": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LoginLambdaFunction"
+        },
+        "CodeSha256": "gy76psj+Sc0xJdB353Rm8gIFL+Za00aQ9j+DH06gPGo="
+      }
+    },
+    "LogoutLambdaVersionsbbEyfF5O6tppRowkzpnLhJAl264N50vhzfCT6TKs": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LogoutLambdaFunction"
+        },
+        "CodeSha256": "gy76psj+Sc0xJdB353Rm8gIFL+Za00aQ9j+DH06gPGo="
+      }
+    },
+    "LogAnalyzerLambdaVersionoIayVgrxXARgo2X2n9Tr4pS7Om8zjvm3lIwfP53z60": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LogAnalyzerLambdaFunction"
+        },
+        "CodeSha256": "gy76psj+Sc0xJdB353Rm8gIFL+Za00aQ9j+DH06gPGo="
+      }
+    },
+    "RotateKeyLambdaVersionPZL8IIn3DRA2Ogmexbl68Vwqb9QdIuuWbq5UqKi9Dc": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "RotateKeyLambdaFunction"
+        },
+        "CodeSha256": "gy76psj+Sc0xJdB353Rm8gIFL+Za00aQ9j+DH06gPGo="
+      }
+    },
+    "GetSecurityMetricsLambdaVersionW7D8ChODnRoM7D4EGAJnWKAC95FhiDxMfR4NM3s3KY": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "GetSecurityMetricsLambdaFunction"
+        },
+        "CodeSha256": "gy76psj+Sc0xJdB353Rm8gIFL+Za00aQ9j+DH06gPGo="
       }
     },
     "ApiGatewayRestApi": {
@@ -352,6 +686,57 @@
           "Ref": "ApiGatewayResourceSecurity"
         },
         "PathPart": "reportGate",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceSecurityMetrics": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceSecurity"
+        },
+        "PathPart": "metrics",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAuth": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "ApiGatewayRestApi",
+            "RootResourceId"
+          ]
+        },
+        "PathPart": "auth",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAuthLogin": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceAuth"
+        },
+        "PathPart": "login",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceAuthLogout": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceAuth"
+        },
+        "PathPart": "logout",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
@@ -441,6 +826,141 @@
         },
         "ResourceId": {
           "Ref": "ApiGatewayResourceSecurityReportgate"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodAuthLoginOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAuthLogin"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodAuthLogoutOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAuthLogout"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodSecurityMetricsOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceSecurityMetrics"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -539,7 +1059,145 @@
         "ReportGateLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1763768386709": {
+    "ApiGatewayMethodAuthLoginPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAuthLogin"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "LoginLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "LoginLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodAuthLogoutPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceAuthLogout"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "LogoutLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "LogoutLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayMethodSecurityMetricsGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceSecurityMetrics"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "NONE",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "GetSecurityMetricsLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "GetSecurityMetricsLambdaPermissionApiGateway"
+      ]
+    },
+    "ApiGatewayDeployment1763932484866": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -550,9 +1208,40 @@
       "DependsOn": [
         "ApiGatewayMethodSecurityVerifyticketOptions",
         "ApiGatewayMethodSecurityReportgateOptions",
+        "ApiGatewayMethodAuthLoginOptions",
+        "ApiGatewayMethodAuthLogoutOptions",
+        "ApiGatewayMethodSecurityMetricsOptions",
         "ApiGatewayMethodSecurityVerifyticketPost",
-        "ApiGatewayMethodSecurityReportgatePost"
+        "ApiGatewayMethodSecurityReportgatePost",
+        "ApiGatewayMethodAuthLoginPost",
+        "ApiGatewayMethodAuthLogoutPost",
+        "ApiGatewayMethodSecurityMetricsGet"
       ]
+    },
+    "ApiGatewayUsagePlan": {
+      "Type": "AWS::ApiGateway::UsagePlan",
+      "DependsOn": "ApiGatewayDeployment1763932484866",
+      "Properties": {
+        "ApiStages": [
+          {
+            "ApiId": {
+              "Ref": "ApiGatewayRestApi"
+            },
+            "Stage": "dev"
+          }
+        ],
+        "Description": "Usage plan for can2025-secure-gates dev stage",
+        "UsagePlanName": "can2025-secure-gates-dev",
+        "Quota": {
+          "Limit": 5000,
+          "Offset": 2,
+          "Period": "MONTH"
+        },
+        "Throttle": {
+          "BurstLimit": 200,
+          "RateLimit": 100
+        }
+      }
     },
     "VerifyTicketLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
@@ -628,10 +1317,144 @@
         }
       }
     },
+    "LoginLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LoginLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "LogoutLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LogoutLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "GetSecurityMetricsLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "GetSecurityMetricsLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "LogAnalyzerEventSourceMappingDynamodbAuditTable": {
+      "Type": "AWS::Lambda::EventSourceMapping",
+      "DependsOn": [
+        "IamRoleLambdaExecution"
+      ],
+      "Properties": {
+        "BatchSize": 10,
+        "Enabled": true,
+        "EventSourceArn": {
+          "Fn::GetAtt": [
+            "AuditTable",
+            "StreamArn"
+          ]
+        },
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "LogAnalyzerLambdaFunction",
+            "Arn"
+          ]
+        },
+        "StartingPosition": "TRIM_HORIZON"
+      }
+    },
     "UsedJtiTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "can2025-secure-gates-dev-used-jti",
+        "TableName": "can2025-secure-gates-used-jti-dev",
         "AttributeDefinitions": [
           {
             "AttributeName": "jti",
@@ -654,7 +1477,7 @@
     "AuditTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "can2025-secure-gates-dev-audit",
+        "TableName": "can2025-secure-gates-audit-dev",
         "AttributeDefinitions": [
           {
             "AttributeName": "auditId",
@@ -667,13 +1490,54 @@
             "KeyType": "HASH"
           }
         ],
-        "BillingMode": "PAY_PER_REQUEST"
+        "BillingMode": "PAY_PER_REQUEST",
+        "StreamSpecification": {
+          "StreamViewType": "NEW_IMAGE"
+        }
       }
     },
     "SecurityQueue": {
       "Type": "AWS::SQS::Queue",
       "Properties": {
         "QueueName": "can2025-secure-gates-dev-security-alerts"
+      }
+    },
+    "SoldTicketsTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "can2025-secure-gates-sold-tickets-dev",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "ticketId",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "ticketId",
+            "KeyType": "HASH"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
+      }
+    },
+    "UsersTable": {
+      "Type": "AWS::DynamoDB::Table",
+      "Properties": {
+        "TableName": "can2025-secure-gates-users-dev",
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "userId",
+            "AttributeType": "S"
+          }
+        ],
+        "KeySchema": [
+          {
+            "AttributeName": "userId",
+            "KeyType": "HASH"
+          }
+        ],
+        "BillingMode": "PAY_PER_REQUEST"
       }
     },
     "SecurityTestInstance": {
@@ -702,7 +1566,7 @@
     "VerifyTicketLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "VerifyTicketLambdaVersiona3mEI2aKEvgCxT8zmWtQRcwSF00HQhlgX2nwit5v4"
+        "Ref": "VerifyTicketLambdaVersionH97O9aDsz5VdUGMTKiSRbI4RRvOJiSWsDMyQtbZZg"
       },
       "Export": {
         "Name": "sls-can2025-secure-gates-dev-VerifyTicketLambdaFunctionQualifiedArn"
@@ -711,10 +1575,55 @@
     "ReportGateLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReportGateLambdaVersionCrB08z9eiitlFyR3GV5ZBmkBY93rAasVSdjR3MMUL8"
+        "Ref": "ReportGateLambdaVersionyafJ6QsbR40b8K483E8rpnvSGGB4bpk8OYruu5WNt0"
       },
       "Export": {
         "Name": "sls-can2025-secure-gates-dev-ReportGateLambdaFunctionQualifiedArn"
+      }
+    },
+    "LoginLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "LoginLambdaVersionjkY8IALdNiOZ0Dse8ltPbvlxhjCpsvjS11UaoMZ4xtE"
+      },
+      "Export": {
+        "Name": "sls-can2025-secure-gates-dev-LoginLambdaFunctionQualifiedArn"
+      }
+    },
+    "LogoutLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "LogoutLambdaVersionsbbEyfF5O6tppRowkzpnLhJAl264N50vhzfCT6TKs"
+      },
+      "Export": {
+        "Name": "sls-can2025-secure-gates-dev-LogoutLambdaFunctionQualifiedArn"
+      }
+    },
+    "LogAnalyzerLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "LogAnalyzerLambdaVersionoIayVgrxXARgo2X2n9Tr4pS7Om8zjvm3lIwfP53z60"
+      },
+      "Export": {
+        "Name": "sls-can2025-secure-gates-dev-LogAnalyzerLambdaFunctionQualifiedArn"
+      }
+    },
+    "RotateKeyLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "RotateKeyLambdaVersionPZL8IIn3DRA2Ogmexbl68Vwqb9QdIuuWbq5UqKi9Dc"
+      },
+      "Export": {
+        "Name": "sls-can2025-secure-gates-dev-RotateKeyLambdaFunctionQualifiedArn"
+      }
+    },
+    "GetSecurityMetricsLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "GetSecurityMetricsLambdaVersionW7D8ChODnRoM7D4EGAJnWKAC95FhiDxMfR4NM3s3KY"
+      },
+      "Export": {
+        "Name": "sls-can2025-secure-gates-dev-GetSecurityMetricsLambdaFunctionQualifiedArn"
       }
     },
     "ServiceEndpoint": {
