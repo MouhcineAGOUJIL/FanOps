@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 
 // Configuration
-const JWT_SECRET = process.env.JWT_SECRET || 'can2025-secret-key-local';
+const JWT_SECRET = process.env.JWT_SECRET || 'can2025-super-secret-key-for-local-development';
 const DB_FILE = path.join(__dirname, '../.offline-db.json');
 
 async function seed() {

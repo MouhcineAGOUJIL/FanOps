@@ -12,6 +12,7 @@ import AdminTicketValidation from './pages/admin/TicketValidation';
 import AdminForecast from './pages/admin/ForecastView';
 import AdminSponsor from './pages/admin/SponsorAnalytics';
 import SecurityDashboard from './pages/admin/SecurityDashboard';
+import FlowManagement from './pages/admin/FlowManagement';
 
 import ScanPage from './pages/gatekeeper/ScanPage';
 import LoginPage from './pages/auth/LoginPage';
@@ -47,6 +48,7 @@ function App() {
           <Route path="forecast" element={<AdminForecast />} />
           <Route path="sponsors" element={<AdminSponsor />} />
           <Route path="security" element={<SecurityDashboard />} />
+          <Route path="flow" element={<FlowManagement />} />
         </Route>
 
         {/* Gatekeeper Routes */}

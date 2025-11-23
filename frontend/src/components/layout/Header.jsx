@@ -1,8 +1,27 @@
+import { LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { authService } from '../../services/authService';
 import cafLogo from '../../assets/afcon2025_logo.png';
 
-const navLinks = ['Home', 'News', 'Videos', 'Calendar', 'Volunteers', 'Jobs', 'Qualifiers', 'Archive'];
+const navLinks = [
+  { label: 'Home', url: '/' },
+  { label: 'News', url: 'https://www.cafonline.com/afcon2025/news/' },
+  { label: 'Videos', url: 'https://www.cafonline.com/afcon2025/videos/' },
+  { label: 'Calendar', url: 'https://www.cafonline.com/media/epqkudrg/match-schedule_totalenergies-caf-africa-cup-of-nations_morocco25.pdf' },
+  { label: 'Volunteers', url: 'https://www.cafonline.com/afcon2025/volunteers/' },
+  { label: 'Jobs', url: 'https://www.cafonline.com/afconjobs/' },
+  { label: 'Qualifiers', url: 'https://www.cafonline.com/afcon2025/qualifiers/' },
+  { label: 'Archive', url: 'https://www.cafonline.com/afcon2025/archive/2023/' }
+];
 
 export const Header = ({ userType }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await authService.logout();
+    navigate('/login');
+  };
+
   return (
     <header
       style={{
@@ -59,42 +78,55 @@ export const Header = ({ userType }) => {
           className="flex flex-wrap items-center justify-center gap-6"
           style={{ flex: 1 }}
         >
-          {navLinks.map((link, index) => (
-            <button
-              key={link}
-              type="button"
-              className={`nav-link${index === 0 ? ' active' : ''}`}
+          {navLinks.map((link) => (
+            <a
+              key={link.label}
+              href={link.url}
+              target={link.url.startsWith('http') ? '_blank' : '_self'}
+              rel={link.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+              className="nav-link"
+              style={{
+                textDecoration: 'none',
+                color: 'rgba(255,255,255,0.8)',
+                fontWeight: 600,
+                fontSize: '0.9rem',
+                textTransform: 'uppercase',
+                letterSpacing: '0.05em',
+                transition: 'color 0.2s ease',
+                cursor: 'pointer'
+              }}
+              onMouseOver={(e) => e.target.style.color = 'rgba(255,255,255,1)'}
+              onMouseOut={(e) => e.target.style.color = 'rgba(255,255,255,0.8)'}
             >
-              {link}
-            </button>
+              {link.label}
+            </a>
           ))}
         </nav>
 
         <div className="flex items-center gap-4">
-          <span
-            className="pill"
-            style={{
-              border: '1px solid rgba(255,255,255,0.2)',
-              background: 'rgba(255,255,255,0.05)',
-            }}
-          >
-            {userType === 'admin' ? 'Admin Center' : 'Fan Cockpit'}
-          </span>
           <button
+            onClick={handleLogout}
             style={{
-              background: 'linear-gradient(120deg, #15a657, #0e8042)',
-              border: 'none',
-              borderRadius: '999px',
-              padding: '0.75rem 1.8rem',
+              background: 'linear-gradient(120deg, #8B0000, #600000)',
+              border: '1px solid rgba(255,255,255,0.2)',
+              borderRadius: '8px',
+              padding: '0.6rem 1.5rem',
               color: '#fff',
               fontWeight: 600,
               letterSpacing: '0.05em',
               textTransform: 'uppercase',
-              boxShadow: '0 15px 30px rgba(14, 128, 66, 0.45)',
+              boxShadow: '0 4px 12px rgba(139, 0, 0, 0.3)',
               cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              transition: 'all 0.2s ease'
             }}
+            onMouseOver={(e) => e.target.style.background = 'linear-gradient(120deg, #600000, #400000)'}
+            onMouseOut={(e) => e.target.style.background = 'linear-gradient(120deg, #8B0000, #600000)'}
           >
-            Launch Console
+            <LogOut size={16} />
+            Logout
           </button>
         </div>
       </div>

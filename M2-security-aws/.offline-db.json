@@ -20,6 +20,34 @@
       "gateId": "G1",
       "usedAt": "2025-11-22T22:57:12.017Z",
       "ttl": 1763938632
+    },
+    "d1bab888-42d7-4aa4-9d03-9700989e7821": {
+      "jti": "d1bab888-42d7-4aa4-9d03-9700989e7821",
+      "ticketId": "50692087-ff77-4635-9514-4452ddbf371c",
+      "gateId": "G1",
+      "usedAt": "2025-11-23T15:27:45.905Z",
+      "ttl": 1763998065
+    },
+    "307a0b28-55e1-413c-a02b-76df28fcc482": {
+      "jti": "307a0b28-55e1-413c-a02b-76df28fcc482",
+      "ticketId": "5e34d9d5-cf58-4f0d-9d20-353dbc85ccab",
+      "gateId": "G1",
+      "usedAt": "2025-11-23T15:29:36.950Z",
+      "ttl": 1763998176
+    },
+    "f71189d4-8305-41df-ada6-b48cafae374a": {
+      "jti": "f71189d4-8305-41df-ada6-b48cafae374a",
+      "ticketId": "2931c8bb-2400-4e89-8499-6705074a1e06",
+      "gateId": "G1",
+      "usedAt": "2025-11-23T15:31:38.162Z",
+      "ttl": 1763998298
+    },
+    "388e7292-ab30-4948-8026-fc7514ea3dd5": {
+      "jti": "388e7292-ab30-4948-8026-fc7514ea3dd5",
+      "ticketId": "089a324d-1e38-4a5a-bb10-db419d704967",
+      "gateId": "G1",
+      "usedAt": "2025-11-23T15:31:53.676Z",
+      "ttl": 1763998313
     }
   },
   "audit": [
@@ -150,6 +178,178 @@
       "gatekeeperId": "GK-001",
       "result": "invalid_jwt",
       "error": "Bad control character in string literal in JSON at position 211"
+    },
+    {
+      "auditId": "55f1e45e-b125-464e-bf82-04b08a86b31a",
+      "timestamp": "2025-11-23T15:27:40.500Z",
+      "ticketJWT": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aWNrZXRJZ...",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "invalid_jwt",
+      "error": "invalid signature"
+    },
+    {
+      "auditId": "f2f18cf1-f9e7-42d6-b191-a861a8a66f00",
+      "timestamp": "2025-11-23T15:27:45.906Z",
+      "jti": "d1bab888-42d7-4aa4-9d03-9700989e7821",
+      "ticketId": "50692087-ff77-4635-9514-4452ddbf371c",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "B-12",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "valid"
+    },
+    {
+      "auditId": "ff1f6d6e-3203-42c3-b015-3bc17a9cc26f",
+      "timestamp": "2025-11-23T15:27:55.549Z",
+      "ticketJWT": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0aWNrZXRJZ...",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "invalid_jwt",
+      "error": "invalid signature"
+    },
+    {
+      "auditId": "8f0c9e29-1c54-4205-b6e0-059e8bc0eea0",
+      "timestamp": "2025-11-23T15:28:31.618Z",
+      "ticketJWT": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJVU...",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "invalid_jwt",
+      "error": "invalid signature"
+    },
+    {
+      "auditId": "355423a1-defb-413f-b464-9ca33b8b8485",
+      "timestamp": "2025-11-23T15:29:29.431Z",
+      "jti": "d1bab888-42d7-4aa4-9d03-9700989e7821",
+      "ticketId": "50692087-ff77-4635-9514-4452ddbf371c",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "replay_attack",
+      "message": "Tentative de rejeu détectée"
+    },
+    {
+      "auditId": "117d8a19-ecf5-4328-b53a-22c59c4a6183",
+      "timestamp": "2025-11-23T15:29:36.951Z",
+      "jti": "307a0b28-55e1-413c-a02b-76df28fcc482",
+      "ticketId": "5e34d9d5-cf58-4f0d-9d20-353dbc85ccab",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "VIP-10",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "valid"
+    },
+    {
+      "auditId": "762cc49a-7f27-41fc-844a-0853cd22ba57",
+      "timestamp": "2025-11-23T15:31:26.529Z",
+      "jti": "307a0b28-55e1-413c-a02b-76df28fcc482",
+      "ticketId": "5e34d9d5-cf58-4f0d-9d20-353dbc85ccab",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "replay_attack",
+      "message": "Tentative de rejeu détectée"
+    },
+    {
+      "auditId": "b33b08f0-017f-484b-97c6-054ca9e7031e",
+      "timestamp": "2025-11-23T15:31:38.163Z",
+      "jti": "f71189d4-8305-41df-ada6-b48cafae374a",
+      "ticketId": "2931c8bb-2400-4e89-8499-6705074a1e06",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "A-42",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "valid"
+    },
+    {
+      "auditId": "32196991-7278-41ea-8286-e8a5d86398e9",
+      "timestamp": "2025-11-23T15:31:53.676Z",
+      "jti": "388e7292-ab30-4948-8026-fc7514ea3dd5",
+      "ticketId": "089a324d-1e38-4a5a-bb10-db419d704967",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "B-12",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "valid"
+    },
+    {
+      "auditId": "1f6f8a5e-4140-4172-be71-b5b3a4cf9691",
+      "timestamp": "2025-11-23T15:40:07.006Z",
+      "ticketJWT": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJVU...",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "invalid_jwt",
+      "error": "invalid signature"
+    },
+    {
+      "auditId": "c91dff17-1e0d-47a4-9c73-19651d2d94bc",
+      "timestamp": "2025-11-23T15:40:19.915Z",
+      "jti": "307a0b28-55e1-413c-a02b-76df28fcc482",
+      "ticketId": "5e34d9d5-cf58-4f0d-9d20-353dbc85ccab",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "replay_attack",
+      "message": "Tentative de rejeu détectée"
+    },
+    {
+      "auditId": "b280f51d-26e7-45a0-9f08-409035147306",
+      "timestamp": "2025-11-23T15:40:35.118Z",
+      "jti": "f71189d4-8305-41df-ada6-b48cafae374a",
+      "ticketId": "2931c8bb-2400-4e89-8499-6705074a1e06",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "replay_attack",
+      "message": "Tentative de rejeu détectée"
+    },
+    {
+      "auditId": "8b99d2ae-ad11-4a6d-985e-24ce003dc4fa",
+      "timestamp": "2025-11-23T15:40:53.471Z",
+      "ticketJWT": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJVU...",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "invalid_jwt",
+      "error": "invalid signature"
+    },
+    {
+      "auditId": "ebf0292e-1374-4954-b86f-593805496942",
+      "timestamp": "2025-11-23T15:40:54.645Z",
+      "ticketJWT": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJVU...",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "invalid_jwt",
+      "error": "invalid signature"
+    },
+    {
+      "auditId": "ed491871-4c79-4c20-aad5-3da46600132b",
+      "timestamp": "2025-11-23T15:41:23.995Z",
+      "ticketJWT": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJVU...",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "invalid_jwt",
+      "error": "invalid signature"
+    },
+    {
+      "auditId": "39391b9c-8fe5-4021-a13e-c1293d92dc10",
+      "timestamp": "2025-11-23T15:51:26.710Z",
+      "ticketJWT": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJVU...",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "invalid_jwt",
+      "error": "invalid signature"
     }
   ],
   "soldTickets": {
@@ -340,6 +540,195 @@
       "seatNumber": "B-12",
       "status": "active",
       "purchaseDate": "2025-11-22T22:56:46.338Z",
+      "price": 50
+    },
+    "01352c4c-ea1a-443b-8b9d-9466d71df759": {
+      "ticketId": "01352c4c-ea1a-443b-8b9d-9466d71df759",
+      "userId": "USER-185",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "A-42",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:23:27.184Z",
+      "price": 50
+    },
+    "e115807b-10c5-40c2-b2b8-d0172c8c36a3": {
+      "ticketId": "e115807b-10c5-40c2-b2b8-d0172c8c36a3",
+      "userId": "USER-893",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "VIP-10",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:23:27.185Z",
+      "price": 200
+    },
+    "089a324d-1e38-4a5a-bb10-db419d704967": {
+      "ticketId": "089a324d-1e38-4a5a-bb10-db419d704967",
+      "userId": "USER-237",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "B-12",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:23:27.186Z",
+      "price": 50
+    },
+    "7c240632-be94-4502-87e2-0cb83f88de31": {
+      "ticketId": "7c240632-be94-4502-87e2-0cb83f88de31",
+      "userId": "USER-584",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "A-42",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:27:26.718Z",
+      "price": 50
+    },
+    "57a01b27-8d74-4cd5-bf40-70395e150a47": {
+      "ticketId": "57a01b27-8d74-4cd5-bf40-70395e150a47",
+      "userId": "USER-282",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "VIP-10",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:27:26.719Z",
+      "price": 200
+    },
+    "16676e4f-4014-4c6a-b35d-7f7f6f509678": {
+      "ticketId": "16676e4f-4014-4c6a-b35d-7f7f6f509678",
+      "userId": "USER-318",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "B-12",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:27:26.720Z",
+      "price": 50
+    },
+    "2931c8bb-2400-4e89-8499-6705074a1e06": {
+      "ticketId": "2931c8bb-2400-4e89-8499-6705074a1e06",
+      "userId": "USER-616",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "A-42",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:27:38.399Z",
+      "price": 50
+    },
+    "5e34d9d5-cf58-4f0d-9d20-353dbc85ccab": {
+      "ticketId": "5e34d9d5-cf58-4f0d-9d20-353dbc85ccab",
+      "userId": "USER-873",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "VIP-10",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:27:38.400Z",
+      "price": 200
+    },
+    "50692087-ff77-4635-9514-4452ddbf371c": {
+      "ticketId": "50692087-ff77-4635-9514-4452ddbf371c",
+      "userId": "USER-165",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "B-12",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:27:38.401Z",
+      "price": 50
+    },
+    "3f82c934-2db6-4069-a2b4-0c3d5c7aea19": {
+      "ticketId": "3f82c934-2db6-4069-a2b4-0c3d5c7aea19",
+      "userId": "USER-392",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "A-42",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:28:18.617Z",
+      "price": 50
+    },
+    "dba4d0f6-91ae-468f-9b22-0b89c5e443ef": {
+      "ticketId": "dba4d0f6-91ae-468f-9b22-0b89c5e443ef",
+      "userId": "USER-867",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "VIP-10",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:28:18.619Z",
+      "price": 200
+    },
+    "9635b77d-2061-408c-bf9d-e6c398894170": {
+      "ticketId": "9635b77d-2061-408c-bf9d-e6c398894170",
+      "userId": "USER-947",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "B-12",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:28:18.621Z",
+      "price": 50
+    },
+    "a69ea21f-2406-46f1-ac14-a28f8587eb40": {
+      "ticketId": "a69ea21f-2406-46f1-ac14-a28f8587eb40",
+      "userId": "USER-508",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "A-42",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:40:42.431Z",
+      "price": 50
+    },
+    "ef48afa6-5fa0-4902-9429-8d4880fa17d1": {
+      "ticketId": "ef48afa6-5fa0-4902-9429-8d4880fa17d1",
+      "userId": "USER-533",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "VIP-10",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:40:42.432Z",
+      "price": 200
+    },
+    "a5a8a3fe-8989-4438-8c3f-3f298c5d8114": {
+      "ticketId": "a5a8a3fe-8989-4438-8c3f-3f298c5d8114",
+      "userId": "USER-227",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "B-12",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:40:42.433Z",
+      "price": 50
+    },
+    "ab938514-0db8-4bcd-88b5-110d6a2ee3be": {
+      "ticketId": "ab938514-0db8-4bcd-88b5-110d6a2ee3be",
+      "userId": "USER-235",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "A-42",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:41:12.645Z",
+      "price": 50
+    },
+    "5e040363-5ae2-4967-88a0-868145207014": {
+      "ticketId": "5e040363-5ae2-4967-88a0-868145207014",
+      "userId": "USER-103",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "VIP-10",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:41:12.646Z",
+      "price": 200
+    },
+    "ce9cd1bc-a3ba-4827-a340-c2ddfcb8a750": {
+      "ticketId": "ce9cd1bc-a3ba-4827-a340-c2ddfcb8a750",
+      "userId": "USER-776",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "B-12",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:41:12.647Z",
+      "price": 50
+    },
+    "f7b46a82-56e6-4285-bcf8-a8fd70526ceb": {
+      "ticketId": "f7b46a82-56e6-4285-bcf8-a8fd70526ceb",
+      "userId": "USER-545",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "A-42",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:51:20.202Z",
+      "price": 50
+    },
+    "468c956d-0db0-4ade-9fb1-37573488c34e": {
+      "ticketId": "468c956d-0db0-4ade-9fb1-37573488c34e",
+      "userId": "USER-577",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "VIP-10",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:51:20.204Z",
+      "price": 200
+    },
+    "153463af-ff68-4f6a-a795-17a1410819d8": {
+      "ticketId": "153463af-ff68-4f6a-a795-17a1410819d8",
+      "userId": "USER-851",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "B-12",
+      "status": "active",
+      "purchaseDate": "2025-11-23T15:51:20.205Z",
       "price": 50
     }
   },

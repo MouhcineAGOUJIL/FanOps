@@ -1,15 +1,8 @@
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { authService } from '../../services/authService';
-import { LogOut, Shield, Home, MapPin, Ticket, TrendingUp, DollarSign, Scan } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Shield, Home, MapPin, TrendingUp, DollarSign, Activity } from 'lucide-react';
 
 export const Sidebar = ({ userType }) => {
   const location = useLocation();
-  const navigate = useNavigate();
-
-  const handleLogout = async () => {
-    await authService.logout();
-    navigate('/login');
-  };
 
   const fanRoutes = [
     { path: '/fan', label: 'Dashboard' },
@@ -18,6 +11,7 @@ export const Sidebar = ({ userType }) => {
 
   const adminRoutes = [
     { path: '/admin', label: 'Dashboard', icon: Home },
+    { path: '/admin/flow', label: 'Flow Management', icon: Activity },
     { path: '/admin/gates', label: 'Gate Monitoring', icon: MapPin },
     { path: '/admin/forecast', label: 'Forecast', icon: TrendingUp },
     { path: '/admin/sponsors', label: 'Sponsors', icon: DollarSign },
@@ -79,14 +73,6 @@ export const Sidebar = ({ userType }) => {
           );
         })}
       </nav>
-
-      <button
-        onClick={handleLogout}
-        className="mt-auto flex items-center gap-2 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-colors w-full text-left"
-      >
-        <LogOut size={20} />
-        <span>Sign Out</span>
-      </button>
     </aside>
   );
 };

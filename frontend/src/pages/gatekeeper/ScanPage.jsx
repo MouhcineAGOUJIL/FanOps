@@ -1,12 +1,19 @@
 import { useState } from 'react';
 import { Scan, CheckCircle, XCircle, AlertTriangle } from 'lucide-react';
 import { securityService } from '../../services/securityService';
+import successAudio from '../../assets/DimaMaghriboutput.mp3';
 
 export default function ScanPage() {
     const [ticketJWT, setTicketJWT] = useState('');
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false);
     const [gatekeeperId] = useState('GK-001'); // Mock ID for now
+
+    const playSuccessSound = () => {
+        const audio = new Audio(successAudio);
+        audio.volume = 0.7;
+        audio.play().catch(err => console.log('Audio playback failed:', err));
+    };
 
     const handleScan = async () => {
         setLoading(true);
@@ -19,6 +26,11 @@ export default function ScanPage() {
                 gatekeeperId
             });
             setResult(response);
+
+            // Play success sound if ticket is valid
+            if (response.ok) {
+                playSuccessSound();
+            }
         } catch (error) {
             setResult({ ok: false, reason: 'network_error', message: 'Erreur de connexion' });
         } finally {
