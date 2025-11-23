@@ -397,14 +397,14 @@ GET /api/flow/investigation/{investigation_id}
 import requests
 
 BASE_URL = "https://func-m1-fanops-comehdi-fwgeaxhwambjcsev.francecentral-01.azurewebsites.net"
-KEY = "ask-m1-team-for-key"
+
 
 # Get gate status
 status = requests.get(f"{BASE_URL}/api/flow/status?stadiumId=AGADIR").json()
 
 # Send gate data
 requests.post(
-    f"{BASE_URL}/api/flow/ingest?code={KEY}",
+    f"{BASE_URL}/api/flow/ingest",
     json={
         "stadiumId": "AGADIR",
         "gateId": "G1",
