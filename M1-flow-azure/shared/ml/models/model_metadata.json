@@ -1,0 +1,20 @@
+{
+  "version": "1.0",
+  "created_at": "2025-11-23T00:29:51.911332",
+  "metrics": {
+    "rmse": 0.3937744789278698,
+    "r2": 0.9948242033413981
+  },
+  "features": [
+    "hour_of_day",
+    "minute_of_hour",
+    "minutes_to_kickoff",
+    "is_peak",
+    "queue_length",
+    "processing_time",
+    "capacity_utilization",
+    "gate_G1",
+    "gate_G2",
+    "gate_G3"
+  ]
+}

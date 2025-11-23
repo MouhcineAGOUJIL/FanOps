@@ -58,10 +58,15 @@ class ONNXInference:
             logging.error(f"Inference error: {str(e)}")
             return -1.0
 
-# Singleton instance for global reuse
-# Assuming model is in shared/ml/models/wait_time_model.onnx relative to function root
-# In Azure Functions, root is usually where host.json is.
-import pathlib
-current_dir = pathlib.Path(__file__).parent.parent.parent
-model_path = current_dir / "shared" / "ml" / "models" / "wait_time_model.onnx"
-inference_engine = ONNXInference(str(model_path))
+
+# Lazy-loading singleton pattern to avoid crashes during module import
+_inference_engine = None
+
+def get_inference_engine():
+    global _inference_engine
+    if _inference_engine is None:
+        import pathlib
+        current_dir = pathlib.Path(__file__).parent.parent.parent
+        model_path = current_dir / "shared" / "ml" / "models" / "wait_time_model.onnx"
+        _inference_engine = ONNXInference(str(model_path))
+    return _inference_engine

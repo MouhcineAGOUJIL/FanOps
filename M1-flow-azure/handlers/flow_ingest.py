@@ -18,7 +18,11 @@ def flow_ingest(req: func.HttpRequest) -> func.HttpResponse:
         
         # Push to Queue
         queue_client = storage_client.get_queue_client(settings.QUEUE_NAME_INFLOW)
-        queue_client.send_message(measurement.json())
+        queue_client.send_message(json.dumps(measurement.dict()))
+        
+        # TEMPORARY WORKAROUND: Process synchronously since queue trigger isn't firing
+        from handlers.process_queue import process_measurement_sync
+        process_measurement_sync(measurement)
         
         return func.HttpResponse(
             json.dumps({"status": "accepted", "gateId": measurement.gateId}),
