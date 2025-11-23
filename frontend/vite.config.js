@@ -5,6 +5,15 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
+    // Allow ngrok and other tunneling services
+    allowedHosts: [
+      'localhost',
+      '.ngrok.io',
+      '.ngrok-free.app',
+      '.ngrok-free.dev',
+      '.loca.lt',
+      'all' // Allow all hosts (use with caution)
+    ],
     watch: {
       // Exclude directories from watching to reduce file descriptors
       ignored: [

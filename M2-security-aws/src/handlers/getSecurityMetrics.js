@@ -17,10 +17,17 @@ exports.handler = async (event) => {
         const recentEvents = await getRecentEvents();
 
         // Aggregate metrics
+        const stats = calculateStats(recentEvents);
+
         const metrics = {
+            total: stats.totalEvents,
+            valid: stats.validScans,
+            invalid: stats.invalidScans,
+            replay: stats.replayAttempts,
+            activeGates: stats.uniqueGates,
             alerts: detectAlerts(recentEvents),
             recentEvents: recentEvents.slice(0, 10), // Latest 10
-            statistics: calculateStats(recentEvents),
+            statistics: stats,
             systemHealth: {
                 lastKeyRotation: 'N/A (Manual rotation required)',
                 apiStatus: 'Healthy',
@@ -52,31 +59,45 @@ exports.handler = async (event) => {
 };
 
 async function getRecentEvents() {
-    if (IS_OFFLINE) {
-        // Read from file-based DB
-        if (!fs.existsSync(DB_FILE)) {
-            return [];
+    try {
+        if (IS_OFFLINE) {
+            // Read from file-based DB
+            if (!fs.existsSync(DB_FILE)) {
+                return [];
+            }
+            const db = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+            const auditLogs = db.audit || [];
+
+            // Filter last 24h
+            const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+            return auditLogs
+                .filter(log => new Date(log.timestamp).getTime() > oneDayAgo)
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        } else {
+            // In production, use DynamoDB Scan
+            if (!AUDIT_TABLE) {
+                console.warn('AUDIT_TABLE not configured');
+                return [];
+            }
+
+            const result = await dynamodb.scan({
+                TableName: AUDIT_TABLE,
+                Limit: 100 // Limit to last 100 events for performance
+            }).promise();
+
+            if (!result.Items || result.Items.length === 0) {
+                console.log('No audit events found');
+                return [];
+            }
+
+            const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
+            return result.Items
+                .filter(log => new Date(log.timestamp).getTime() > oneDayAgo)
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         }
-        const db = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
-        const auditLogs = db.AuditTable || [];
-
-        // Filter last 24h
-        const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
-        return auditLogs
-            .filter(log => new Date(log.timestamp).getTime() > oneDayAgo)
-            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-    } else {
-        // In production, use DynamoDB Scan with filter
-        // For better performance, consider using a GSI on timestamp
-        const result = await dynamodb.scan({
-            TableName: AUDIT_TABLE,
-            // In production, add FilterExpression for last 24h
-        }).promise();
-
-        const oneDayAgo = Date.now() - 24 * 60 * 60 * 1000;
-        return result.Items
-            .filter(log => new Date(log.timestamp).getTime() > oneDayAgo)
-            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    } catch (error) {
+        console.error('Error fetching recent events:', error);
+        return []; // Return empty array on error instead of throwing
     }
 }
 
@@ -123,11 +144,23 @@ function detectAlerts(events) {
 function calculateStats(events) {
     const last24h = events;
 
+    // Count by result field (valid, invalid_ticket, replay, etc.)
+    const validScans = last24h.filter(e => e.result === 'valid').length;
+    const invalidScans = last24h.filter(e => e.result === 'invalid_ticket' || e.result === 'invalid_jwt' || e.result === 'expired').length;
+    const replayAttempts = last24h.filter(e => e.result === 'replay' || e.result === 'replay_attack').length;
+
+    // Count unique gates
+    const uniqueGates = new Set(last24h.map(e => e.gateId).filter(Boolean)).size;
+
     return {
         totalEvents: last24h.length,
-        ticketScans: last24h.filter(e => e.type === 'TICKET_SCANNED').length,
-        loginAttempts: last24h.filter(e => e.type === 'LOGIN_SUCCESS' || e.type === 'LOGIN_FAILURE').length,
-        failedLogins: last24h.filter(e => e.type === 'LOGIN_FAILURE').length,
-        securityAlerts: last24h.filter(e => e.type === 'SECURITY_ALERT').length
+        validScans,
+        invalidScans,
+        replayAttempts,
+        uniqueGates,
+        ticketScans: last24h.length, // All events are ticket-related
+        loginAttempts: 0, // Not tracked in audit table yet
+        failedLogins: 0,
+        securityAlerts: replayAttempts + invalidScans
     };
 }

@@ -8,8 +8,11 @@ const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 
 // Configure AWS SDK for offline development
-const isOffline = process.env.IS_OFFLINE || process.env.AWS_SAM_LOCAL;
-const JWT_SECRET = process.env.JWT_SECRET || 'can2025-super-secret-key-for-local-development';
+const isOffline = process.env.IS_OFFLINE === 'true' || process.env.AWS_SAM_LOCAL === 'true';
+const JWT_SECRET = process.env.JWT_SECRET || 'can2025-secret-key-local';
+
+console.log('🌍 Running mode:', isOffline ? 'OFFLINE (local)' : 'AWS Lambda');
+console.log('🔑 JWT_SECRET:', JWT_SECRET);
 // Mock storage for offline mode
 const mockStorage = {
   usedJTI: new Map(),
@@ -271,7 +274,7 @@ exports.handler = async (event) => {
         return { valid: false, message: 'Billet inconnu (non vendu)' };
       }
 
-      if (ticket.status !== 'active') {
+      if (ticket.status && ticket.status !== 'active' && ticket.status !== 'valid') {
         return { valid: false, message: `Billet invalide (Statut: ${ticket.status})` };
       }
 
