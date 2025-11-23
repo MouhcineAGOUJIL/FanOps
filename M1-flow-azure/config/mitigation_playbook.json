@@ -1,0 +1,74 @@
+{
+    "scanner_failure": {
+        "priority": "high",
+        "actions": [
+            "Dispatch technical team to gate immediately",
+            "Activate backup scanner if available",
+            "Reroute 30% of crowd to adjacent gate",
+            "Notify operations center of hardware failure",
+            "Begin manual ticket verification as temporary measure"
+        ],
+        "estimated_time": "5-10 minutes",
+        "follow_up": "Schedule equipment inspection after match"
+    },
+    "weather_event": {
+        "priority": "medium",
+        "actions": [
+            "Deploy weather shelter at gate entrance",
+            "Increase staff presence by 50%",
+            "Send weather alerts and updates to fans via app",
+            "Prepare indoor holding area for overflow",
+            "Monitor weather forecast for further changes"
+        ],
+        "estimated_time": "10-15 minutes",
+        "follow_up": "Review weather contingency plans"
+    },
+    "crowd_surge": {
+        "priority": "high",
+        "actions": [
+            "Alert security team - Priority 1",
+            "Deploy additional staff to gate (minimum 3 personnel)",
+            "Activate crowd control barriers",
+            "Redirect new arrivals to Gates with <5min wait",
+            "Initiate public announcements for crowd distribution"
+        ],
+        "estimated_time": "2-5 minutes",
+        "follow_up": "Investigate cause of surge"
+    },
+    "system_glitch": {
+        "priority": "medium",
+        "actions": [
+            "Restart gate processing system",
+            "Clear duplicate records from database",
+            "Verify data integrity with test scans",
+            "Monitor system logs for recurring errors",
+            "Switch to backup server if issue persists"
+        ],
+        "estimated_time": "3-7 minutes",
+        "follow_up": "Full system audit post-match"
+    },
+    "staffing_issue": {
+        "priority": "medium",
+        "actions": [
+            "Redeploy staff from low-traffic areas",
+            "Call in backup personnel from reserve pool",
+            "Implement manual processing temporarily",
+            "Log incident for scheduling review",
+            "Adjust break schedules to maintain coverage"
+        ],
+        "estimated_time": "5-10 minutes",
+        "follow_up": "Review staffing allocation algorithm"
+    },
+    "vip_arrival": {
+        "priority": "low",
+        "actions": [
+            "Ensure VIP lane is properly staffed",
+            "Coordinate with VIP services team",
+            "Maintain separation from general admission",
+            "Expedite processing for VIP credentials",
+            "Monitor for completion of VIP entry window"
+        ],
+        "estimated_time": "15-20 minutes",
+        "follow_up": "Update VIP arrival schedule for next match"
+    }
+}
