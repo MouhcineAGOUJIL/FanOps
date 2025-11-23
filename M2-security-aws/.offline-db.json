@@ -6,6 +6,20 @@
       "gateId": "G1",
       "usedAt": "2025-11-22T12:24:19.275Z",
       "ttl": 1763900659
+    },
+    "6111e5b9-eeb7-4008-baa8-d8946cf34585": {
+      "jti": "6111e5b9-eeb7-4008-baa8-d8946cf34585",
+      "ticketId": "0a401d83-724d-4079-a19c-60789debe4f3",
+      "gateId": "G1",
+      "usedAt": "2025-11-22T22:56:54.741Z",
+      "ttl": 1763938614
+    },
+    "d232f541-3774-476e-bae0-d427a331340e": {
+      "jti": "d232f541-3774-476e-bae0-d427a331340e",
+      "ticketId": "612458e1-7b73-42fc-8690-b7a621bf61dd",
+      "gateId": "G1",
+      "usedAt": "2025-11-22T22:57:12.017Z",
+      "ttl": 1763938632
     }
   },
   "audit": [
@@ -91,6 +105,51 @@
       "gatekeeperId": "GK-001",
       "result": "invalid_jwt",
       "error": "jwt malformed"
+    },
+    {
+      "auditId": "839f7f7a-6451-4292-aff4-4a949e0462d4",
+      "timestamp": "2025-11-22T22:56:54.741Z",
+      "jti": "6111e5b9-eeb7-4008-baa8-d8946cf34585",
+      "ticketId": "0a401d83-724d-4079-a19c-60789debe4f3",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "B-12",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "valid"
+    },
+    {
+      "auditId": "aeb1237e-4c5f-41c3-bb7c-93ba98def219",
+      "timestamp": "2025-11-22T22:57:12.017Z",
+      "jti": "d232f541-3774-476e-bae0-d427a331340e",
+      "ticketId": "612458e1-7b73-42fc-8690-b7a621bf61dd",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "VIP-10",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "valid"
+    },
+    {
+      "auditId": "ab920293-0294-4520-9405-b65fe393a192",
+      "timestamp": "2025-11-22T22:57:16.715Z",
+      "jti": "d232f541-3774-476e-bae0-d427a331340e",
+      "ticketId": "612458e1-7b73-42fc-8690-b7a621bf61dd",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "replay_attack",
+      "message": "Tentative de rejeu détectée"
+    },
+    {
+      "auditId": "bc7dd7d7-46d6-478d-92f9-e9ee82b6f561",
+      "timestamp": "2025-11-22T22:57:24.923Z",
+      "ticketJWT": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJVU...",
+      "gateId": "G1",
+      "deviceId": "scanner-01",
+      "gatekeeperId": "GK-001",
+      "result": "invalid_jwt",
+      "error": "Bad control character in string literal in JSON at position 211"
     }
   ],
   "soldTickets": {
@@ -255,21 +314,55 @@
       "status": "active",
       "purchaseDate": "2025-11-22T13:08:52.960Z",
       "price": 50
+    },
+    "ed58db4b-a114-4372-90b6-82abf5f2d96c": {
+      "ticketId": "ed58db4b-a114-4372-90b6-82abf5f2d96c",
+      "userId": "USER-524",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "A-42",
+      "status": "active",
+      "purchaseDate": "2025-11-22T22:56:46.335Z",
+      "price": 50
+    },
+    "612458e1-7b73-42fc-8690-b7a621bf61dd": {
+      "ticketId": "612458e1-7b73-42fc-8690-b7a621bf61dd",
+      "userId": "USER-178",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "VIP-10",
+      "status": "active",
+      "purchaseDate": "2025-11-22T22:56:46.337Z",
+      "price": 200
+    },
+    "0a401d83-724d-4079-a19c-60789debe4f3": {
+      "ticketId": "0a401d83-724d-4079-a19c-60789debe4f3",
+      "userId": "USER-657",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "B-12",
+      "status": "active",
+      "purchaseDate": "2025-11-22T22:56:46.338Z",
+      "price": 50
     }
   },
   "users": {
     "admin": {
       "username": "admin",
-      "passwordHash": "$2b$10$e2n92LEfgFjvN6JAD0jAEOPBE.Ex5DZK8usPUiyNKWfcmbLIDKw8G",
+      "passwordHash": "$2b$10$Mk8NH023MypH/9MtVqhIje9zGFcfp2M9OMkuAMBelK1SZAg4qK3Su",
       "role": "admin",
-      "createdAt": "2025-11-22T13:08:43.446Z"
+      "createdAt": "2025-11-22T22:49:58.632Z"
     },
     "gk1": {
       "username": "gk1",
-      "passwordHash": "$2b$10$g8nyQE3JwjlvZTDQGi/xsuSbBWnjqrHCdGH2w6sFpVTfNABDQj0ta",
+      "passwordHash": "$2b$10$2aa7diNjYU0cTaPIJNvG2u3I9H3yn8ydaoRTm5lUw5fKX2QqEUELq",
       "role": "gatekeeper",
       "gateId": "G1",
-      "createdAt": "2025-11-22T13:08:43.512Z"
+      "createdAt": "2025-11-22T22:48:46.729Z"
+    },
+    "gatekeeper1": {
+      "username": "gatekeeper1",
+      "passwordHash": "$2b$10$46hyfPL9GcXnIHS4Zes6KeV5iwJKdkk0WfkTTJi6Sw3adb7CoMvqe",
+      "role": "gatekeeper",
+      "gateId": "G1",
+      "createdAt": "2025-11-22T22:49:58.632Z"
     }
   }
 }

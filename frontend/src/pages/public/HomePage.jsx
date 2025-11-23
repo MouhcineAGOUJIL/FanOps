@@ -35,13 +35,13 @@ export default function HomePage() {
                     {/* Navigation Menu */}
                     <nav className="hidden md:flex items-center gap-6">
                         <a href="/" className="text-white text-sm font-semibold hover:text-white/80 transition-colors">HOME</a>
-                        <a href="#" className="text-white text-sm font-semibold hover:text-white/80 transition-colors">NEWS</a>
-                        <a href="#" className="text-white text-sm font-semibold hover:text-white/80 transition-colors">VIDEOS</a>
-                        <a href="#" className="text-white text-sm font-semibold hover:text-white/80 transition-colors">CALENDAR</a>
-                        <a href="#" className="text-white text-sm font-semibold hover:text-white/80 hover:border-b-2 hover:border-green-500 pb-1 transition-all">VOLUNTEERS</a>
-                        <a href="#" className="text-white text-sm font-semibold hover:text-white/80 transition-colors">JOBS</a>
-                        <a href="#" className="text-white text-sm font-semibold hover:text-white/80 transition-colors">QUALIFIERS</a>
-                        <a href="#" className="text-white text-sm font-semibold hover:text-white/80 transition-colors">ARCHIVE</a>
+                        <a href="https://www.cafonline.com/afcon2025/news/" target="_blank" rel="noopener noreferrer" className="text-white text-sm font-semibold hover:text-white/80 transition-colors">NEWS</a>
+                        <a href="https://www.cafonline.com/afcon2025/videos/" target="_blank" rel="noopener noreferrer" className="text-white text-sm font-semibold hover:text-white/80 transition-colors">VIDEOS</a>
+                        <a href="https://www.cafonline.com/media/epqkudrg/match-schedule_totalenergies-caf-africa-cup-of-nations_morocco25.pdf" target="_blank" rel="noopener noreferrer" className="text-white text-sm font-semibold hover:text-white/80 transition-colors">CALENDAR</a>
+                        <a href="https://www.cafonline.com/afcon2025/volunteers/" target="_blank" rel="noopener noreferrer" className="text-white text-sm font-semibold hover:text-white/80 hover:border-b-2 hover:border-green-500 pb-1 transition-all">VOLUNTEERS</a>
+                        <a href="https://www.cafonline.com/afconjobs/" target="_blank" rel="noopener noreferrer" className="text-white text-sm font-semibold hover:text-white/80 transition-colors">JOBS</a>
+                        <a href="https://www.cafonline.com/afcon2025/qualifiers/" target="_blank" rel="noopener noreferrer" className="text-white text-sm font-semibold hover:text-white/80 transition-colors">QUALIFIERS</a>
+                        <a href="https://www.cafonline.com/afcon2025/archive/2023/" target="_blank" rel="noopener noreferrer" className="text-white text-sm font-semibold hover:text-white/80 transition-colors">ARCHIVE</a>
                     </nav>
 
                     <Link
