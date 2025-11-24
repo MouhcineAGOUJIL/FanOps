@@ -19,7 +19,7 @@ export const MainLayout = ({ userType }) => {
           backgroundImage: `url('/moroccan_zelij_red_1763840057262.png')`,
           backgroundSize: '400px 400px',
           backgroundRepeat: 'repeat',
-          opacity: 0.15,
+          opacity: 0.04,
           zIndex: 0
         }}
       />

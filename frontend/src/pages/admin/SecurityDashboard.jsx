@@ -73,21 +73,30 @@ export default function SecurityDashboard() {
         );
     }
 
+
     // Calculate statistics from real data
     const stats = {
-        totalScans: metrics?.total || 0,
+        totalScans: metrics?.statistics?.ticketScans || metrics?.total || 0,
         validTickets: metrics?.valid || 0,
         invalidTickets: metrics?.invalid || 0,
         replayAttempts: metrics?.replay || 0,
-        activeGates: metrics?.activeGates || 0
+        activeGates: metrics?.activeGates || 0,
+        loginAttempts: metrics?.statistics?.loginAttempts || 0,
+        failedLogins: metrics?.statistics?.failedLogins || 0,
+        successfulLogins: metrics?.statistics?.successfulLogins || 0,
+        totalEvents: metrics?.statistics?.totalEvents || metrics?.total || 0
     };
 
     const successRate = stats.totalScans > 0
         ? ((stats.validTickets / stats.totalScans) * 100).toFixed(1)
         : 0;
 
+    const loginSuccessRate = stats.loginAttempts > 0
+        ? ((stats.successfulLogins / stats.loginAttempts) * 100).toFixed(1)
+        : 0;
+
     const recentAlerts = auditLogs
-        .filter(log => log.result !== 'valid')
+        .filter(log => log.result !== 'valid' && log.result !== 'LOGIN_SUCCESS')
         .slice(0, 5);
 
     return (
@@ -111,52 +120,94 @@ export default function SecurityDashboard() {
                 </button>
             </div>
 
-            {/* Key Metrics */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="glass rounded-xl p-6">
-                    <div className="flex items-center justify-between mb-2">
-                        <Activity className="w-6 h-6 text-blue-400" />
-                        <span className="text-xs text-white/50">Total</span>
+            {/* Key Metrics - Ticket Scanning */}
+            <div>
+                <h2 className="text-white/70 text-sm font-medium mb-3 flex items-center gap-2">
+                    <Activity className="w-4 h-4" />
+                    Ticket Scanning Metrics (Last 24h)
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div className="glass rounded-xl p-6">
+                        <div className="flex items-center justify-between mb-2">
+                            <Activity className="w-6 h-6 text-blue-400" />
+                            <span className="text-xs text-white/50">Total</span>
+                        </div>
+                        <div className="text-3xl font-bold text-white">{stats.totalScans}</div>
+                        <div className="text-sm text-white/60 mt-1">Scan Attempts</div>
                     </div>
-                    <div className="text-3xl font-bold text-white">{stats.totalScans}</div>
-                    <div className="text-sm text-white/60 mt-1">Scan Attempts</div>
-                </div>
 
-                <div className="glass rounded-xl p-6">
-                    <div className="flex items-center justify-between mb-2">
-                        <CheckCircle className="w-6 h-6 text-green-400" />
-                        <span className="text-xs text-white/50">Valid</span>
+                    <div className="glass rounded-xl p-6">
+                        <div className="flex items-center justify-between mb-2">
+                            <CheckCircle className="w-6 h-6 text-green-400" />
+                            <span className="text-xs text-white/50">Valid</span>
+                        </div>
+                        <div className="text-3xl font-bold text-green-400">{stats.validTickets}</div>
+                        <div className="text-sm text-white/60 mt-1">Successful Scans</div>
                     </div>
-                    <div className="text-3xl font-bold text-green-400">{stats.validTickets}</div>
-                    <div className="text-sm text-white/60 mt-1">Successful Scans</div>
-                </div>
 
-                <div className="glass rounded-xl p-6">
-                    <div className="flex items-center justify-between mb-2">
-                        <AlertTriangle className="w-6 h-6 text-red-400" />
-                        <span className="text-xs text-white/50">Invalid</span>
+                    <div className="glass rounded-xl p-6">
+                        <div className="flex items-center justify-between mb-2">
+                            <AlertTriangle className="w-6 h-6 text-red-400" />
+                            <span className="text-xs text-white/50">Invalid</span>
+                        </div>
+                        <div className="text-3xl font-bold text-red-400">{stats.invalidTickets}</div>
+                        <div className="text-sm text-white/60 mt-1">Rejected Tickets</div>
                     </div>
-                    <div className="text-3xl font-bold text-red-400">{stats.invalidTickets}</div>
-                    <div className="text-sm text-white/60 mt-1">Rejected Tickets</div>
-                </div>
 
-                <div className="glass rounded-xl p-6">
-                    <div className="flex items-center justify-between mb-2">
-                        <Lock className="w-6 h-6 text-orange-400" />
-                        <span className="text-xs text-white/50">Replay</span>
+                    <div className="glass rounded-xl p-6">
+                        <div className="flex items-center justify-between mb-2">
+                            <Lock className="w-6 h-6 text-orange-400" />
+                            <span className="text-xs text-white/50">Replay</span>
+                        </div>
+                        <div className="text-3xl font-bold text-orange-400">{stats.replayAttempts}</div>
+                        <div className="text-sm text-white/60 mt-1">Replay Attacks</div>
                     </div>
-                    <div className="text-3xl font-bold text-orange-400">{stats.replayAttempts}</div>
-                    <div className="text-sm text-white/60 mt-1">Replay Attacks</div>
                 </div>
             </div>
 
-            {/* Success Rate & System Status */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Success Rate */}
+            {/* Authentication Metrics */}
+            <div>
+                <h2 className="text-white/70 text-sm font-medium mb-3 flex items-center gap-2">
+                    <Users className="w-4 h-4" />
+                    Authentication Metrics (Last 24h)
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="glass rounded-xl p-6">
+                        <div className="flex items-center justify-between mb-2">
+                            <Users className="w-6 h-6 text-purple-400" />
+                            <span className="text-xs text-white/50">Total</span>
+                        </div>
+                        <div className="text-3xl font-bold text-white">{stats.loginAttempts}</div>
+                        <div className="text-sm text-white/60 mt-1">Login Attempts</div>
+                    </div>
+
+                    <div className="glass rounded-xl p-6">
+                        <div className="flex items-center justify-between mb-2">
+                            <CheckCircle className="w-6 h-6 text-green-400" />
+                            <span className="text-xs text-white/50">Success</span>
+                        </div>
+                        <div className="text-3xl font-bold text-green-400">{stats.successfulLogins}</div>
+                        <div className="text-sm text-white/60 mt-1">Successful Logins</div>
+                    </div>
+
+                    <div className="glass rounded-xl p-6">
+                        <div className="flex items-center justify-between mb-2">
+                            <AlertTriangle className="w-6 h-6 text-red-400" />
+                            <span className="text-xs text-white/50">Failed</span>
+                        </div>
+                        <div className="text-3xl font-bold text-red-400">{stats.failedLogins}</div>
+                        <div className="text-sm text-white/60 mt-1">Failed Attempts</div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Success Rates & System Status */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {/* Ticket Success Rate */}
                 <div className="glass rounded-xl p-6">
                     <h3 className="text-white font-bold mb-4 flex items-center gap-2">
                         <TrendingUp className="w-5 h-5 text-green-400" />
-                        Success Rate
+                        Ticket Success Rate
                     </h3>
                     <div className="flex items-end gap-4">
                         <div className="text-5xl font-bold text-green-400">{successRate}%</div>
@@ -166,6 +217,24 @@ export default function SecurityDashboard() {
                         <div
                             className="bg-green-400 h-full rounded-full transition-all"
                             style={{ width: `${successRate}%` }}
+                        />
+                    </div>
+                </div>
+
+                {/* Login Success Rate */}
+                <div className="glass rounded-xl p-6">
+                    <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+                        <Users className="w-5 h-5 text-purple-400" />
+                        Login Success Rate
+                    </h3>
+                    <div className="flex items-end gap-4">
+                        <div className="text-5xl font-bold text-purple-400">{loginSuccessRate}%</div>
+                        <div className="text-white/60 mb-2">auth success</div>
+                    </div>
+                    <div className="mt-4 bg-white/5 rounded-full h-3 overflow-hidden">
+                        <div
+                            className="bg-purple-400 h-full rounded-full transition-all"
+                            style={{ width: `${loginSuccessRate}%` }}
                         />
                     </div>
                 </div>
@@ -198,6 +267,12 @@ export default function SecurityDashboard() {
                                 Active
                             </span>
                         </div>
+                        <div className="border-t border-white/10 pt-3 mt-3">
+                            <div className="flex items-center gap-2 text-xs text-white/50">
+                                <Key className="w-3 h-3" />
+                                <span>Key Rotation: {metrics?.systemHealth?.lastKeyRotation || 'Manual'}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -219,8 +294,8 @@ export default function SecurityDashboard() {
                             <div
                                 key={index}
                                 className={`p-4 rounded-lg border ${alert.result === 'replay'
-                                        ? 'bg-red-500/10 border-red-500/30'
-                                        : 'bg-orange-500/10 border-orange-500/30'
+                                    ? 'bg-red-500/10 border-red-500/30'
+                                    : 'bg-orange-500/10 border-orange-500/30'
                                     }`}
                             >
                                 <div className="flex items-start justify-between">

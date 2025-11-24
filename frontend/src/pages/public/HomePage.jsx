@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Shield, Ticket, Activity, ArrowRight, Users, BarChart3 } from 'lucide-react';
+import cafLogo from '../../assets/afcon2025_logo.png';
 
 export default function HomePage() {
     return (
@@ -23,13 +24,17 @@ export default function HomePage() {
                 <div className="container mx-auto px-6 h-16 flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <img
-                            src="/src/assets/afcon2025_logo.png"
+                            src={cafLogo}
                             alt="AFCON 2025"
-                            className="h-10 w-auto"
-                            onError={(e) => {
-                                e.target.style.display = 'none';
+                            className="h-12 w-auto"
+                            style={{
+                                filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.3))'
                             }}
                         />
+                        <div>
+                            <p className="text-white/60 text-xs uppercase tracking-wider">TotalEnergies</p>
+                            <h1 className="text-white text-lg font-bold uppercase tracking-tight">AFCON 2025 FanOps</h1>
+                        </div>
                     </div>
 
                     {/* Navigation Menu */}
