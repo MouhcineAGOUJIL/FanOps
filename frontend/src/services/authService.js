@@ -6,7 +6,8 @@ export const authService = {
         try {
             const response = await m2Client.post('/auth/login', { username, password });
 
-            if (response.data.ok) {
+            // Check if token exists in response (backend returns token directly)
+            if (response.data.token) {
                 localStorage.setItem('auth_token', response.data.token);
                 localStorage.setItem('user_role', response.data.user.role);
                 localStorage.setItem('user_data', JSON.stringify(response.data.user));

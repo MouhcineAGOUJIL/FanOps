@@ -18,7 +18,7 @@ export default function LoginPage() {
         try {
             const result = await authService.login(username, password);
 
-            if (result.ok) {
+            if (result.token) {
                 const role = result.user.role;
                 if (role === 'admin') {
                     navigate('/admin');
