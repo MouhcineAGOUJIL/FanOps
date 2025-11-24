@@ -209,6 +209,19 @@ resources:
       Properties:
         InstanceType: t3.micro
         ImageId: ami-0694d931cee176e7d # Ubuntu 22.04 LTS (eu-west-1)
+        # KeyName: my-key-pair # UNCOMMENT and replace with your AWS KeyPair name to enable SSH
+        SecurityGroups:
+          - !Ref SecurityInstanceSG
         Tags:
           - Key: Name
             Value: ${self:service}-${self:provider.stage}-test-instance
+
+    SecurityInstanceSG:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: Allow SSH access to security test instance
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: 22
+            ToPort: 22
+            CidrIp: 0.0.0.0/0 # WARNING: In production, restrict to your IP only
