@@ -13,12 +13,12 @@ const IS_OFFLINE = process.env.IS_OFFLINE === 'true';
 const JWT_SECRET = process.env.JWT_SECRET || 'can2025-secret-key-local';
 
 // Cache for KMS-retrieved secret
+// Cache for KMS-retrieved secret
 let cachedJWTSecret = null;
-const isOffline = process.env.IS_OFFLINE || process.env.AWS_SAM_LOCAL;
 
 // DB Setup (Offline Support)
 let dynamodb;
-if (isOffline) {
+if (IS_OFFLINE) {
     const DB_FILE = path.join(__dirname, '../../.offline-db.json');
 
     // Helper to read/write DB
@@ -94,11 +94,7 @@ exports.login = async (event) => {
                 ipAddress: event.requestContext?.identity?.sourceIp,
                 userAgent: event.requestContext?.identity?.userAgent
             });
-            return {
-                statusCode: 400,
-                headers: { 'Access-Control-Allow-Origin': '*' },
-                body: JSON.stringify({ message: 'Username and password are required' })
-            };
+            return createResponse(400, { message: 'Username and password are required' });
         }
 
         // Get JWT Secret (from KMS or Env)
@@ -111,21 +107,17 @@ exports.login = async (event) => {
             }
         }
 
-        // Fetch user
-        const result = await dynamodb.get({
+        // Fetch user (Scan because we don't have userId, only username)
+        // In production, use a GSI on username for performance
+        const result = await dynamodb.scan({
             TableName: USERS_TABLE,
-            Key: { username } // Note: Schema uses 'userId' as key but for login we often lookup by username. 
-            // If schema is userId, we might need a GSI or Scan. 
-            // Assuming for now username is the key or we scan.
-            // Wait, serverless.yml says KeySchema is userId. 
-            // Let's check the offline logic. It uses db.users[username].
-            // We should probably stick to the existing logic for now.
+            FilterExpression: 'username = :username',
+            ExpressionAttributeValues: {
+                ':username': username
+            }
         }).promise();
 
-        // For this implementation, let's assume the existing logic works (it might be using username as key in practice or mock)
-        // If the table key is userId, this .get will fail if we pass username as Key unless username IS the userId.
-
-        const user = result.Item;
+        const user = result.Items && result.Items.length > 0 ? result.Items[0] : null;
 
         if (!user || user.password !== password) { // In prod use bcrypt.compare
             await logAuditEvent({
@@ -136,11 +128,7 @@ exports.login = async (event) => {
                 ipAddress: event.requestContext?.identity?.sourceIp,
                 userAgent: event.requestContext?.identity?.userAgent
             });
-            return {
-                statusCode: 401,
-                headers: { 'Access-Control-Allow-Origin': '*' },
-                body: JSON.stringify({ message: 'Invalid credentials' })
-            };
+            return createResponse(401, { message: 'Invalid credentials' });
         }
 
         // Generate JWT
@@ -163,14 +151,10 @@ exports.login = async (event) => {
             userAgent: event.requestContext?.identity?.userAgent
         });
 
-        return {
-            statusCode: 200,
-            headers: { 'Access-Control-Allow-Origin': '*' },
-            body: JSON.stringify({
-                token,
-                user: { username: user.username, role: user.role }
-            })
-        };
+        return createResponse(200, {
+            token,
+            user: { username: user.username, role: user.role }
+        });
 
     } catch (error) {
         console.error('Login error:', error);
