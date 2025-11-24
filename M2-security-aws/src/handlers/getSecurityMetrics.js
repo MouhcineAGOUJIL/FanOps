@@ -146,11 +146,30 @@ function calculateStats(events) {
 
     // Count by result field (valid, invalid_ticket, replay, etc.)
     const validScans = last24h.filter(e => e.result === 'valid').length;
-    const invalidScans = last24h.filter(e => e.result === 'invalid_ticket' || e.result === 'invalid_jwt' || e.result === 'expired').length;
-    const replayAttempts = last24h.filter(e => e.result === 'replay' || e.result === 'replay_attack').length;
+    const invalidScans = last24h.filter(e =>
+        e.result === 'invalid_ticket' ||
+        e.result === 'invalid_jwt' ||
+        e.result === 'expired'
+    ).length;
+    const replayAttempts = last24h.filter(e =>
+        e.result === 'replay' ||
+        e.result === 'replay_attack'
+    ).length;
 
     // Count unique gates
     const uniqueGates = new Set(last24h.map(e => e.gateId).filter(Boolean)).size;
+
+    // Track authentication events
+    const loginSuccesses = last24h.filter(e => e.result === 'LOGIN_SUCCESS').length;
+    const loginFailures = last24h.filter(e => e.result === 'LOGIN_FAILURE').length;
+    const loginAttempts = loginSuccesses + loginFailures;
+
+    // Total ticket scans (exclude authentication events)
+    const ticketEvents = last24h.filter(e =>
+        e.type !== 'authentication' &&
+        !e.result?.startsWith('LOGIN')
+    );
+    const ticketScans = ticketEvents.length;
 
     return {
         totalEvents: last24h.length,
@@ -158,9 +177,10 @@ function calculateStats(events) {
         invalidScans,
         replayAttempts,
         uniqueGates,
-        ticketScans: last24h.length, // All events are ticket-related
-        loginAttempts: 0, // Not tracked in audit table yet
-        failedLogins: 0,
-        securityAlerts: replayAttempts + invalidScans
+        ticketScans,
+        loginAttempts,
+        failedLogins: loginFailures,
+        successfulLogins: loginSuccesses,
+        securityAlerts: replayAttempts + invalidScans + loginFailures
     };
 }
