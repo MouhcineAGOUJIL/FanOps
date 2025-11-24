@@ -33,11 +33,24 @@ provider:
         - !GetAtt AuditTable.Arn
         - !GetAtt SoldTicketsTable.Arn
         - !GetAtt UsersTable.Arn
+    # KMS Permissions for encryption/decryption
     - Effect: Allow
       Action:
         - kms:Decrypt
+        - kms:DescribeKey
+        - kms:Encrypt
+        - kms:GenerateDataKey
+      Resource:
+        - arn:aws:kms:${self:provider.region}:*:key/*
+        - arn:aws:kms:${self:provider.region}:*:alias/can2025-*
+    # SSM Parameter Store Permissions
+    - Effect: Allow
+      Action:
         - ssm:GetParameter
-      Resource: '*'
+        - ssm:GetParameters
+        - ssm:GetParametersByPath
+      Resource:
+        - arn:aws:ssm:${self:provider.region}:*:parameter/can2025/*
     - Effect: Allow
       Action:
         - sqs:SendMessage
@@ -51,6 +64,9 @@ provider:
       Ref: SecurityQueue
     SOLD_TICKETS_TABLE: ${self:service}-sold-tickets-${opt:stage, self:provider.stage}
     USERS_TABLE: ${self:service}-users-${opt:stage, self:provider.stage}
+    # JWT secret from SSM Parameter Store (KMS encrypted)
+    JWT_SECRET_PARAM: /can2025/${opt:stage, self:provider.stage}/jwt-secret
+    # Fallback for offline/local development
     JWT_SECRET: ${env:JWT_SECRET, 'can2025-secret-key-local'}
 
 functions:

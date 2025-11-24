@@ -6,6 +6,7 @@ console.log('🔑 Using JWT_SECRET:', process.env.JWT_SECRET || 'can2025-secret-
 const AWS = require('aws-sdk');
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
+const { getJWTSecret } = require('../utils/kmsHelper');
 
 // Configure AWS SDK for offline development
 const isOffline = process.env.IS_OFFLINE === 'true' || process.env.AWS_SAM_LOCAL === 'true';
@@ -116,7 +117,17 @@ exports.handler = async (event) => {
     // 1. Vérifier et décoder le JWT
     let decoded;
     try {
-      decoded = jwt.verify(ticketJWT, JWT_SECRET);
+      // Get JWT Secret (from KMS or Env)
+      let secret = JWT_SECRET;
+      if (!isOffline) {
+        try {
+          secret = await getJWTSecret();
+        } catch (err) {
+          console.error('Failed to fetch KMS secret, using fallback');
+        }
+      }
+
+      decoded = jwt.verify(ticketJWT, secret);
       console.log('✅ JWT decoded successfully');
     } catch (error) {
       console.log('❌ JWT verification failed:', error.message);
