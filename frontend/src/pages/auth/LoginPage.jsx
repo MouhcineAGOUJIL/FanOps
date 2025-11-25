@@ -31,7 +31,11 @@ export default function LoginPage() {
                 setError(result.message || 'Login failed');
             }
         } catch (err) {
-            setError('Connection error. Please try again.');
+            if (err.response && err.response.status === 401) {
+                setError('Invalid credentials');
+            } else {
+                setError('Connection error. Please try again.');
+            }
             console.error(err);
         } finally {
             setLoading(false);
