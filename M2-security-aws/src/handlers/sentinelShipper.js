@@ -5,7 +5,7 @@ const crypto = require('crypto');
 // Configuration - Get these from Environment Variables
 const WORKSPACE_ID = process.env.SENTINEL_WORKSPACE_ID;
 const SHARED_KEY = process.env.SENTINEL_SHARED_KEY;
-const LOG_TYPE = 'FanOps_M2_CL'; // Custom Log Table Name in Sentinel
+const LOG_TYPE = 'FanOps_M2'; // Custom Log Table Name in Sentinel (Azure adds _CL)
 
 /**
  * Azure Log Analytics Data Collector API

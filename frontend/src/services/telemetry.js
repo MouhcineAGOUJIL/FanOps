@@ -17,11 +17,17 @@ const appInsights = new ApplicationInsights({
 });
 
 // Only load if connection string is present
-if (import.meta.env.VITE_APP_INSIGHTS_CONNECTION_STRING) {
+const connString = import.meta.env.VITE_APP_INSIGHTS_CONNECTION_STRING;
+if (connString) {
     appInsights.loadAppInsights();
-    console.log('🛡️ Azure Sentinel Telemetry: Active');
+    console.log(`🛡️ Azure Sentinel Telemetry: Active (Key starts with: ${connString.substring(0, 10)}...)`);
+
+    // Send a test event immediately
+    appInsights.trackEvent({ name: 'Sentinel_Integration_Test_Event', properties: { timestamp: new Date().toISOString() } });
+    console.log('📨 Sent test event: Sentinel_Integration_Test_Event');
 } else {
-    console.log('⚠️ Azure Sentinel Telemetry: Disabled (Missing Connection String)');
+    console.error('⚠️ Azure Sentinel Telemetry: Disabled. VITE_APP_INSIGHTS_CONNECTION_STRING is missing!');
+    console.log('Current Env Vars:', import.meta.env);
 }
 
 export const logEvent = (name, properties = {}) => {
