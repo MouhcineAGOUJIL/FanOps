@@ -3,15 +3,28 @@ const { v4: uuidv4 } = require('uuid');
 const jwt = require('jsonwebtoken');
 
 // Configure AWS
+const { getJWTSecret } = require('../src/utils/kmsHelper');
+
+// Configure AWS
 const dynamodb = new AWS.DynamoDB.DocumentClient({
     region: 'eu-west-1'
 });
 
 const TICKETS_TABLE = 'can2025-secure-gates-sold-tickets-dev';
-const JWT_SECRET = 'can2025-secret-key-local'; // Use same secret as deployed functions
 
 async function seedTickets() {
     console.log(`🌱 Seeding Tickets to AWS DynamoDB: ${TICKETS_TABLE}...`);
+
+    // Fetch secret from KMS
+    let JWT_SECRET;
+    try {
+        console.log('🔐 Fetching JWT Secret from KMS...');
+        JWT_SECRET = await getJWTSecret();
+        console.log('✅ Secret fetched successfully');
+    } catch (error) {
+        console.error('❌ Failed to fetch secret from KMS:', error);
+        JWT_SECRET = 'can2025-secret-key-local'; // Fallback
+    }
 
     const tickets = [
         { userId: `USER-${Math.floor(Math.random() * 1000)}`, seat: 'A-42', type: 'STANDARD' },

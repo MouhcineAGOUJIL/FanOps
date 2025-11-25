@@ -1,0 +1,45 @@
+# 🎫 Valid Tickets for Testing (KMS Signed)
+
+These tickets are **cryptographically valid** (signed with the production KMS key) and ready to use.
+
+## 🟢 Valid Tickets (Ready to Scan)
+
+### Ticket #1 (VIP)
+- **User**: USER-898
+- **Seat**: VIP-5
+- **JWT**:
+  ```
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJVU0VSLTg5OCIsInRpY2tldElkIjoiNzgzOTAwNzgtNmZiZi00MmU4LTk5NWItNjI4Yjg3MTZhM2EwIiwic2NvcGVzIjpbImZhbiJdLCJqdGkiOiIyZDZiZmFlOC01NjZmLTRjZWItYWY3MS00YzdlMmFlY2QyZjciLCJtYXRjaElkIjoiQ0FOMjAyNS1NQVItRzEiLCJzZWF0TnVtYmVyIjoiVklQLTUiLCJ0eXBlIjoiVklQIiwiaWF0IjoxNzY0MDYwMzk4LCJleHAiOjE3NjQxNDY3OTh9.V1B6ZP-sRl23VJhKyJ99mXRNDa0cqqs0l-pa85_XmjU
+  ```
+
+### Ticket #2 (VIP)
+- **User**: USER-742
+- **Seat**: VIP-10
+- **JWT**:
+  ```
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJVU0VSLTc0MiIsInRpY2tldElkIjoiNGFhNGRhNmMtZWJjNy00ZTEzLTgxZmQtMTI4MmZiOGNlZTEyIiwic2NvcGVzIjpbImZhbiJdLCJqdGkiOiIwMTU1NDA5Yy0xYzg2LTRmNWMtYWQyYS05ZDI5OTk3YTc1N2QiLCJtYXRjaElkIjoiQ0FOMjAyNS1NQVItRzEiLCJzZWF0TnVtYmVyIjoiVklQLTEwIiwidHlwZSI6IlZJUCIsImlhdCI6MTc2NDA2MDM5OCwiZXhwIjoxNzY0MTQ2Nzk4fQ.9KngUXkhIBJ8XoIJAF-0AN-pWvNQQSn1QPfUgzWq37s
+  ```
+
+### Ticket #3 (Standard)
+- **User**: USER-634
+- **Seat**: C-55
+- **JWT**:
+  ```
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJVU0VSLTYzNCIsInRpY2tldElkIjoiOGFiNDBlMzQtMzU5MC00ZjY0LWFlNTUtMWY4ODQwNThiMmUwIiwic2NvcGVzIjpbImZhbiJdLCJqdGkiOiI4YWY5ZWE0NC0yYjUzLTQyMzItOTIxNy05NGFmYWYyZmQ0YTAiLCJtYXRjaElkIjoiQ0FOMjAyNS1NQVItRzEiLCJzZWF0TnVtYmVyIjoiQy01NSIsInR5cGUiOiJTVEFOREFSRCIsImlhdCI6MTc2NDA2MDM5OCwiZXhwIjoxNzY0MTQ2Nzk4fQ.uf19Nh2lhNEyPMB_c5tEkKhFBWcogzuiA2JQaSvC6Sg
+  ```
+
+### Ticket #4 (Standard)
+- **User**: USER-893
+- **Seat**: B-12
+- **JWT**:
+  ```
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJVU0VSLTg5MyIsInRpY2tldElkIjoiMGI3N2RlZDYtOTQ5My00NjRlLWJjZGQtMmFkZDI5NTJjMGRkIiwic2NvcGVzIjpbImZhbiJdLCJqdGkiOiJhYWEzNjM3MC0yMmViLTRiNzEtOWI3Ny1jMGQzNWZjN2I0Y2QiLCJtYXRjaElkIjoiQ0FOMjAyNS1NQVItRzEiLCJzZWF0TnVtYmVyIjoiQi0xMiIsInR5cGUiOiJTVEFOREFSRCIsImlhdCI6MTc2NDA2MDM5OCwiZXhwIjoxNzY0MTQ2Nzk4fQ.bkMJ-LzGgG69GPisQlIhXTvR0Y-TwrLMM1O-4E6dPdw
+  ```
+
+### Ticket #5 (Standard)
+- **User**: USER-237
+- **Seat**: A-42
+- **JWT**:
+  ```
+  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJVU0VSLTIzNyIsInRpY2tldElkIjoiN2RiMDcxYjktZjkwNy00ZDdhLTlhZjgtYmU1MmU1Mzg4NmFiIiwic2NvcGVzIjpbImZhbiJdLCJqdGkiOiIwMDdkYjQ3YS1lZTBmLTRjMjUtOWMwNS0wNzk3MzEzMzVlYmIiLCJtYXRjaElkIjoiQ0FOMjAyNS1NQVItRzEiLCJzZWF0TnVtYmVyIjoiQS00MiIsInR5cGUiOiJTVEFOREFSRCIsImlhdCI6MTc2NDA2MDM5NywiZXhwIjoxNzY0MTQ2Nzk3fQ.87VyJRE_S-dw4vXUVMoQ-n9xj40s6h-RuocjrB7ZLRI
+  ```
