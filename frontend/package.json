@@ -10,6 +10,7 @@
     "lint": "eslint . --ext js,jsx"
   },
   "dependencies": {
+    "@microsoft/applicationinsights-web": "^3.3.10",
     "axios": "^1.13.2",
     "clsx": "^2.0.0",
     "date-fns": "^3.6.0",

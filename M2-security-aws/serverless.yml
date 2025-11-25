@@ -133,6 +133,22 @@ functions:
           method: get
           cors: true
 
+  sentinelShipper:
+    handler: src/handlers/sentinelShipper.handler
+    description: Forwards CloudWatch Logs to Azure Sentinel
+    memorySize: 128
+    timeout: 10
+    environment:
+      SENTINEL_WORKSPACE_ID: ${env:SENTINEL_WORKSPACE_ID, ''}
+      SENTINEL_SHARED_KEY: ${env:SENTINEL_SHARED_KEY, ''}
+    events:
+      - cloudwatchLog:
+          logGroup: /aws/lambda/can2025-secure-gates-dev-verifyTicket
+      - cloudwatchLog:
+          logGroup: /aws/lambda/can2025-secure-gates-dev-login
+      - cloudwatchLog:
+          logGroup: /aws/lambda/can2025-secure-gates-dev-reportGate
+
 
 plugins:
   - serverless-offline
