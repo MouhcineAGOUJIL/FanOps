@@ -2,6 +2,7 @@
 service: can2025-secure-gates
 
 frameworkVersion: '3'
+useDotenv: true
 
 provider:
   name: aws

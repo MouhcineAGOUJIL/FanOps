@@ -307,7 +307,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/can2025-secure-gates/dev/1764096985917-2025-11-25T18:56:25.917Z/can2025-secure-gates.zip"
+          "S3Key": "serverless/can2025-secure-gates/dev/1764108650876-2025-11-25T22:10:50.876Z/can2025-secure-gates.zip"
         },
         "Handler": "src/handlers/verifyTicket.handler",
         "Runtime": "nodejs20.x",
@@ -329,7 +329,7 @@
             "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
             "USERS_TABLE": "can2025-secure-gates-users-dev",
             "JWT_SECRET_PARAM": "/can2025/dev/jwt-secret",
-            "JWT_SECRET": "can2025-secret-key-local"
+            "JWT_SECRET": "can2025-super-secret-key-for-local-development"
           }
         },
         "Role": {
@@ -350,7 +350,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/can2025-secure-gates/dev/1764096985917-2025-11-25T18:56:25.917Z/can2025-secure-gates.zip"
+          "S3Key": "serverless/can2025-secure-gates/dev/1764108650876-2025-11-25T22:10:50.876Z/can2025-secure-gates.zip"
         },
         "Handler": "src/handlers/reportGate.handler",
         "Runtime": "nodejs20.x",
@@ -372,7 +372,7 @@
             "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
             "USERS_TABLE": "can2025-secure-gates-users-dev",
             "JWT_SECRET_PARAM": "/can2025/dev/jwt-secret",
-            "JWT_SECRET": "can2025-secret-key-local"
+            "JWT_SECRET": "can2025-super-secret-key-for-local-development"
           }
         },
         "Role": {
@@ -393,7 +393,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/can2025-secure-gates/dev/1764096985917-2025-11-25T18:56:25.917Z/can2025-secure-gates.zip"
+          "S3Key": "serverless/can2025-secure-gates/dev/1764108650876-2025-11-25T22:10:50.876Z/can2025-secure-gates.zip"
         },
         "Handler": "src/handlers/auth.login",
         "Runtime": "nodejs20.x",
@@ -414,7 +414,7 @@
             "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
             "USERS_TABLE": "can2025-secure-gates-users-dev",
             "JWT_SECRET_PARAM": "/can2025/dev/jwt-secret",
-            "JWT_SECRET": "can2025-secret-key-local"
+            "JWT_SECRET": "can2025-super-secret-key-for-local-development"
           }
         },
         "Role": {
@@ -435,7 +435,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/can2025-secure-gates/dev/1764096985917-2025-11-25T18:56:25.917Z/can2025-secure-gates.zip"
+          "S3Key": "serverless/can2025-secure-gates/dev/1764108650876-2025-11-25T22:10:50.876Z/can2025-secure-gates.zip"
         },
         "Handler": "src/handlers/auth.logout",
         "Runtime": "nodejs20.x",
@@ -456,7 +456,7 @@
             "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
             "USERS_TABLE": "can2025-secure-gates-users-dev",
             "JWT_SECRET_PARAM": "/can2025/dev/jwt-secret",
-            "JWT_SECRET": "can2025-secret-key-local"
+            "JWT_SECRET": "can2025-super-secret-key-for-local-development"
           }
         },
         "Role": {
@@ -477,7 +477,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/can2025-secure-gates/dev/1764096985917-2025-11-25T18:56:25.917Z/can2025-secure-gates.zip"
+          "S3Key": "serverless/can2025-secure-gates/dev/1764108650876-2025-11-25T22:10:50.876Z/can2025-secure-gates.zip"
         },
         "Handler": "src/handlers/logAnalyzer.handler",
         "Runtime": "nodejs20.x",
@@ -498,7 +498,7 @@
             "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
             "USERS_TABLE": "can2025-secure-gates-users-dev",
             "JWT_SECRET_PARAM": "/can2025/dev/jwt-secret",
-            "JWT_SECRET": "can2025-secret-key-local"
+            "JWT_SECRET": "can2025-super-secret-key-for-local-development"
           }
         },
         "Role": {
@@ -519,7 +519,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/can2025-secure-gates/dev/1764096985917-2025-11-25T18:56:25.917Z/can2025-secure-gates.zip"
+          "S3Key": "serverless/can2025-secure-gates/dev/1764108650876-2025-11-25T22:10:50.876Z/can2025-secure-gates.zip"
         },
         "Handler": "src/handlers/rotateKey.handler",
         "Runtime": "nodejs20.x",
@@ -540,7 +540,7 @@
             "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
             "USERS_TABLE": "can2025-secure-gates-users-dev",
             "JWT_SECRET_PARAM": "/can2025/dev/jwt-secret",
-            "JWT_SECRET": "can2025-secret-key-local",
+            "JWT_SECRET": "can2025-super-secret-key-for-local-development",
             "SSM_PARAMETER_PATH": "/can2025/dev/jwt-secret"
           }
         },
@@ -562,7 +562,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/can2025-secure-gates/dev/1764096985917-2025-11-25T18:56:25.917Z/can2025-secure-gates.zip"
+          "S3Key": "serverless/can2025-secure-gates/dev/1764108650876-2025-11-25T22:10:50.876Z/can2025-secure-gates.zip"
         },
         "Handler": "src/handlers/getSecurityMetrics.handler",
         "Runtime": "nodejs20.x",
@@ -583,7 +583,7 @@
             "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
             "USERS_TABLE": "can2025-secure-gates-users-dev",
             "JWT_SECRET_PARAM": "/can2025/dev/jwt-secret",
-            "JWT_SECRET": "can2025-secret-key-local"
+            "JWT_SECRET": "can2025-super-secret-key-for-local-development"
           }
         },
         "Role": {
@@ -604,7 +604,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/can2025-secure-gates/dev/1764096985917-2025-11-25T18:56:25.917Z/can2025-secure-gates.zip"
+          "S3Key": "serverless/can2025-secure-gates/dev/1764108650876-2025-11-25T22:10:50.876Z/can2025-secure-gates.zip"
         },
         "Handler": "src/handlers/sentinelShipper.handler",
         "Runtime": "nodejs20.x",
@@ -626,7 +626,7 @@
             "SOLD_TICKETS_TABLE": "can2025-secure-gates-sold-tickets-dev",
             "USERS_TABLE": "can2025-secure-gates-users-dev",
             "JWT_SECRET_PARAM": "/can2025/dev/jwt-secret",
-            "JWT_SECRET": "can2025-secret-key-local",
+            "JWT_SECRET": "can2025-super-secret-key-for-local-development",
             "SENTINEL_WORKSPACE_ID": "8319720c-e6ac-4cda-b35a-4e2ca89f36dd",
             "SENTINEL_SHARED_KEY": "HHpZpx5j6RUP1O62r7VaYe6nFbIu0aKZcykne3w2QbpdUp3Tvzr7H127IwxpT6X2FRFRpfR89kQvs0cyLauuWA=="
           }
@@ -642,86 +642,86 @@
         "SentinelShipperLogGroup"
       ]
     },
-    "VerifyTicketLambdaVersionjTCFefXs83GmwGYCH9dStHS9zYOLMSkkMVxLzSc778": {
+    "VerifyTicketLambdaVersion7k8TQI5FfvpU7inJ06hnDJQDN8qya7GSuNNxvzx3ZSU": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "VerifyTicketLambdaFunction"
         },
-        "CodeSha256": "/WbpWA3L9og9DY/SvDI6j2OcJMcHsEs0MaDreUkrV2Y=",
+        "CodeSha256": "oVGdx9b7mH6GvNGOJKH9YNZOjdGerGK1nym3JFajBu0=",
         "Description": "Vérification et validation des billets JWT"
       }
     },
-    "ReportGateLambdaVersionlrSOylO9MZbHiGJABgUki0ctrTDZcmBrTyyb9XdnaI0": {
+    "ReportGateLambdaVersionjakb9kiHoi6iVA3jgP7wMeqJemntg3T63BEBPdpobQ": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ReportGateLambdaFunction"
         },
-        "CodeSha256": "/WbpWA3L9og9DY/SvDI6j2OcJMcHsEs0MaDreUkrV2Y=",
+        "CodeSha256": "oVGdx9b7mH6GvNGOJKH9YNZOjdGerGK1nym3JFajBu0=",
         "Description": "Rapport de statut des portiques"
       }
     },
-    "LoginLambdaVersion7EMCP4oEvl9TTHoMPctK2nBPTjMYXvmDp4eoF1QM": {
+    "LoginLambdaVersion6tY5bPAlQcsr9o04ubgkuGBmP5kcaFJjBwv1nUPzWA": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "LoginLambdaFunction"
         },
-        "CodeSha256": "/WbpWA3L9og9DY/SvDI6j2OcJMcHsEs0MaDreUkrV2Y="
+        "CodeSha256": "oVGdx9b7mH6GvNGOJKH9YNZOjdGerGK1nym3JFajBu0="
       }
     },
-    "LogoutLambdaVersiono6XMzCrVLmqDq7hr4gJsgz46nKFZ1iUxDKB3xf6lNsY": {
+    "LogoutLambdaVersionqjxDuyhjmUAoyzal4YUVXIlsmRYudev28Lk0FUl3c": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "LogoutLambdaFunction"
         },
-        "CodeSha256": "/WbpWA3L9og9DY/SvDI6j2OcJMcHsEs0MaDreUkrV2Y="
+        "CodeSha256": "oVGdx9b7mH6GvNGOJKH9YNZOjdGerGK1nym3JFajBu0="
       }
     },
-    "LogAnalyzerLambdaVersione4N6In4qb67sR1HhD5oRIERr9g8Lzpfi1th4UW1q6Q": {
+    "LogAnalyzerLambdaVersionSHg0YIlVm0sRcBE4tRK3GxJkFv6QvyzvrN61fk4n0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "LogAnalyzerLambdaFunction"
         },
-        "CodeSha256": "/WbpWA3L9og9DY/SvDI6j2OcJMcHsEs0MaDreUkrV2Y="
+        "CodeSha256": "oVGdx9b7mH6GvNGOJKH9YNZOjdGerGK1nym3JFajBu0="
       }
     },
-    "RotateKeyLambdaVersionD5cTaSPoWimrruWTZxNiFNg2Bl75D9NmLBWK8cK6w": {
+    "RotateKeyLambdaVersionEE72ltOzrfaLcX6pwAls7rzHlyf0xuSF4VrdThfnWs": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "RotateKeyLambdaFunction"
         },
-        "CodeSha256": "/WbpWA3L9og9DY/SvDI6j2OcJMcHsEs0MaDreUkrV2Y="
+        "CodeSha256": "oVGdx9b7mH6GvNGOJKH9YNZOjdGerGK1nym3JFajBu0="
       }
     },
-    "GetSecurityMetricsLambdaVersionxtoPCpRhkbQPHo849uXIL5UZQRaz9FqcOMJ6lphtE": {
+    "GetSecurityMetricsLambdaVersionnimVm7c4InXpidMXJj69rTiM3wptII2rG6D7oiU5C4": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "GetSecurityMetricsLambdaFunction"
         },
-        "CodeSha256": "/WbpWA3L9og9DY/SvDI6j2OcJMcHsEs0MaDreUkrV2Y="
+        "CodeSha256": "oVGdx9b7mH6GvNGOJKH9YNZOjdGerGK1nym3JFajBu0="
       }
     },
-    "SentinelShipperLambdaVersion08uSenIdi4Pn3EOocLP0lx4rUW7NfZXG9l75yOwMM": {
+    "SentinelShipperLambdaVersionp45svmfaokD205dOWFJmTS3F1bPMa8tyoMAer5D1U": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SentinelShipperLambdaFunction"
         },
-        "CodeSha256": "/WbpWA3L9og9DY/SvDI6j2OcJMcHsEs0MaDreUkrV2Y=",
+        "CodeSha256": "oVGdx9b7mH6GvNGOJKH9YNZOjdGerGK1nym3JFajBu0=",
         "Description": "Forwards CloudWatch Logs to Azure Sentinel"
       }
     },
@@ -1282,7 +1282,7 @@
         "GetSecurityMetricsLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1764096975061": {
+    "ApiGatewayDeployment1764108633988": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -1305,7 +1305,7 @@
     },
     "ApiGatewayUsagePlan": {
       "Type": "AWS::ApiGateway::UsagePlan",
-      "DependsOn": "ApiGatewayDeployment1764096975061",
+      "DependsOn": "ApiGatewayDeployment1764108633988",
       "Properties": {
         "ApiStages": [
           {
@@ -1764,7 +1764,7 @@
     "VerifyTicketLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "VerifyTicketLambdaVersionjTCFefXs83GmwGYCH9dStHS9zYOLMSkkMVxLzSc778"
+        "Ref": "VerifyTicketLambdaVersion7k8TQI5FfvpU7inJ06hnDJQDN8qya7GSuNNxvzx3ZSU"
       },
       "Export": {
         "Name": "sls-can2025-secure-gates-dev-VerifyTicketLambdaFunctionQualifiedArn"
@@ -1773,7 +1773,7 @@
     "ReportGateLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ReportGateLambdaVersionlrSOylO9MZbHiGJABgUki0ctrTDZcmBrTyyb9XdnaI0"
+        "Ref": "ReportGateLambdaVersionjakb9kiHoi6iVA3jgP7wMeqJemntg3T63BEBPdpobQ"
       },
       "Export": {
         "Name": "sls-can2025-secure-gates-dev-ReportGateLambdaFunctionQualifiedArn"
@@ -1782,7 +1782,7 @@
     "LoginLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "LoginLambdaVersion7EMCP4oEvl9TTHoMPctK2nBPTjMYXvmDp4eoF1QM"
+        "Ref": "LoginLambdaVersion6tY5bPAlQcsr9o04ubgkuGBmP5kcaFJjBwv1nUPzWA"
       },
       "Export": {
         "Name": "sls-can2025-secure-gates-dev-LoginLambdaFunctionQualifiedArn"
@@ -1791,7 +1791,7 @@
     "LogoutLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "LogoutLambdaVersiono6XMzCrVLmqDq7hr4gJsgz46nKFZ1iUxDKB3xf6lNsY"
+        "Ref": "LogoutLambdaVersionqjxDuyhjmUAoyzal4YUVXIlsmRYudev28Lk0FUl3c"
       },
       "Export": {
         "Name": "sls-can2025-secure-gates-dev-LogoutLambdaFunctionQualifiedArn"
@@ -1800,7 +1800,7 @@
     "LogAnalyzerLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "LogAnalyzerLambdaVersione4N6In4qb67sR1HhD5oRIERr9g8Lzpfi1th4UW1q6Q"
+        "Ref": "LogAnalyzerLambdaVersionSHg0YIlVm0sRcBE4tRK3GxJkFv6QvyzvrN61fk4n0"
       },
       "Export": {
         "Name": "sls-can2025-secure-gates-dev-LogAnalyzerLambdaFunctionQualifiedArn"
@@ -1809,7 +1809,7 @@
     "RotateKeyLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "RotateKeyLambdaVersionD5cTaSPoWimrruWTZxNiFNg2Bl75D9NmLBWK8cK6w"
+        "Ref": "RotateKeyLambdaVersionEE72ltOzrfaLcX6pwAls7rzHlyf0xuSF4VrdThfnWs"
       },
       "Export": {
         "Name": "sls-can2025-secure-gates-dev-RotateKeyLambdaFunctionQualifiedArn"
@@ -1818,7 +1818,7 @@
     "GetSecurityMetricsLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "GetSecurityMetricsLambdaVersionxtoPCpRhkbQPHo849uXIL5UZQRaz9FqcOMJ6lphtE"
+        "Ref": "GetSecurityMetricsLambdaVersionnimVm7c4InXpidMXJj69rTiM3wptII2rG6D7oiU5C4"
       },
       "Export": {
         "Name": "sls-can2025-secure-gates-dev-GetSecurityMetricsLambdaFunctionQualifiedArn"
@@ -1827,7 +1827,7 @@
     "SentinelShipperLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SentinelShipperLambdaVersion08uSenIdi4Pn3EOocLP0lx4rUW7NfZXG9l75yOwMM"
+        "Ref": "SentinelShipperLambdaVersionp45svmfaokD205dOWFJmTS3F1bPMa8tyoMAer5D1U"
       },
       "Export": {
         "Name": "sls-can2025-secure-gates-dev-SentinelShipperLambdaFunctionQualifiedArn"

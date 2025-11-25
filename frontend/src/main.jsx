@@ -5,6 +5,7 @@ import './index.css'
 import App from './App.jsx'
 import { ErrorBoundary } from './components/common/ErrorBoundary'
 import { loadTestData } from './testData/loadTestData'
+import './services/telemetry' // Initialize Azure Telemetry
 
 const rootElement = document.getElementById('root');
 

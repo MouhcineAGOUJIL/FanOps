@@ -11,7 +11,7 @@ const LOG_TYPE = 'FanOps_M2_CL'; // Custom Log Table Name in Sentinel
  * Azure Log Analytics Data Collector API
  * https://learn.microsoft.com/en-us/azure/azure-monitor/logs/data-collector-api
  */
-function postDataToSentinel(body, timestamp) {
+function postDataToSentinel(body) {
     return new Promise((resolve, reject) => {
         if (!WORKSPACE_ID || !SHARED_KEY) {
             return reject(new Error('Missing Sentinel Configuration (WORKSPACE_ID or SHARED_KEY)'));
@@ -37,7 +37,8 @@ function postDataToSentinel(body, timestamp) {
                 'Authorization': authorization,
                 'Log-Type': LOG_TYPE,
                 'x-ms-date': date,
-                'time-generated-field': timestamp // Optional: use specific timestamp field
+                'time-generated-field': 'TimeGenerated', // Optional: use specific timestamp field
+                'Content-Length': contentLength
             }
         };
 
@@ -67,7 +68,7 @@ exports.handler = (event, context, callback) => {
             return callback(err);
         }
 
-        const parsed = JSON.parse(result.toString('ascii'));
+        const parsed = JSON.parse(result.toString('utf8'));
         console.log(`Decoded payload: ${parsed.logEvents.length} events from ${parsed.logGroup}`);
 
         const sentinelEvents = parsed.logEvents.map(logEvent => {
