@@ -17,22 +17,53 @@ export const m2Client = axios.create({
     },
 });
 
-// Add JWT token to requests
+// Add JWT token to requests and track start time
 m2Client.interceptors.request.use(
     (config) => {
         const token = localStorage.getItem('auth_token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
+        // Add metadata for telemetry
+        config.metadata = { startTime: new Date() };
         return config;
     },
     (error) => Promise.reject(error)
 );
 
-// Handle authentication errors
+// Handle authentication errors and log telemetry
 m2Client.interceptors.response.use(
-    (response) => response,
+    (response) => {
+        // Calculate duration
+        const duration = new Date() - response.config.metadata.startTime;
+
+        // Log successful API call
+        import('./telemetry').then(({ logEvent, logMetric }) => {
+            logEvent('API_Request_Success', {
+                url: response.config.url,
+                method: response.config.method,
+                status: response.status
+            });
+            logMetric('API_Latency', duration, {
+                url: response.config.url,
+                method: response.config.method
+            });
+        });
+
+        return response;
+    },
     (error) => {
+        // Log failed API call
+        import('./telemetry').then(({ logEvent, logError }) => {
+            logEvent('API_Request_Failure', {
+                url: error.config?.url,
+                method: error.config?.method,
+                status: error.response?.status,
+                message: error.message
+            });
+            logError(error);
+        });
+
         if (error.response?.status === 401) {
             // Clear auth and redirect to login
             localStorage.removeItem('auth_token');
