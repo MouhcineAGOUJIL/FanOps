@@ -10,9 +10,9 @@ const appInsights = new ApplicationInsights({
     config: {
         connectionString: import.meta.env.VITE_APP_INSIGHTS_CONNECTION_STRING || '',
         enableAutoRouteTracking: true, // Track page views automatically
-        enableCorsCorrelation: true,   // Correlate requests with backend
-        enableRequestHeaderTracking: true,
-        enableResponseHeaderTracking: true,
+        enableCorsCorrelation: false,   // Disable to prevent CORS issues with AWS API Gateway
+        enableRequestHeaderTracking: false,
+        enableResponseHeaderTracking: false,
     }
 });
 
