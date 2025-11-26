@@ -66,9 +66,16 @@ After deploying and generating some traffic (login, scan tickets):
     FanOps_M2_CL
     | sort by TimeGenerated desc
     ```
-3.  Run this query to see **Frontend Logs**:
+3.  Run this query to see **Frontend Logs** (Page Views & API Calls):
     ```kusto
     AppRequests
+    | sort by TimeGenerated desc
+    ```
+
+4.  Run this query to see **Custom Events** (Login/Logout):
+    ```kusto
+    AppEvents
+    | where Name startswith "Login" or Name startswith "API"
     | sort by TimeGenerated desc
     ```
 

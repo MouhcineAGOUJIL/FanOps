@@ -48,7 +48,7 @@ m2Client.interceptors.response.use(
                 url: response.config.url,
                 method: response.config.method
             });
-        });
+        }).catch(e => console.error('Telemetry Error:', e));
 
         return response;
     },
@@ -62,7 +62,7 @@ m2Client.interceptors.response.use(
                 message: error.message
             });
             logError(error);
-        });
+        }).catch(e => console.error('Telemetry Error:', e));
 
         if (error.response?.status === 401) {
             // Clear auth and redirect to login
