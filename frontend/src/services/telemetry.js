@@ -32,19 +32,19 @@ if (connString) {
 
 export const logEvent = (name, properties = {}) => {
     if (appInsights.appInsights.isInitialized()) {
-        appInsights.trackEvent({ name }, properties);
+        appInsights.trackEvent({ name, properties });
     }
 };
 
 export const logError = (error, severityLevel = 3) => {
     if (appInsights.appInsights.isInitialized()) {
-        appInsights.trackException({ error, severityLevel });
+        appInsights.trackException({ exception: error, severityLevel });
     }
 };
 
 export const logMetric = (name, average, properties = {}) => {
     if (appInsights.appInsights.isInitialized()) {
-        appInsights.trackMetric({ name, average }, properties);
+        appInsights.trackMetric({ name, average, properties });
     }
 };
 
