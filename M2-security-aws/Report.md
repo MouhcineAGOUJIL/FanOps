@@ -14,32 +14,33 @@ The architecture follows a **Serverless Event-Driven** pattern, ensuring zero id
 
 ```mermaid
 graph TD
-    subgraph Client [Frontend (React)]
+    subgraph Client ["Frontend (React)"]
         App[FanOps Web App]
         Tel[Azure Telemetry SDK]
     end
 
-    subgraph AWS [AWS Cloud (Backend)]
+    subgraph AWS ["AWS Cloud (Backend)"]
         APIGW[API Gateway]
         
-        subgraph Compute [Lambda Functions]
+        subgraph Compute ["Lambda Functions"]
             Auth[Auth Service]
             Verify[Ticket Verification]
             Report[Gate Reporting]
             Logs[Log Shipper]
         end
         
-        subgraph Storage [DynamoDB]
+        subgraph Storage ["DynamoDB"]
             Users[Users Table]
             Tickets[Sold Tickets]
             Audit[Audit Logs]
-            JTI[Used JTI (Anti-Replay)]
+            JTI[Used JTI]
         end
         
-        KMS[AWS KMS (Encryption)]
+        KMS[AWS KMS]
+        EC2[Security Test VM]
     end
 
-    subgraph Azure [Azure Cloud (Security)]
+    subgraph Azure ["Azure Cloud (Security)"]
         Sentinel[Microsoft Sentinel]
         LAW[Log Analytics Workspace]
     end
@@ -55,11 +56,37 @@ graph TD
     %% Security Flow
     Logs -->|Forward Logs| Sentinel
     Audit -->|Stream| Logs
+    EC2 -->|Syslog| Sentinel
 ```
 
 ---
 
-## 3. 🔄 Information Flow
+## 3. ☁️ Cloud Service Models
+
+We utilize the full spectrum of cloud service models to optimize for cost, management, and control.
+
+### ⚡ FaaS (Function as a Service)
+*   **AWS Lambda**: The core compute engine.
+    *   **Usage**: Runs business logic (Ticket Verification, Login) only when triggered.
+    *   **Benefit**: Zero idle cost. We only pay when a fan scans a ticket (milliseconds).
+    *   **Scale**: Automatically handles 1 to 10,000 concurrent scans without configuration.
+
+### 🛠️ PaaS (Platform as a Service)
+*   **AWS API Gateway**: Manages the HTTP endpoints, rate limiting, and SSL termination.
+*   **AWS DynamoDB**: A fully managed NoSQL database for high-speed storage.
+*   **AWS SQS**: Managed message queues for decoupling services.
+*   **Azure Sentinel**: Cloud-native SIEM for security analytics.
+*   **Azure Log Analytics**: Managed data lake for storing logs.
+
+### 💻 IaaS (Infrastructure as a Service)
+*   **AWS EC2 (t3.micro)**: A virtual machine used for **Security Testing**.
+    *   **Usage**: Hosts penetration testing tools and scripts to simulate attacks against the API.
+    *   **Control**: We have full OS-level access (Ubuntu Linux) to install custom security tools.
+    *   **Integration**: Connected to Azure Sentinel via the Azure Monitor Agent to audit OS-level logs (Syslog/Auth).
+
+---
+
+## 4. 🔄 Information Flow
 
 ### A. Authentication Flow (User Login)
 1.  **User** submits credentials on the Frontend.
@@ -93,23 +120,24 @@ graph TD
 
 ---
 
-## 4. 🧩 Services & Technologies
+## 5. 🧩 Services & Technologies Breakdown
 
 ### ☁️ AWS (The Engine)
-| Service | Role | Why it was chosen |
-| :--- | :--- | :--- |
-| **Lambda** | Compute | Zero server management, auto-scaling for match spikes. |
-| **API Gateway** | API Management | Built-in throttling, DDoS protection, and SSL. |
-| **DynamoDB** | Database | Single-digit millisecond latency for fast scanning. |
-| **KMS** | Security | FIPS 140-2 validated encryption for JWT secrets. |
-| **CloudWatch** | Logging | Native logging for all AWS resources. |
+| Service | Type | Role | Why it was chosen |
+| :--- | :--- | :--- | :--- |
+| **Lambda** | **FaaS** | Compute | Zero server management, auto-scaling for match spikes. |
+| **API Gateway** | **PaaS** | API Management | Built-in throttling, DDoS protection, and SSL. |
+| **DynamoDB** | **PaaS** | Database | Single-digit millisecond latency for fast scanning. |
+| **KMS** | **PaaS** | Security | FIPS 140-2 validated encryption for JWT secrets. |
+| **CloudWatch** | **PaaS** | Logging | Native logging for all AWS resources. |
+| **EC2** | **IaaS** | Testing | Full control for running security audit tools. |
 
 ### 🛡️ Azure (The Shield)
-| Service | Role | Why it was chosen |
-| :--- | :--- | :--- |
-| **Sentinel** | SIEM | AI-driven threat detection and correlation. |
-| **Log Analytics** | Data Lake | Central storage for logs from all clouds. |
-| **App Insights** | APM | Deep visibility into Frontend performance and errors. |
+| Service | Type | Role | Why it was chosen |
+| :--- | :--- | :--- | :--- |
+| **Sentinel** | **PaaS** | SIEM | AI-driven threat detection and correlation. |
+| **Log Analytics** | **PaaS** | Data Lake | Central storage for logs from all clouds. |
+| **App Insights** | **PaaS** | APM | Deep visibility into Frontend performance and errors. |
 
 ### 💻 Frontend (The Interface)
 | Technology | Role |
@@ -120,7 +148,7 @@ graph TD
 
 ---
 
-## 5. 🔗 Service Connections
+## 6. 🔗 Service Connections
 
 ### Frontend ↔ AWS
 *   **Protocol**: HTTPS (REST)
@@ -141,6 +169,6 @@ graph TD
 
 ---
 
-## 6. 🚀 Conclusion
+## 7. 🚀 Conclusion
 
 The **FanOps M2** module is a robust, production-ready security system. By combining the **scalability of AWS Serverless** with the **advanced threat intelligence of Microsoft Azure**, it provides a secure and observable platform for managing the CAN 2025 event.
