@@ -31,7 +31,12 @@ async function seedTickets() {
         { userId: `USER-${Math.floor(Math.random() * 1000)}`, seat: 'VIP-10', type: 'VIP' },
         { userId: `USER-${Math.floor(Math.random() * 1000)}`, seat: 'B-12', type: 'STANDARD' },
         { userId: `USER-${Math.floor(Math.random() * 1000)}`, seat: 'C-55', type: 'STANDARD' },
-        { userId: `USER-${Math.floor(Math.random() * 1000)}`, seat: 'VIP-5', type: 'VIP' }
+        { userId: `USER-${Math.floor(Math.random() * 1000)}`, seat: 'VIP-5', type: 'VIP' },
+        { userId: `USER-${Math.floor(Math.random() * 1000)}`, seat: 'D-21', type: 'STANDARD' },
+        { userId: `USER-${Math.floor(Math.random() * 1000)}`, seat: 'E-08', type: 'STANDARD' },
+        { userId: `USER-${Math.floor(Math.random() * 1000)}`, seat: 'VIP-22', type: 'VIP' },
+        { userId: `USER-${Math.floor(Math.random() * 1000)}`, seat: 'F-99', type: 'STANDARD' },
+        { userId: `USER-${Math.floor(Math.random() * 1000)}`, seat: 'G-15', type: 'STANDARD' }
     ];
 
     for (const ticket of tickets) {

@@ -40,8 +40,9 @@ async function getValidTickets() {
                 decoded = jwt.verify(token, secret);
                 isSigValid = true;
             } catch (e) {
-                // Signature invalid
+                // Signature invalid or expired
                 decoded = jwt.decode(token); // Decode anyway to see info
+                // console.log(`[DEBUG] Verification failed for ${decoded?.sub}: ${e.message}`);
             }
 
             if (!decoded) {
@@ -53,7 +54,7 @@ async function getValidTickets() {
             if (isUsed) {
                 // console.log(`[🔴 USED] ${decoded.sub}`);
             } else if (!isSigValid) {
-                // console.log(`[⚠️ INVALID SIG] ${decoded.sub}`);
+                console.log(`[⚠️ INVALID] ${decoded.sub} - Reason: Verification Failed`);
             } else {
                 validCount++;
                 console.log(`\n[🟢 VALID & SIGNED] Ticket #${index + 1}`);
