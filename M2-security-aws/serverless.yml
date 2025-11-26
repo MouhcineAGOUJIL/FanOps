@@ -225,13 +225,14 @@ resources:
       Type: AWS::EC2::Instance
       Properties:
         InstanceType: t3.micro
-        ImageId: ami-0694d931cee176e7d # Ubuntu 22.04 LTS (eu-west-1)
-        # KeyName: my-key-pair # UNCOMMENT and replace with your AWS KeyPair name to enable SSH
+        # Ubuntu 22.04 LTS (eu-west-1)
+        ImageId: ami-0694d931cee176e7d
+        IamInstanceProfile: !Ref SecurityInstanceProfile
         SecurityGroups:
           - !Ref SecurityInstanceSG
         Tags:
           - Key: Name
-            Value: ${self:service}-${self:provider.stage}-test-instance
+            Value: ${self:service}-${self:provider.stage}-ubuntu-scanner
 
     SecurityInstanceSG:
       Type: AWS::EC2::SecurityGroup
@@ -242,3 +243,40 @@ resources:
             FromPort: 22
             ToPort: 22
             CidrIp: 0.0.0.0/0 # WARNING: In production, restrict to your IP only
+
+    # S3 Bucket for ZAP Reports
+    SecurityReportsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:service}-security-reports-${opt:stage, self:provider.stage}
+
+    # IAM Role for EC2 to access S3
+    SecurityInstanceRole:
+      Type: AWS::IAM::Role
+      Properties:
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service: ec2.amazonaws.com
+              Action: sts:AssumeRole
+        Policies:
+          - PolicyName: S3Access
+            PolicyDocument:
+              Version: '2012-10-17'
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - s3:PutObject
+                    - s3:GetObject
+                    - s3:ListBucket
+                  Resource:
+                    - !GetAtt SecurityReportsBucket.Arn
+                    - !Join ['', [!GetAtt SecurityReportsBucket.Arn, '/*']]
+
+    SecurityInstanceProfile:
+      Type: AWS::IAM::InstanceProfile
+      Properties:
+        Roles:
+          - !Ref SecurityInstanceRole
