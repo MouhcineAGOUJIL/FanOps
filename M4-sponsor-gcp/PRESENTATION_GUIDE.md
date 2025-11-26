@@ -93,23 +93,27 @@ Frontend (React)
      │
      │ HTTPS POST
      ▼
-Cloud Functions (Python)
+Cloud Functions (FaaS) ◄───┐
+     │                     │ Download
+     │                     │
+     ▼                     │
+Cloud Storage (PaaS) ◄─────┘
+     ▲
+     │ Upload (Training)
      │
-     │ Download (Cold Start)
-     ▼
-Cloud Storage (Model)
+Compute Engine (IaaS)
 ```
 
-### Expliquer les Choix Techniques
+### Expliquer les Choix Techniques (Les 3 Types de Cloud)
 
-**Q : Pourquoi Cloud Functions ?**
-> "Serverless = pas de serveur à gérer, scaling automatique, et on ne paie que ce qu'on utilise. Parfait pour un événement comme la CAN avec des pics de trafic."
+**1. IaaS (Infrastructure as a Service)**
+> "J'ai utilisé une **VM Compute Engine** pour l'entraînement du modèle. Cela permet d'avoir une puissance de calcul dédiée et de ne pas bloquer mon poste local. C'est là que tourne le script Python `train_model_vm.py`."
 
-**Q : Pourquoi séparer le modèle du code ?**
-> "Le modèle fait 106 MB. Le séparer dans Cloud Storage permet de le mettre à jour sans redéployer le code, et optimise les déploiements."
+**2. PaaS (Platform as a Service)**
+> "Le modèle entraîné est stocké sur **Cloud Storage**. C'est le lien entre l'entraînement (IaaS) et la production (FaaS)."
 
-**Q : Pourquoi Random Forest ?**
-> "Robuste, rapide en prédiction (~10ms), et ne nécessite pas de GPU. Idéal pour du temps réel."
+**3. FaaS (Function as a Service)**
+> "**Cloud Functions** héberge l'API. C'est serverless, ça scale à l'infini, et ça coûte 0€ quand personne ne l'utilise."
 
 ---
 

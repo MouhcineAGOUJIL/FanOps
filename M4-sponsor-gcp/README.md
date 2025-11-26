@@ -31,58 +31,6 @@ Un système ML serverless qui :
 - ✅ Prédit parmi 12 sponsors configurés
 - ✅ Retourne un message marketing personnalisé
 - ✅ Répond en <200ms (warm start)
-
-### URL de Production
-```
-https://europe-west1-can2025-fanops.cloudfunctions.net/m4-sponsor-ai
-```
-
-## 🏗️ Architecture
-
-```
-┌─────────────┐
-│   Frontend  │
-│   (React)   │
-└──────┬──────┘
-       │ HTTPS POST
-       ▼
-┌─────────────────────────┐
-│  Cloud Functions Gen 2  │
-│  ┌──────────────────┐   │
-│  │  main.py         │   │
-│  │  Python 3.10     │   │
-│  │  512 MB RAM      │   │
-│  └──────────────────┘   │
-└──────┬──────────────────┘
-       │ Download Model
-       ▼
-┌─────────────────────────┐
-│   Cloud Storage (GCS)   │
-│  ┌──────────────────┐   │
-│  │ model.joblib     │   │
-│  │ (106.7 MB)       │   │
-│  └──────────────────┘   │
-└─────────────────────────┘
-```
-
-**Services GCP Utilisés :**
-1. **Cloud Functions** : Héberge le code Python (serverless)
-2. **Cloud Storage** : Stocke le modèle ML entraîné
-3. **Cloud Build** : Compile et déploie automatiquement
-4. **Cloud Run** : Infrastructure sous-jacente (auto-scaling)
-
-📖 **Documentation complète** : Voir [ARCHITECTURE.md](./ARCHITECTURE.md)
-
-## 🚀 Installation
-
-### Prérequis
-- Python 3.10+
-- pip
-
-### Installation Locale
-```bash
-cd M4-sponsor-gcp
-python -m pip install -r requirements.txt
 ```
 
 ### Dépendances Principales
@@ -250,18 +198,6 @@ M4-sponsor-gcp/
 | **Adidas** | Sports | Performance, Compétition |
 | **Royal Air Maroc** | Travel | Zones VIP, International |
 | **OCP** | Industry | Zones VIP, Prestige |
-| **Koutoubia** | Hospitality | Mi-temps, Repos |
-| **CDG** | Finance | Zones VIP, Business |
-| **Hyundai** | Automotive | Zones parking, Mobilité |
-| **Visa** | Finance | Paiements, Transactions |
-
-## 🔄 Ré-entraîner le Modèle
-
-Si vous modifiez `sponsors_config.py` ou voulez générer de nouvelles données :
-
-```bash
-python train_model.py
-```
 
 **Sortie :**
 ```
