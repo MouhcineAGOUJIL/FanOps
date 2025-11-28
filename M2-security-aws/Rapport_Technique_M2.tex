@@ -5,38 +5,66 @@
 \usepackage[T1]{fontenc}
 \usepackage[french]{babel}
 \usepackage{lmodern}
+\usepackage{microtype}
 
 % Mise en page
 \usepackage[margin=2.5cm]{geometry}
 \usepackage{fancyhdr}
 \usepackage{lastpage}
 \usepackage{titlesec}
+\usepackage{float}
 
 % Graphiques et Couleurs
 \usepackage{graphicx}
 \usepackage{xcolor}
 \usepackage{tcolorbox}
 \usepackage{tikz}
+\usetikzlibrary{shapes,arrows,positioning,shadows}
 
 % Liens et Code
 \usepackage{hyperref}
 \usepackage{listings}
+\usepackage{booktabs}
 
 % Configuration des couleurs
 \definecolor{primary}{RGB}{0, 51, 102} % Bleu foncé professionnel
 \definecolor{secondary}{RGB}{204, 0, 0} % Rouge (FanOps)
+\definecolor{accent}{RGB}{0, 153, 76}   % Vert (Succès/Validé)
 \definecolor{codegray}{rgb}{0.95,0.95,0.95}
+\definecolor{codeblue}{rgb}{0.0,0.0,0.6}
+\definecolor{yamlkey}{rgb}{0.0,0.5,0.0}
 
 % Configuration des listings de code
 \lstset{
     backgroundcolor=\color{codegray},
-    basicstyle=\ttfamily\small,
+    basicstyle=\ttfamily\footnotesize,
     breaklines=true,
     captionpos=b,
     frame=single,
-    keywordstyle=\color{blue},
-    commentstyle=\color{green!60!black},
-    stringstyle=\color{secondary}
+    keywordstyle=\color{codeblue}\bfseries,
+    commentstyle=\color{green!50!black},
+    stringstyle=\color{secondary},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    tabsize=2,
+    showstringspaces=false
+}
+
+\lstdefinelanguage{yaml}{
+  keywords={true,false,null,y,n},
+  keywordstyle=\color{darkgray}\bfseries,
+  basicstyle=\ttfamily\footnotesize,
+  sensitive=false,
+  comment=[l]{\#},
+  morecomment=[s]{/*}{*/},
+  commentstyle=\color{purple}\ttfamily,
+  stringstyle=\color{blue}\ttfamily,
+  moredelim=[l][\color{orange}]{\&},
+  moredelim=[l][\color{magenta}]{*},
+  moredelim=**[il][\color{secondary}{: }],
+  morestring=[b]',
+  morestring=[b]"
 }
 
 % En-têtes et pieds de page
@@ -45,21 +73,27 @@
 \lhead{\textbf{Projet FanOps - CAN 2025}}
 \rhead{Module M2 : Secure Gates}
 \rfoot{Page \thepage \hspace{1pt} sur \pageref{LastPage}}
+\renewcommand{\headrulewidth}{1pt}
+\renewcommand{\footrulewidth}{1pt}
 
 % Titre du document
 \title{
     \vspace{-2cm}
-    \begin{tcolorbox}[colback=primary,colframe=primary,arc=10pt,boxrule=0pt]
+    \begin{tcolorbox}[colback=primary,colframe=primary,arc=0pt,boxrule=0pt, width=\textwidth]
         \centering \textcolor{white}{\Huge \textbf{Rapport Technique Détaillé}} \\
         \vspace{0.5cm}
         \textcolor{white}{\Large \textbf{Service de Sécurité M2 (Secure Gates)}}
     \end{tcolorbox}
-    \vspace{1cm}
-    \includegraphics[width=0.4\textwidth]{example-image-a} \\ % Placeholder pour logo
-    \vspace{1cm}
-    \large \textbf{Architecture Cloud, Implémentation et Sécurité Offensive}
+    \vspace{2cm}
+    \begin{center}
+        \Huge \textbf{Architecture Cloud Hybride \& Mise en Œuvre DevSecOps}
+    \end{center}
+    \vspace{2cm}
+    \large
+    \textbf{Contexte :} Coupe d'Afrique des Nations 2025 \\
+    \textbf{Domaine :} Cloud Computing, Serverless, SIEM
 }
-\author{\textbf{Équipe Cloud FanOps}}
+\author{\textbf{Équipe Technique FanOps}}
 \date{\today}
 
 \begin{document}
@@ -72,128 +106,238 @@
 \newpage
 
 % ---------------------------------------------------------------------------
-\section{Introduction}
-Dans le cadre de l'organisation de la \textbf{CAN 2025}, la gestion sécurisée des accès aux stades est une priorité critique. Le module \textbf{M2 - Secure Gates} a été conçu pour répondre à cette exigence en fournissant une solution robuste, évolutive et résiliente.
+\section{1. Contexte et Enjeux}
 
-Ce rapport détaille l'architecture technique, les choix de services Cloud (AWS et Azure), ainsi que la mise en œuvre des mécanismes de sécurité avancés (Anti-Replay, Chiffrement KMS, et Audit Automatisé).
+L'organisation de la \textbf{Coupe d'Afrique des Nations (CAN) 2025} au Maroc représente un défi logistique et sécuritaire majeur. La gestion des accès aux stades pour des millions de supporters nécessite une infrastructure infaillible.
+
+Le module \textbf{M2 - Secure Gates} a pour mission de garantir :
+\begin{itemize}
+    \item \textbf{L'Authenticité} : Chaque billet doit être cryptographiquement vérifiable.
+    \item \textbf{L'Unicité} : Un billet ne peut être utilisé qu'une seule fois (Protection Anti-Replay).
+    \item \textbf{La Disponibilité} : Le système doit supporter des pics de charge massifs (100k requêtes/minute avant un match).
+    \item \textbf{L'Observabilité} : Toute tentative de fraude doit être détectée en temps réel.
+\end{itemize}
 
 % ---------------------------------------------------------------------------
-\section{Architecture Globale}
+\section{2. Architecture Cloud Hybride}
 
-L'architecture du service M2 repose sur un modèle \textbf{Serverless} et \textbf{Multi-Cloud}. Ce choix stratégique permet d'éliminer la gestion des serveurs, de réduire les coûts opérationnels (Pay-per-use) et de garantir une mise à l'échelle automatique lors des pics d'affluence (matchs).
+Nous avons opté pour une stratégie \textbf{"Best of Breed"}, combinant la puissance de calcul d'AWS avec l'intelligence de sécurité de Microsoft Azure.
 
-\subsection{Vue d'ensemble}
-Le système est divisé en trois couches principales :
-\begin{enumerate}
-    \item \textbf{Frontend (Client)} : Application React utilisée par les agents de sécurité (Gatekeepers).
-    \item \textbf{Backend (AWS)} : API Gateway, Lambda et DynamoDB pour la logique métier.
-    \item \textbf{Sécurité & Observabilité (Azure/AWS)} : Sentinel pour le SIEM et EC2 pour les tests de pénétration.
-\end{enumerate}
+\subsection{2.1 Diagramme d'Architecture}
 
 \begin{center}
-\begin{tikzpicture}[node distance=2cm, auto]
-    % Simple TikZ diagram representation
-    \node[draw, rectangle, rounded corners, fill=blue!10, minimum width=3cm, minimum height=1cm] (client) {Frontend React};
-    \node[draw, rectangle, rounded corners, fill=orange!10, minimum width=3cm, minimum height=1cm, below of=client] (api) {AWS API Gateway};
-    \node[draw, rectangle, rounded corners, fill=orange!20, minimum width=3cm, minimum height=1cm, below of=api] (lambda) {AWS Lambda};
-    \node[draw, rectangle, rounded corners, fill=blue!20, minimum width=3cm, minimum height=1cm, below of=lambda] (db) {DynamoDB};
-    \node[draw, rectangle, rounded corners, fill=blue!10, minimum width=3cm, minimum height=1cm, right of=lambda, xshift=4cm] (sentinel) {Azure Sentinel};
+\begin{tikzpicture}[node distance=1.5cm, auto, >=stealth]
+    % Styles
+    \tikzstyle{service} = [rectangle, draw=primary, fill=blue!5, text width=2.5cm, text centered, rounded corners, minimum height=1.2cm]
+    \tikzstyle{db} = [cylinder, draw=primary, fill=orange!10, shape border rotate=90, aspect=0.25, text width=2cm, text centered, minimum height=1.5cm]
+    \tikzstyle{cloud} = [draw, ellipse, fill=gray!5, node distance=3cm, minimum height=2em]
+
+    % Nodes
+    \node[service, fill=green!10] (client) {Frontend React (Vite)};
+    \node[service, below=of client] (api) {AWS API Gateway};
+    \node[service, below=of api] (lambda) {AWS Lambda (Node.js)};
     
-    \draw[->, thick] (client) -- (api);
+    \node[db, below left=of lambda] (dynamo) {DynamoDB (Tickets/Users)};
+    \node[service, below right=of lambda] (kms) {AWS KMS};
+    
+    \node[service, right=of api, xshift=3cm, fill=blue!10] (sentinel) {Azure Sentinel};
+    \node[service, below=of sentinel] (ec2) {EC2 (ZAP Scanner)};
+
+    % Edges
+    \draw[->, thick] (client) -- node[right] {HTTPS/REST} (api);
     \draw[->, thick] (api) -- (lambda);
-    \draw[->, thick] (lambda) -- (db);
-    \draw[->, thick, dashed] (lambda) -- node[above] {Logs} (sentinel);
+    \draw[->, thick] (lambda) -- (dynamo);
+    \draw[->, thick] (lambda) -- (kms);
+    \draw[->, thick, dashed, color=red] (ec2) -- node[above] {Attaques} (api);
+    \draw[->, thick, dashed, color=blue] (lambda) -- node[above] {Logs} (sentinel);
+    \draw[->, thick, dashed, color=blue] (ec2) -- node[right] {Rapports S3} (sentinel);
+
 \end{tikzpicture}
 \end{center}
 
 % ---------------------------------------------------------------------------
-\section{Services Cloud Utilisés}
+\section{3. Cycle de Mise en Œuvre (DevSecOps)}
 
-Nous exploitons le spectre complet des modèles de service Cloud pour optimiser la performance et la sécurité.
+Cette section détaille le processus complet, de l'écriture du code à son exécution en production.
 
-\subsection{FaaS (Function as a Service) - AWS Lambda}
-Le cœur du calcul est assuré par 7 fonctions Lambda (Node.js 20.x).
+\subsection{3.1 Développement (Code)}
+Le backend est développé en \textbf{Node.js 20.x}. Nous avons adopté une architecture modulaire pour garantir la maintenabilité.
+
 \begin{itemize}
-    \item \textbf{Avantage :} Zéro coût d'inactivité. Facturation à la milliseconde.
-    \item \textbf{Rôle :} Authentification, Vérification des billets, Rotation des clés.
+    \item \textbf{Structure du Projet} :
+    \begin{itemize}
+        \item \texttt{src/handlers/} : Contient les points d'entrée Lambda (ex: \texttt{verifyTicket.js}). Chaque fonction est isolée et stateless.
+        \item \texttt{src/services/} : Logique métier (ex: \texttt{ticketService.js}).
+        \item \texttt{src/utils/} : Utilitaires transverses (ex: \texttt{kmsHelper.js} pour le déchiffrement).
+    \end{itemize}
+    \item \textbf{Sécurité dans le Code} :
+    \begin{itemize}
+        \item Utilisation de \texttt{bcrypt} pour le hachage des mots de passe.
+        \item Validation stricte des entrées (Input Validation) pour prévenir les injections NoSQL.
+        \item Gestion des erreurs centralisée pour ne jamais exposer de stack traces à l'utilisateur.
+    \end{itemize}
 \end{itemize}
 
-\subsection{PaaS (Platform as a Service)}
-\begin{itemize}
-    \item \textbf{AWS API Gateway :} Gère les requêtes REST, le throttling (protection DDoS) et la terminaison SSL.
-    \item \textbf{Amazon DynamoDB :} Base de données NoSQL ultra-rapide (<10ms).
-    \item \textbf{AWS KMS (Key Management Service) :} Gestion des clés de chiffrement pour signer les tokens JWT.
-    \item \textbf{Azure Sentinel :} SIEM Cloud-native pour la corrélation des menaces.
-\end{itemize}
+\subsection{3.2 Configuration (Infrastructure as Code)}
+Toute l'infrastructure est définie dans le fichier \texttt{serverless.yml}. Cela permet des déploiements reproductibles et auditable.
 
-\subsection{IaaS (Infrastructure as a Service) - AWS EC2}
-Une instance \textbf{Ubuntu 22.04} (t3.micro) est déployée pour l'audit de sécurité offensif.
-\begin{itemize}
-    \item \textbf{Rôle :} Héberge l'outil OWASP ZAP.
-    \item \textbf{Automatisation :} Exécute des scans de vulnérabilité quotidiens via Cron.
-\end{itemize}
+\begin{lstlisting}[language=yaml, caption=Extrait de la configuration Serverless]
+service: can2025-secure-gates
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-west-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource: !GetAtt UsedJtiTable.Arn
 
-% ---------------------------------------------------------------------------
-\section{Mise en Œuvre Technique}
+functions:
+  verifyTicket:
+    handler: src/handlers/verifyTicket.handler
+    events:
+      - http:
+          path: /security/verifyTicket
+          method: post
+          cors: true
 
-\subsection{1. Authentification et Gestion des Secrets}
-La sécurité commence par la protection des identités.
-\begin{itemize}
-    \item \textbf{Flux :} L'utilisateur envoie ses identifiants. La Lambda \texttt{login} vérifie le hash (bcrypt) dans DynamoDB.
-    \item \textbf{Chiffrement :} Si valide, un token JWT est généré. Ce token est signé avec une clé secrète stockée dans \textbf{SSM Parameter Store} et chiffrée par \textbf{KMS}.
-    \item \textbf{Sécurité :} Le code source ne contient aucun secret en clair.
-\end{itemize}
-
-\subsection{2. Vérification des Billets (Anti-Replay)}
-Pour empêcher qu'un même billet soit utilisé deux fois (fraude classique), nous avons implémenté un mécanisme de \textit{Stateful Inspection}.
-
-\begin{lstlisting}[language=Javascript, caption=Logique Anti-Replay simplifiée]
-// 1. Verifier la signature cryptographique
-jwt.verify(token, kmsSecret);
-
-// 2. Verifier si le JTI (ID unique) existe deja
-const isUsed = await dynamoDB.get({ 
-    TableName: 'UsedJTI', 
-    Key: { jti: decoded.jti } 
-});
-
-if (isUsed) throw new Error("REPLAY_ATTACK_DETECTED");
-
-// 3. Marquer comme utilise
-await dynamoDB.put({ 
-    TableName: 'UsedJTI', 
-    Item: { jti: decoded.jti, ttl: 24h } 
-});
+resources:
+  Resources:
+    UsedJtiTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        BillingMode: PAY_PER_REQUEST
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
 \end{lstlisting}
 
-\subsection{3. Audit de Sécurité Automatisé (CI/CD Security)}
-Une innovation majeure de ce module est l'intégration de tests de sécurité offensifs continus.
-
+\textbf{Points Clés de la Configuration :}
 \begin{itemize}
-    \item \textbf{Outil :} OWASP ZAP (Zed Attack Proxy).
-    \item \textbf{Infrastructure :} Instance EC2 dédiée avec rôle IAM restreint (Write-Only sur S3).
-    \item \textbf{Workflow :}
-    \begin{enumerate}
-        \item Script Bash exécuté chaque nuit à 02h00 (Cron).
-        \item Scan actif de l'API Gateway (Recherche d'injections SQL, XSS, etc.).
-        \item Génération d'un rapport HTML.
-        \item Upload automatique vers un bucket S3 sécurisé (\texttt{security-reports}).
-    \end{enumerate}
+    \item \textbf{IAM Roles (Moindre Privilège)} : Chaque fonction ne reçoit que les permissions strictement nécessaires (ex: \texttt{verifyTicket} peut lire \texttt{SoldTickets} mais pas \texttt{Users}).
+    \item \textbf{Variables d'Environnement} : Les noms de tables et les configurations sont injectés dynamiquement selon le stage (\texttt{dev}, \texttt{prod}).
 \end{itemize}
 
-\subsection{4. Surveillance Unifiée (SIEM)}
-Bien que l'infrastructure soit sur AWS, la sécurité est pilotée par \textbf{Microsoft Azure Sentinel}.
-\begin{itemize}
-    \item Une Lambda \texttt{SentinelShipper} capture les logs CloudWatch en temps réel.
-    \item Les logs sont normalisés et envoyés à l'API Azure Log Analytics.
-    \item Des règles de détection (KQL) alertent le SOC en cas d'anomalie (ex: Brute Force).
-\end{itemize}
+\subsection{3.3 Déploiement (CI/CD)}
+Le déploiement est automatisé via le Framework Serverless, qui orchestre CloudFormation sous le capot.
+
+\textbf{Étapes du Déploiement :}
+\begin{enumerate}
+    \item \textbf{Packaging} : Le code est zippé, excluant les fichiers de développement (\texttt{devDependencies}).
+    \item \textbf{Upload} : Le zip est uploadé sur un bucket S3 de déploiement.
+    \item \textbf{CloudFormation} :
+    \begin{itemize}
+        \item Création/Mise à jour de la Stack.
+        \item Provisionnement des tables DynamoDB.
+        \item Création des Rôles IAM.
+        \item Configuration de l'API Gateway.
+    \end{itemize}
+    \item \textbf{Mise à jour Lambda} : Le code des fonctions est mis à jour.
+\end{enumerate}
+
+\begin{lstlisting}[language=bash, caption=Commande de deploiement]
+# Deploiement sur l'environnement de developpement
+serverless deploy --stage dev --region eu-west-1
+\end{lstlisting}
+
+\subsection{3.4 Fonctionnement Opérationnel}
+Une fois en production, voici le cycle de vie d'une requête :
+
+\begin{enumerate}
+    \item \textbf{Entrée} : L'API Gateway reçoit une requête HTTPS. Elle vérifie le quota (Throttling) et l'authentification.
+    \item \textbf{Exécution (Cold/Warm Start)} :
+    \begin{itemize}
+        \item Si un conteneur Lambda est chaud, il est réutilisé (latence < 10ms).
+        \item Sinon, AWS provisionne un nouveau conteneur (Cold Start ~200ms).
+    \end{itemize}
+    \item \textbf{Logique} : La fonction exécute la vérification (KMS, DynamoDB).
+    \item \textbf{Sortie} : La réponse JSON est renvoyée.
+    \item \textbf{Observabilité} :
+    \begin{itemize}
+        \item Les logs sont poussés asynchronement vers CloudWatch.
+        \item La Lambda \texttt{sentinelShipper} se réveille pour transférer ces logs vers Azure Sentinel.
+    \end{itemize}
+\end{enumerate}
 
 % ---------------------------------------------------------------------------
-\section{Conclusion}
+\section{4. Sécurité Offensive Automatisée (IaaS)}
 
-Le module \textbf{M2 - Secure Gates} démontre une approche moderne de la sécurité Cloud. En combinant la puissance de calcul d'AWS avec l'intelligence de sécurité d'Azure, et en intégrant des tests offensifs automatisés, nous garantissons un niveau de protection maximal pour l'événement CAN 2025.
+Pour garantir une posture de sécurité proactive, nous avons implémenté une chaîne d'audit continu.
 
-L'architecture est non seulement sécurisée, mais aussi optimisée pour les coûts et prête à absorber la charge massive des jours de match.
+\subsection{4.1 Infrastructure de Test}
+Une instance \textbf{AWS EC2 (Ubuntu 22.04)} agit comme un "attaquant interne".
+\begin{itemize}
+    \item \textbf{Rôle IAM} : \texttt{SecurityInstanceRole}. Principe du moindre privilège : cette instance ne peut qu'écrire dans le bucket S3 des rapports, elle n'a aucun accès à DynamoDB ou Lambda.
+\end{itemize}
+
+\subsection{4.2 Automatisation avec OWASP ZAP}
+Un script Bash, exécuté quotidiennement par \textbf{Cron} (02h00 AM), orchestre les tests.
+
+\begin{lstlisting}[language=bash, caption=Extrait du script d'automatisation ZAP]
+#!/bin/bash
+TARGET="https://api.can2025.com/dev"
+REPORT="/tmp/zap-report-$(date +%F).html"
+
+# 1. Lancement du scan de vulnerabilites (SQLi, XSS, etc.)
+/opt/zap/zap.sh -cmd -quickurl $TARGET -quickout $REPORT
+
+# 2. Exfiltration du rapport vers S3 (Securise)
+aws s3 cp $REPORT s3://can2025-security-reports/
+\end{lstlisting}
+
+Ce mécanisme nous permet de recevoir chaque matin un rapport de sécurité frais, identifiant toute nouvelle vulnérabilité introduite par un déploiement récent.
+
+% ---------------------------------------------------------------------------
+\section{5. Intégration SIEM (Azure Sentinel)}
+
+La surveillance est centralisée dans Azure pour bénéficier des capacités d'IA de Microsoft.
+
+\subsection{5.1 Flux de Données}
+\begin{enumerate}
+    \item \textbf{Logs Applicatifs} : Lambda envoie ses logs (erreurs, latence) à CloudWatch.
+    \item \textbf{Forwarder} : La Lambda \texttt{sentinelShipper} s'abonne aux Log Groups CloudWatch.
+    \item \textbf{Ingestion} : Elle formate les logs en JSON et les pousse vers l'API \textbf{Azure Log Analytics Data Collector}.
+\end{enumerate}
+
+\subsection{5.2 Détection des Menaces (KQL)}
+Nous utilisons le langage Kusto (KQL) pour créer des règles d'alerte.
+
+\textbf{Exemple : Détection d'attaque Brute Force}
+\begin{lstlisting}[language=SQL, caption=Requete KQL Sentinel]
+AppEvents
+| where Name == "Login_Failure"
+| summarize FailureCount = count() by IPAddress, bin(TimeGenerated, 5m)
+| where FailureCount > 10
+| project TimeGenerated, IPAddress, FailureCount, "Brute Force Detected"
+\end{lstlisting}
+
+% ---------------------------------------------------------------------------
+\section{6. Analyse FinOps (Coûts)}
+
+L'architecture Serverless permet une optimisation drastique des coûts.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|r|}
+\hline
+\textbf{Service} & \textbf{Métrique} & \textbf{Coût Est. / Mois} \\ \hline
+AWS Lambda & 1M requêtes (128MB) & \$0.20 \\ \hline
+API Gateway & 1M requêtes & \$3.50 \\ \hline
+DynamoDB & 1M écritures & \$1.25 \\ \hline
+EC2 (t3.micro) & Instance Réservée & \$4.00 \\ \hline
+Azure Sentinel & 5 GB logs/mois & \$12.00 \\ \hline
+\textbf{Total} & & \textbf{\textasciitilde \$21.00} \\ \hline
+\end{tabular}
+\caption{Estimation des coûts pour une charge moyenne}
+\end{table}
+
+% ---------------------------------------------------------------------------
+\section{7. Conclusion}
+
+Le module \textbf{M2 - Secure Gates} est une démonstration concrète d'une architecture Cloud moderne, sécurisée et résiliente. 
+
+En intégrant la sécurité à tous les niveaux (Chiffrement KMS, Anti-Replay DynamoDB, Audit ZAP, Surveillance Sentinel), nous avons construit une forteresse numérique capable de protéger l'intégrité de la CAN 2025 tout en restant flexible et économique.
 
 \end{document}
