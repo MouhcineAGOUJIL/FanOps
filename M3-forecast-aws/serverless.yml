@@ -1,0 +1,42 @@
+service: m3-forecast-aws
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-east-1
+  memorySize: 1024
+  timeout: 30
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:GetObject
+          Resource: "arn:aws:s3:::m3-forecast-models-can2025/*"
+  environment:
+    MODEL_BUCKET: m3-forecast-models-can2025
+
+package:
+  patterns:
+    - '!layer/**'
+    - '!node_modules/**'
+    - '!.serverless/**'
+
+functions:
+  predictAttendance:
+    handler: lambda_function.handler
+    layers:
+      - { Ref: SklearnLambdaLayer }
+    events:
+      - http:
+          path: predict
+          method: post
+          cors: true
+
+layers:
+  sklearn:
+    path: layer
+    compatibleRuntimes:
+      - python3.9
