@@ -144,13 +144,19 @@ function detectAlerts(events) {
 function calculateStats(events) {
     const last24h = events;
 
-    // Count by result field (valid, invalid_ticket, replay, etc.)
+    // Count by result field
+    // Valid scans have result: 'valid'
     const validScans = last24h.filter(e => e.result === 'valid').length;
+
+    // Invalid scans have specific result codes
     const invalidScans = last24h.filter(e =>
         e.result === 'invalid_ticket' ||
         e.result === 'invalid_jwt' ||
-        e.result === 'expired'
+        e.result === 'expired' ||
+        e.result === 'invalid_claims'
     ).length;
+
+    // Replay attempts
     const replayAttempts = last24h.filter(e =>
         e.result === 'replay' ||
         e.result === 'replay_attack'
@@ -159,9 +165,9 @@ function calculateStats(events) {
     // Count unique gates
     const uniqueGates = new Set(last24h.map(e => e.gateId).filter(Boolean)).size;
 
-    // Track authentication events
-    const loginSuccesses = last24h.filter(e => e.result === 'LOGIN_SUCCESS').length;
-    const loginFailures = last24h.filter(e => e.result === 'LOGIN_FAILURE').length;
+    // Track authentication events (type: 'authentication')
+    const loginSuccesses = last24h.filter(e => e.type === 'authentication' && e.result === 'LOGIN_SUCCESS').length;
+    const loginFailures = last24h.filter(e => e.type === 'authentication' && e.result === 'LOGIN_FAILURE').length;
     const loginAttempts = loginSuccesses + loginFailures;
 
     // Total ticket scans (exclude authentication events)
