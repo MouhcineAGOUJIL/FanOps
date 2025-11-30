@@ -1,0 +1,38 @@
+name: Security Scan (OWASP ZAP)
+
+on:
+  push:
+    branches: [ main ]
+  schedule:
+    - cron: '0 2 * * *' # Daily at 2am
+
+jobs:
+  zap_scan:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: ZAP Scan
+        uses: zaproxy/action-full-scan@v0.9.0
+        with:
+          target: 'https://3cfc8hn4xa.execute-api.eu-west-1.amazonaws.com/dev' # Your API Gateway URL
+          allow_issue_writing: false
+          cmd_options: '-a'
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1
+
+      - name: Upload Report to S3
+        run: |
+          # ZAP action generates report_html.html in the workspace
+          mv report_html.html zap-report-$(date +%Y-%m-%d)-github.html
+          aws s3 cp zap-report-*.html s3://can2025-secure-gates-security-reports-dev/reports/
