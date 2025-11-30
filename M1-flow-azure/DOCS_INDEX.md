@@ -18,8 +18,11 @@ Complete documentation for the M1 Smart Stadium Flow Controller microservice.
 
 | Document | Purpose |
 |----------|---------|
-| [EXECUTION_GUIDE.md](./EXECUTION_GUIDE.md) | Local development + Azure deployment |
-| [CLOUD_DEPLOYMENT.md](./CLOUD_DEPLOYMENT.md) | Azure Portal step-by-step guide |
+| [EXECUTION_GUIDE.md](./EXECUTION_GUIDE.md) | Local development + Azure Functions deployment (PaaS) |
+| [CLOUD_DEPLOYMENT.md](./CLOUD_DEPLOYMENT.md) | Azure Portal step-by-step guide (PaaS) |
+| [AZURE_VM_DEPLOYMENT.md](./AZURE_VM_DEPLOYMENT.md) | Azure VM deployment guide (IaaS) |
+| [IAAS_IMPLEMENTATION_GUIDE.md](./IAAS_IMPLEMENTATION_GUIDE.md) | Complete IaaS implementation guide |
+| [monitoring-service/TESTING_GUIDE.md](./monitoring-service/TESTING_GUIDE.md) | Local testing for monitoring service |
 | [DEMO_SCRIPT.md](./DEMO_SCRIPT.md) | 5-minute presentation walkthrough |
 
 ---
