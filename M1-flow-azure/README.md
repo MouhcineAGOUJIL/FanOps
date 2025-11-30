@@ -1,15 +1,10 @@
 # 🏟️ M1 - Smart Stadium Flow Controller
 
-**Cloud**: Microsoft Azure (PaaS + IaaS) + AWS (Hybrid) | **Language**: Python 3.9+ | **Type**: Hybrid Serverless + VM Architecture with AI
+**Cloud**: Microsoft Azure + AWS (Hybrid) | **Language**: Python 3.9+ | **Type**: Serverless Microservice with AI
 
 ## 📖 Overview
 
 **M1** is an AI-powered intelligent core of the CAN 2025 FanOps platform, managing real-time crowd flow across stadium gates using machine learning, autonomous decision-making, and root cause analysis.
-
-**Deployment Architecture:**
-- 🔷 **Azure Functions (PaaS)**: Serverless APIs, ML inference, AI agent, RCA engine
-- 🖥️ **Azure VM (IaaS)**: 24/7 persistent monitoring service with WebSocket streaming
-- ☁️ **AWS SageMaker**: Anomaly detection (optional, mocked for dev)
 
 **Key Capabilities:**
 - ✅ **Real-time Ingestion**: Processes turnstile telemetry with <200ms latency
@@ -18,33 +13,18 @@
 - ✅ **AI Orchestration Agent**: GPT-powered autonomous decision-making (every 2 minutes)
 - ✅ **Root Cause Analysis**: Automated investigation with hypothesis testing and Bayesian reasoning
 - ✅ **Traffic Classification**: Auto-assigns Green/Yellow/Red status to gates
-- ✅ **WebSocket Streaming**: Real-time updates from persistent VM (IaaS)
 - ✅ **Production-Ready**: Full error handling, validation, and fallback logic
 
-**Current Status**: ✅ **FULLY OPERATIONAL** - Hybrid PaaS + IaaS deployment verified end-to-end
+**Current Status**: ✅ **FULLY OPERATIONAL** - Core + AI enhancements verified end-to-end
 
-**Cost**: 
-- PaaS: ~$2/month (Functions) + ~$10/month (OpenAI)
-- IaaS: ~$7.50/month (VM B1s)
-- **Total: ~$20/month**
-
+**Cost**: ~$0.004/agent decision, ~$0.001/RCA investigation (GPT-3.5-Turbo)
 
 ---
 
 ## 🎯 Quick Links
 
-**Core Documentation:**
 - **[EXECUTION_GUIDE.md](./EXECUTION_GUIDE.md)** - Complete local & cloud deployment guide
 - **[DEMO_SCRIPT.md](./DEMO_SCRIPT.md)** - 5-minute presentation walkthrough
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Complete system architecture
-- **[DOCS_INDEX.md](./DOCS_INDEX.md)** - Documentation navigation hub
-
-**IaaS Monitoring Component:**
-- **[AZURE_VM_DEPLOYMENT.md](./AZURE_VM_DEPLOYMENT.md)** - Deploy monitoring VM (IaaS)
-- **[IAAS_IMPLEMENTATION_GUIDE.md](./IAAS_IMPLEMENTATION_GUIDE.md)** - Complete IaaS setup guide
-- **[monitoring-service/TESTING_GUIDE.md](./monitoring-service/TESTING_GUIDE.md)** - Local testing
-
-**Integration:**
 - **[PROJECT_OVERVIEW.md](../PROJECT_OVERVIEW.md)** - Non-technical project explanation
 - **[docs/integration_contracts.md](../docs/integration_contracts.md)** - API schemas for M2/M3/M4 teams
 
@@ -54,7 +34,7 @@
 
 ```
 M1-flow-azure/
-├── ai_engine/                       # AI Components
+├── ai_engine/                       # NEW - AI Components
 │   ├── agent/
 │   │   ├── orchestration_agent.py   # Main AI decision agent
 │   │   ├── function_definitions.py   # OpenAI function calling schemas
@@ -80,19 +60,6 @@ M1-flow-azure/
 │   ├── agent_orchestrator.py        # [Timer] Runs agent every 2 min
 │   └── investigation.py             # [HTTP] Query RCA results
 │
-├── monitoring-service/              # NEW - IaaS Monitoring Component
-│   ├── main.py                      # FastAPI app with WebSocket
-│   ├── stream_processor.py          # Real-time Azure Table polling
-│   ├── metrics_aggregator.py        # Rolling metrics calculation
-│   ├── config.py                    # Service configuration
-│   ├── requirements.txt             # Python dependencies
-│   └── TESTING_GUIDE.md             # Local testing guide
-│
-├── iaas-deployment/                 # NEW - VM Deployment Scripts
-│   ├── deploy-vm.sh                 # Azure CLI VM creation
-│   ├── vm-setup.sh                  # VM initialization script
-│   └── README.md                     # Deployment quick reference
-│
 ├── scripts/
 │   ├── generate_data.py             # Generates 50k synthetic training samples
 │   └── train_model.py               # Trains LightGBM → exports ONNX
@@ -104,7 +71,7 @@ M1-flow-azure/
 │   │   │   └── model_metadata.json       # Model version & metrics
 │   │   ├── aws_anomaly_client.py         # AWS SageMaker client (mocked)
 │   │   └── onnx_inference.py             # ONNX Runtime wrapper
-│   ├── openai_client.py             # OpenAI API wrapper
+│   ├── openai_client.py             # NEW - OpenAI API wrapper
 │   ├── models.py                    # Pydantic data models
 │   └── storage_client.py            # Azure Storage wrappers
 │
@@ -117,11 +84,7 @@ M1-flow-azure/
 │   ├── test_rca.py                  # RCA testing
 │   └── locustfile.py                # Load testing
 │
-├── ARCHITECTURE.md                   # Complete system architecture
-├── AZURE_VM_DEPLOYMENT.md            # NEW - VM deployment guide
-├── IAAS_IMPLEMENTATION_GUIDE.md      # NEW - IaaS setup guide
 ├── DEMO_SCRIPT.md                   # Presentation guide
-├── DOCS_INDEX.md                    # Documentation index
 ├── EXECUTION_GUIDE.md               # Deployment instructions
 ├── function_app.py                  # Azure Functions entry point
 ├── host.json                        # Functions configuration
@@ -362,19 +325,14 @@ locust -f tests/locustfile.py
 1. **Multi-Model AI**: ONNX (prediction) + GPT (reasoning) + SageMaker (anomaly)
 2. **Autonomous Agent**: Function calling with chain-of-thought reasoning
 3. **Bayesian RCA**: Evidence-based diagnosis with uncertainty quantification
-4. **Hybrid Cloud Architecture**: PaaS (Functions) + IaaS (VM) + Multi-cloud (AWS)
-5. **Real-Time Streaming**: WebSocket-based persistent monitoring
-6. **Cost Optimization**: Mock modes, caching, GPT-3.5-Turbo selection
+4. **Cost Optimization**: Mock modes, caching, GPT-3.5-Turbo selection
 
 ### Learning Objectives Demonstrated
-- ✅ Serverless cloud architecture (Azure Functions - PaaS)
-- ✅ IaaS deployment (Azure VM with systemd, nginx)
-- ✅ Hybrid cloud design (PaaS + IaaS integration)
+- ✅ Serverless cloud architecture (Azure Functions)
 - ✅ Multi-cloud integration (Azure + AWS + OpenAI)
 - ✅ ML engineering (train → ONNX → deploy)
 - ✅ AI agent design (function calling, RAG-like patterns)
-- ✅ Real-time systems (WebSocket streaming)
-- ✅ Production engineering (logging, fallbacks, caching, systemd services)
+- ✅ Production engineering (logging, fallbacks, caching)
 
 ---
 
@@ -403,45 +361,11 @@ For questions or integration support, see `docs/integration_contracts.md`
 
 ---
 
-## 🌐 Production Deployment Status
-
-### Azure Functions (PaaS) - LIVE ✅
-**Function App**: `func-m1-fanops-comehdi`  
-**Region**: France Central  
-**Base URL**: `https://func-m1-fanops-comehdi-fwgeaxhwambjcsev.francecentral-01.azurewebsites.net`  
-**Status**: Fully operational
-
-**Endpoints:**
-- `POST /api/flow/ingest` - Ingest gate telemetry
-- `GET /api/flow/status?stadiumId={id}` - Get gate status + ML predictions
-- `GET /api/flow/ai-insights?stadium_id={id}` - Query AI agent decisions
-- `GET /api/flow/investigation/{id}` - Get RCA investigation results
-
-### Azure VM (IaaS) - LIVE ✅
-**VM Name**: `vm-m1-monitoring`  
-**Public IP**: `4.211.206.250`  
-**Region**: France Central  
-**Status**: 24/7 persistent monitoring active
-
-**Endpoints:**
-- `GET http://4.211.206.250/` - Health check
-- `GET http://4.211.206.250/api/realtime/gates?stadiumId={id}` - Real-time gate status
-- `GET http://4.211.206.250/api/metrics?stadiumId={id}&period={period}` - Aggregated metrics
-- `WebSocket ws://4.211.206.250/ws/gates?stadiumId={id}` - Real-time streaming
-
-**CORS Enabled For:**
-- `http://localhost:5173` (local development)
-- `https://unabsolved-bullishly-curtis.ngrok-free.dev` (ngrok)
-- `https://main.dgkr7h0ph8j37.amplifyapp.com` (AWS Amplify)
-- `http://4.211.206.250` (VM self)
-
----
-
-## 🔗 API Reference (For M2/M3/M4 Integration)
-
-### PaaS Endpoints (Azure Functions)
+## 🔗 Production API Endpoints (For M2/M3/M4 Integration)
 
 **Base URL**: `https://func-m1-fanops-comehdi-fwgeaxhwambjcsev.francecentral-01.azurewebsites.net`
+
+### Quick Reference
 
 #### **1. Ingest Gate Data**
 ```
@@ -463,53 +387,6 @@ GET /api/flow/ai-insights?stadium_id={stadium_id}
 GET /api/flow/investigation/{investigation_id}
 ```
 
-### IaaS Endpoints (Monitoring VM)
-
-**Base URL**: `http://4.211.206.250`
-
-#### **1. Real-Time Gate Status (HTTP)**
-```
-GET /api/realtime/gates?stadiumId={stadium_id}
-```
-
-#### **2. Aggregated Metrics**
-```
-GET /api/metrics?stadiumId={stadium_id}&period={5m|15m|1h|1d}
-```
-
-#### **3. Real-Time Streaming (WebSocket)**
-```javascript
-const ws = new WebSocket('ws://4.211.206.250/ws/gates?stadiumId=AGADIR');
-ws.onmessage = (event) => {
-  const data = JSON.parse(event.data);
-  console.log('Gate update:', data);
-};
-```
-
----
-
-## 📊 Architecture Comparison
-
-### Before (PaaS Only)
-```
-Frontend → Azure Functions → Azure Storage
-          (Serverless)
-```
-
-### Current (Hybrid PaaS + IaaS)
-```
-                  ┌─→ Azure Functions (PaaS) ─→ ML + AI + RCA
-                  │   - APIs (200ms latency)
-Frontend ─────────┤   - Serverless autoscaling
-                  │
-                  └─→ Azure VM (IaaS) ─────────→ Real-time monitoring
-                      - WebSocket streaming
-                      - 24/7 persistent
-                      - Rolling metrics
-                      
-                      Both read/write → Azure Storage (Tables, Queue, Blob)
-```
-
 ### Stadium IDs
 - `AGADIR` - Agadir Stadium
 - `RABAT` - Rabat Stadium  
@@ -518,19 +395,25 @@ Frontend ─────────┤   - Serverless autoscaling
 ### Example Usage (Python)
 ```python
 import requests
-import websocket
 
-# PaaS: Get status via Azure Functions
-status = requests.get(
-    "https://func-m1-fanops-comehdi-fwgeaxhwambjcsev.francecentral-01.azurewebsites.net/api/flow/status?stadiumId=AGADIR"
-).json()
+BASE_URL = "https://func-m1-fanops-comehdi-fwgeaxhwambjcsev.francecentral-01.azurewebsites.net"
 
-# IaaS: Real-time updates via WebSocket
-ws = websocket.WebSocket()
-ws.connect("ws://4.211.206.250/ws/gates?stadiumId=AGADIR")
-while True:
-    data = ws.recv()
-    print(f"Update: {data}")
+
+# Get gate status
+status = requests.get(f"{BASE_URL}/api/flow/status?stadiumId=AGADIR").json()
+
+# Send gate data
+requests.post(
+    f"{BASE_URL}/api/flow/ingest",
+    json={
+        "stadiumId": "AGADIR",
+        "gateId": "G1",
+        "ts": "2025-07-14T18:00:00Z",
+        "perMinuteCount": 45,
+        "avgProcessingTime": 3.2,
+        "queueLength": 120
+    }
+)
 ```
 
-**For detailed API docs and integration, see [docs/integration_contracts.md](../docs/integration_contracts.md)**
+**For detailed API docs, see above or contact M1 team.**
