@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // M1 Flow Controller Production API
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://func-m1-fanops-comehdi-fwgeaxhwambjcsev.francecentral-01.azurewebsites.net/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://func-m1-fanops-comehdi.azurewebsites.net/api';
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

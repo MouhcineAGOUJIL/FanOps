@@ -114,6 +114,13 @@ Name: AzureWebJobsStorage
 Value: [Paste connection string from Step 2.13]
 ```
 
+**⚠️ CRITICAL: Python V2 Function Discovery**
+```
+Name: AzureWebJobsFeatureFlags
+Value: EnableWorkerIndexing
+```
+> **Important**: This flag is **required** for Azure to discover and index functions defined using the Python V2 programming model (Blueprint decorators). Without this, functions will deploy but **won't appear in the portal**.
+
 ```
 Name: TABLE_NAME_GATES
 Value: gatestatus

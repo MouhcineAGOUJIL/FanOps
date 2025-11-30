@@ -8,9 +8,9 @@ from handlers.investigation import investigation_bp
 
 app = func.FunctionApp()
 
-app.register_functions(flow_ingest_bp)
-app.register_functions(flow_status_bp)
-app.register_functions(process_queue_bp)
-app.register_functions(ai_insights_bp)
-app.register_functions(agent_orchestrator_bp)
-app.register_functions(investigation_bp)
+app.register_blueprint(flow_ingest_bp)
+app.register_blueprint(flow_status_bp)
+app.register_blueprint(process_queue_bp)
+app.register_blueprint(ai_insights_bp)
+app.register_blueprint(agent_orchestrator_bp)
+app.register_blueprint(investigation_bp)
