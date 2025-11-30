@@ -2009,6 +2009,33 @@
       "status": "active",
       "purchaseDate": "2025-11-28T15:15:44.825Z",
       "price": 50
+    },
+    "12f56ad4-e24b-4abd-94a7-65658f2ba303": {
+      "ticketId": "12f56ad4-e24b-4abd-94a7-65658f2ba303",
+      "userId": "USER-66",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "A-42",
+      "status": "active",
+      "purchaseDate": "2025-11-30T18:29:21.491Z",
+      "price": 50
+    },
+    "d5f40881-b864-4b42-8f6c-42d9a7f3ef7c": {
+      "ticketId": "d5f40881-b864-4b42-8f6c-42d9a7f3ef7c",
+      "userId": "USER-710",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "VIP-10",
+      "status": "active",
+      "purchaseDate": "2025-11-30T18:29:21.494Z",
+      "price": 200
+    },
+    "a64cd7d5-4b6b-47e8-90df-73ab843eef17": {
+      "ticketId": "a64cd7d5-4b6b-47e8-90df-73ab843eef17",
+      "userId": "USER-840",
+      "matchId": "CAN2025-MAR-G1",
+      "seatNumber": "B-12",
+      "status": "active",
+      "purchaseDate": "2025-11-30T18:29:21.495Z",
+      "price": 50
     }
   },
   "users": {
