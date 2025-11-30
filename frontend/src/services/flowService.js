@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-// M1 Flow Management API (Azure Functions - PaaS)
-const M1_BASE_URL = 'https://func-m1-fanops-comehdi-fwgeaxhwambjcsev.francecentral-01.azurewebsites.net/api/flow';
+// M1 Real-time Monitoring - Using Azure VM (IaaS)
+// Note: May have HTTPS→HTTP blocking on Amplify
+const M1_BASE_URL = 'http://4.211.206.250/api/realtime';
 
 // Function key (leave empty if anonymous auth)
 const FUNCTION_KEY = '';
@@ -23,20 +24,20 @@ const getUrl = (endpoint, params = {}) => {
 };
 
 export const flowService = {
-  // GET /flow/status - Returns real-time gate status with ML predictions
+  // GET /realtime/gates - Returns real-time gate status from VM
   getGateStatus: async (stadiumId = 'AGADIR') => {
     try {
-      console.log('Fetching gate status for:', stadiumId);
-      const url = getUrl('/status', { stadiumId });
+      console.log('[VM] Fetching gate status for:', stadiumId);
+      const url = getUrl('/gates', { stadiumId });
       const response = await axios.get(url, {
         headers: {
           'Content-Type': 'application/json',
         },
-        timeout: 30000 // Long timeout for cold start
+        timeout: 10000
       });
       return response.data;
     } catch (error) {
-      console.error('M1 Flow Status Error:', {
+      console.error('[VM] Gate Status Error:', {
         message: error.message,
         status: error.response?.status,
         data: error.response?.data,
