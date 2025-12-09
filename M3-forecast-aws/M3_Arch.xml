@@ -1,0 +1,132 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.6">
+  <diagram id="M3-Forecast-AWS-Expert" name="M3 Forecast Architecture">
+    <mxGraphModel dx="2712" dy="1369" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="zone_aws" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#FF9900;fontColor=#FFFFFF;strokeColor=#FF9900;rounded=1;arcSize=10;swimlaneFillColor=#FFF8E1;" value="AWS Cloud (M3 - Forecasting)" vertex="1">
+          <mxGeometry height="740" width="1400" x="40" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="region_us" connectable="0" parent="zone_aws" style="group" value="Region: us-east-1 (N. Virginia)" vertex="1">
+          <mxGeometry height="680" width="1360" x="20" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="bg_region" parent="region_us" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#BDBDBD;dashed=1;" value="" vertex="1">
+          <mxGeometry height="680" width="1360" as="geometry" />
+        </mxCell>
+        <mxCell id="runtime_group" parent="region_us" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#F58534;fontColor=#E65100;rounded=1;" value="Serverless Compute (AWS Lambda)" vertex="1">
+          <mxGeometry height="560" width="440" x="360" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="lambda_func" parent="runtime_group" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" value="predictAttendance&#xa;(Python 3.9)" vertex="1">
+          <mxGeometry height="60" width="60" x="350" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_check" parent="runtime_group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F58534;" value="1. Warm Start Check&#xa;(Global Model)" vertex="1">
+          <mxGeometry height="40" width="160" x="40" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_download" parent="runtime_group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F58534;" value="2. Cold Start Download&#xa;(S3 -&gt; /tmp)" vertex="1">
+          <mxGeometry height="40" width="160" x="40" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_parse" parent="runtime_group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#F58534;" value="3. Input Parsing&#xa;(JSON -&gt; DataFrame)" vertex="1">
+          <mxGeometry height="40" width="160" x="40" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_infer_m3" parent="runtime_group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCC80;strokeColor=#E65100;fontStyle=1" value="4. Inference&#xa;(Sklearn Pipeline)" vertex="1">
+          <mxGeometry height="40" width="160" x="40" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_response_m3" parent="runtime_group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#43A047;" value="5. Response&#xa;(JSON Prediction)" vertex="1">
+          <mxGeometry height="40" width="160" x="40" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="layer_py" parent="runtime_group" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#B2DFDB;strokeColor=#009688;size=15;" value="Lambda Layer:&#xa;sklearn, pandas" vertex="1">
+          <mxGeometry height="60" width="100" x="280" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="f_1_2_m3" edge="1" parent="runtime_group" source="proc_check" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;" target="proc_download" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f_2_3_m3" edge="1" parent="runtime_group" source="proc_download" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;" target="proc_parse" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f_3_4_m3" edge="1" parent="runtime_group" source="proc_parse" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;" target="proc_infer_m3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f_4_5_m3" edge="1" parent="runtime_group" source="proc_infer_m3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;" target="proc_response_m3" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_layer" edge="1" parent="runtime_group" source="layer_py" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;exitX=0;exitY=0.5;dashed=1;" target="proc_infer_m3" value="Load Libs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_storage" connectable="0" parent="region_us" style="group" value="Model Artifacts (S3)" vertex="1">
+          <mxGeometry height="260" width="200" x="840" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bg_storage" parent="grp_storage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#9E9E9E;dashed=1;" value="" vertex="1">
+          <mxGeometry height="260" width="200" as="geometry" />
+        </mxCell>
+        <mxCell id="s3_bucket" parent="grp_storage" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;" value="S3 Bucket&#xa;(Models)" vertex="1">
+          <mxGeometry height="80" width="80" x="60" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="model_file_aws" parent="grp_storage" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#B2DFDB;strokeColor=#009688;" value="model.joblib" vertex="1">
+          <mxGeometry height="50" width="70" x="65" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_train_m3" parent="region_us" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#0288D1;fontColor=#01579B;rounded=1;" value="Offline Training (Local Env)" vertex="1">
+          <mxGeometry height="400" width="240" x="1080" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="local_pc" parent="grp_train_m3" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;shape=mxgraph.office.devices.workstation;" value="Data Scientist&#xa;Workstation" vertex="1">
+          <mxGeometry height="70" width="90" x="75" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="script_py_m3" parent="grp_train_m3" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#FFCC80;strokeColor=#E65100;" value="train_model.py" vertex="1">
+          <mxGeometry height="40" width="140" x="50" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="data_mock" parent="grp_train_m3" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#FFE0B2;strokeColor=#E65100;" value="Mock Data&#xa;(Pandas)" vertex="1">
+          <mxGeometry height="60" width="70" x="85" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_deploy" connectable="0" parent="region_us" style="group" value="Deployment" vertex="1">
+          <mxGeometry height="338" width="280" x="40" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="serverless_logo" parent="grp_deploy" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.serverless;" value="" vertex="1">
+          <mxGeometry height="78" width="78" x="100" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="deploy_arrow" edge="1" parent="grp_deploy" source="serverless_logo" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;exitX=1;exitY=0.5;strokeColor=#D81B60;" target="lambda_func" value="Deploy Function">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="560" y="209" />
+              <mxPoint x="560" y="70" />
+            </Array>
+            <mxPoint x="320" y="80" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="api_gw" parent="grp_deploy" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;" value="API Gateway&#xa;(POST /predict)" vertex="1">
+          <mxGeometry height="80" width="80" x="50" y="29" as="geometry" />
+        </mxCell>
+        <mxCell id="c_trig" edge="1" parent="region_us" source="api_gw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;exitX=1;exitY=0.5;strokeColor=#8C4FFF;" target="proc_check" value="Invoke">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_cold_m3" edge="1" parent="region_us" source="proc_download" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;exitX=1;exitY=0.5;dashed=1;fontColor=#ED7100;strokeColor=#ED7100;" target="s3_bucket" value="Download&#xa;Model">
+          <mxGeometry relative="1" x="-0.1429" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="810" y="240" />
+              <mxPoint x="810" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_upload_m3" edge="1" parent="region_us" source="local_pc" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;exitX=0;exitY=0.5;strokeColor=#0288D1;strokeWidth=2;" target="s3_bucket" value="Manual Upload">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1130" y="175" />
+              <mxPoint x="1130" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zone_client" connectable="0" parent="1" style="group" value="Client / Frontend Layer" vertex="1">
+          <mxGeometry height="150" width="1400" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zone_client_bg" parent="zone_client" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="" vertex="1">
+          <mxGeometry height="150" width="1400" as="geometry" />
+        </mxCell>
+        <mxCell id="client_app" parent="zone_client" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;shape=mxgraph.office.devices.laptop;" value="FanOps Web App&#xa;(React/Vite)" vertex="1">
+          <mxGeometry height="50" width="80" x="660" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c_req_m3" edge="1" parent="1" source="client_app" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;strokeColor=#8C4FFF;strokeWidth=2;" target="api_gw" value="HTTPS POST (JSON)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

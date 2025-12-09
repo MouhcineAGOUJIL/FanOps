@@ -1,0 +1,148 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.6">
+  <diagram id="M4-Sponsor-AI-Expert" name="M4 Sponsor AI Architecture">
+    <mxGraphModel dx="793" dy="396" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="zone_gcp" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#E8F0FE;fontColor=#1A73E8;strokeColor=#4285F4;rounded=1;arcSize=10;swimlaneFillColor=#FFFFFF;shadow=0;" value="Google Cloud Platform (M4 - Sponsor AI)" vertex="1">
+          <mxGeometry height="740" width="1400" x="40" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="region_eu" connectable="0" parent="zone_gcp" style="group" value="Region: europe-west1 (Belgium)" vertex="1">
+          <mxGeometry height="680" width="1360" x="20" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="bg_region" parent="region_eu" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#BDBDBD;dashed=1;" value="" vertex="1">
+          <mxGeometry height="680" width="1360" as="geometry" />
+        </mxCell>
+        <mxCell id="runtime_group" parent="region_eu" style="swimlane;whiteSpace=wrap;html=1;fillColor=#F3E5F5;strokeColor=#AB47BC;fontColor=#4A148C;rounded=1;" value="Serverless Runtime (Cloud Functions Gen 2)" vertex="1">
+          <mxGeometry height="560" width="440" x="360" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="cloud_run" parent="runtime_group" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#4285F4;fillColor=#4285F4;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.gcp2.cloud_run;" value="Cloud Run Instance&#xa;(Containerized)" vertex="1">
+          <mxGeometry height="60" width="60" x="350" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_valid" parent="runtime_group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#AB47BC;" value="1. Request Validation&#xa;(JSON Schema)" vertex="1">
+          <mxGeometry height="40" width="160" x="40" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_load" parent="runtime_group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#AB47BC;" value="2. Model Check&#xa;(Cold vs Warm Start)" vertex="1">
+          <mxGeometry height="40" width="160" x="40" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_pandas" parent="runtime_group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#AB47BC;" value="3. Feature Eng.&#xa;(Pandas One-Hot Enc)" vertex="1">
+          <mxGeometry height="40" width="160" x="40" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_infer" parent="runtime_group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFCC80;strokeColor=#F57C00;fontStyle=1" value="4. Inference&#xa;(Random Forest)" vertex="1">
+          <mxGeometry height="40" width="160" x="40" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_enrich" parent="runtime_group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#AB47BC;" value="5. Enrichment&#xa;(Sponsors Details)" vertex="1">
+          <mxGeometry height="40" width="160" x="40" y="380" as="geometry" />
+        </mxCell>
+        <mxCell id="proc_response" parent="runtime_group" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#E8F5E9;strokeColor=#43A047;" value="6. Response&#xa;(JSON Recommender)" vertex="1">
+          <mxGeometry height="40" width="160" x="40" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="config_file" parent="runtime_group" style="shape=note;whiteSpace=wrap;html=1;backgroundOutline=1;darkOpacity=0.05;fillColor=#FFF9C4;strokeColor=#FBC02D;size=15;" value="sponsors_config.py" vertex="1">
+          <mxGeometry height="60" width="100" x="280" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="f_1_2" edge="1" parent="runtime_group" source="proc_valid" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;" target="proc_load" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f_2_3" edge="1" parent="runtime_group" source="proc_load" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;" target="proc_pandas" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f_3_4" edge="1" parent="runtime_group" source="proc_pandas" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;" target="proc_infer" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f_4_5" edge="1" parent="runtime_group" source="proc_infer" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;" target="proc_enrich" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="f_5_6" edge="1" parent="runtime_group" source="proc_enrich" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;" target="proc_response" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_config" edge="1" parent="runtime_group" source="config_file" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;exitX=0;exitY=0.5;dashed=1;" target="proc_enrich" value="Import">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_storage" connectable="0" parent="region_eu" style="group" value="Model Artifacts (GCS)" vertex="1">
+          <mxGeometry height="260" width="200" x="840" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bg_storage" parent="grp_storage" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#9E9E9E;dashed=1;" value="" vertex="1">
+          <mxGeometry height="260" width="200" as="geometry" />
+        </mxCell>
+        <mxCell id="gcs" parent="grp_storage" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#4285F4;fillColor=#4285F4;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.gcp2.cloud_storage;" value="Cloud Storage&#xa;fanops-m4-models" vertex="1">
+          <mxGeometry height="80" width="80" x="60" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="model_file_ml" parent="grp_storage" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#B2DFDB;strokeColor=#009688;" value="model.joblib" vertex="1">
+          <mxGeometry height="50" width="70" x="30" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="model_file_col" parent="grp_storage" style="shape=document;whiteSpace=wrap;html=1;boundedLbl=1;fillColor=#B2DFDB;strokeColor=#009688;" value="columns.joblib" vertex="1">
+          <mxGeometry height="50" width="70" x="110" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_train" parent="region_eu" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#F57C00;fontColor=#E65100;rounded=1;" value="Offline Training (IaaS)" vertex="1">
+          <mxGeometry height="400" width="240" x="1080" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="gce" parent="grp_train" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#4285F4;fillColor=#4285F4;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.gcp2.compute_engine;" value="Compute Engine&#xa;(VM)" vertex="1">
+          <mxGeometry height="80" width="80" x="80" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="script_java" parent="grp_train" style="shape=process;whiteSpace=wrap;html=1;backgroundOutline=1;fillColor=#FFCC80;strokeColor=#E65100;" value="train_model_vm.py" vertex="1">
+          <mxGeometry height="40" width="140" x="50" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="data_sync" parent="grp_train" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#FFE0B2;strokeColor=#E65100;" value="Synthetic Data&#xa;(10k rows)" vertex="1">
+          <mxGeometry height="60" width="70" x="85" y="270" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_cicd" connectable="0" parent="region_eu" style="group" value="CI/CD Pipeline" vertex="1">
+          <mxGeometry height="320" width="280" x="40" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="bg_cicd" parent="grp_cicd" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#9E9E9E;dashed=1;" value="" vertex="1">
+          <mxGeometry height="320" width="280" as="geometry" />
+        </mxCell>
+        <mxCell id="DBHnuSaulwYLa5WWJc_z-42" parent="grp_cicd" style="editableCssRules=.*;html=1;shape=image;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;aspect=fixed;imageAspect=0;fontColor=#1A73E8;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnY9Imh0dHBzOi8vdmVjdGEuaW8vbmFubyIgd2lkdGg9IjE3LjMyOTk5OTkyMzcwNjA1NSIgaGVpZ2h0PSIxOS42MTAwMDA2MTAzNTE1NjIiIHZpZXdCb3g9IjAgMCAxNy4zMjk5OTk5MjM3MDYwNTUgMTkuNjEwMDAwNjEwMzUxNTYyIj4mI3hhOwk8c3R5bGUgdHlwZT0idGV4dC9jc3MiPiYjeGE7CS5zdDB7ZmlsbDojNDI4NWY0O30mI3hhOwkuc3Qxe2ZpbGw6IzY2OWRmNjt9JiN4YTsJLnN0MntmaWxsOiNhZWNiZmE7fSYjeGE7CTwvc3R5bGU+JiN4YTsJPHBhdGggY2xhc3M9InN0MCIgZD0iTTEyLjE4IDcuOThMMTEgNy4yOWwtMy41MiA2LjEgMS4xOC42OCAzLjUyLTIuMDN6IiBmaWxsPSIjNDI4NWY0Ii8+JiN4YTsJPHBhdGggY2xhc3M9InN0MSIgZD0iTTYuMzIgMTIuNzJsMy41My02LjA5LTEuMTktLjY5LTMuNTIgMi4wNHY0LjA2eiIgZmlsbD0iIzY2OWRmNiIvPiYjeGE7CTxwYXRoIGNsYXNzPSJzdDIiIGQ9Ik0zLjc1IDcuOThMMCA1LjgxdjkuMmw3Ljk3IDQuNnYtNC4zM2wtNC4yMi0yLjQ0em05LjEzLTEuMmwzLjc2LTIuMTdMOC42NiAwIC42OCA0LjYxbDMuNzYgMi4xNyA0LjIyLTIuNDR6TTkuMzUgMTkuNjFsNy45OC00LjZ2LTkuMmwtMy43NiAyLjE3djQuODZsLTQuMjIgMi40NHoiIGZpbGw9IiNhZWNiZmEiLz4mI3hhOzwvc3ZnPg==;" value="Cloud Build&#xa;(Deploy Script)" vertex="1">
+          <mxGeometry height="70" width="70" x="110" y="45" as="geometry" />
+        </mxCell>
+        <mxCell id="c_build" edge="1" parent="grp_cicd" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;" value="Push Image">
+          <mxGeometry relative="1" x="0.2853" y="7" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="143" y="130" />
+              <mxPoint x="143" y="163" />
+              <mxPoint x="143" y="163" />
+            </Array>
+            <mxPoint x="140" y="130" as="sourcePoint" />
+            <mxPoint x="142.5" y="195" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="DBHnuSaulwYLa5WWJc_z-39" parent="grp_cicd" style="editableCssRules=.*;html=1;shape=image;verticalLabelPosition=bottom;labelBackgroundColor=#ffffff;verticalAlign=top;aspect=fixed;imageAspect=0;fontColor=#1A73E8;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnY9Imh0dHBzOi8vdmVjdGEuaW8vbmFubyIgd2lkdGg9IjIxLjk5OTAwMDU0OTMxNjQwNiIgaGVpZ2h0PSIyMC4zOTM5OTkwOTk3MzE0NDUiIHZpZXdCb3g9IjAgMCAyMS45OTkwMDA1NDkzMTY0MDYgMjAuMzkzOTk5MDk5NzMxNDQ1Ij4mI3hhOwk8c3R5bGUgdHlwZT0idGV4dC9jc3MiPiYjeGE7CS5zdDB7ZmlsbDojNDI4NWY0O2ZpbGwtcnVsZTpldmVub2RkfSYjeGE7CTwvc3R5bGU+JiN4YTsJPHBhdGggY2xhc3M9InN0MCIgZD0iTTUgMHYyLjQ1OEwxLjk5OSA0LjE5N3YxMi4wMUw1IDE3LjkzOHYyLjQ1NmwtNS0yLjg4N1YyLjg4NnptMTIgMGw0Ljk5OSAyLjg4NnYxNC42MjFMMTcgMjAuMzk0di0yLjQ1NmwzLTEuNzMxVjQuMTk3bC0zLTEuNzM5em0tNi4wMTYgNi42NzNsMi45NDctMS42NDYtMi45NDctMS42NDYtMi45NDcgMS42NDZ6bTMuMjY4LTEuMDk2bC0yLjg3MSAxLjY3OHYzLjI4N2wyLjg3MS0xLjY3NnpNNy43NzMgOC44NjZsMi44NzEgMS42NzRWNy4yNTZMNy43NzMgNS41Nzd6bS0uMjEyIDMuODc4bDIuODItMS42NDYtMi44Mi0xLjY0Ni0yLjgyIDEuNjQ2em0zLjEzMi0xLjA5OGwtMi44NzEgMS42Nzh2My4yODdsMi44NzEtMS42NzZ6bS02LjI2NCAzLjI4OUw3LjMgMTYuNjA5di0zLjI4NWwtMi44Mi0xLjY3OXptMTAuMDI5LTIuMTkxbDIuODItMS42NDYtMi44Mi0xLjY0Ni0yLjgyIDEuNjQ2em0zLjEzMi0xLjA5OGwtMi44NzEgMS42Nzh2My4yODdsMi44NzEtMS42NzZ6bS02LjI2NCAzLjI4OUw3LjMgMTYuNjA5di0zLjI4NWwtMi44NzEtMS42NzZ6Ii8+JiN4YTs8L3N2Zz4=;" value="Artifact Registry&#xa;(Docker Images)" vertex="1">
+          <mxGeometry height="70" width="70" x="110" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="c_deploy_svc" edge="1" parent="region_eu" source="DBHnuSaulwYLa5WWJc_z-39" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;exitX=1;exitY=0.5;dashed=1;strokeColor=#34A853;" target="runtime_group" value="Deploy Service">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="220" y="300" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_coldstart" edge="1" parent="region_eu" source="proc_load" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;exitX=1;exitY=0.5;dashed=1;fontColor=#EA4335;strokeColor=#EA4335;" target="gcs" value="Download&#xa;(Cold Start)">
+          <mxGeometry relative="1" x="-0.1429" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="810" y="240" />
+              <mxPoint x="810" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_train_upload" edge="1" parent="region_eu" source="gce" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;exitX=0;exitY=0.5;strokeColor=#E65100;strokeWidth=2;" target="gcs" value="gcloud upload">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1160" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zone_client" connectable="0" parent="1" style="group" value="Client / Frontend Layer" vertex="1">
+          <mxGeometry height="150" width="1400" x="40" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zone_client_bg" parent="zone_client" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="" vertex="1">
+          <mxGeometry height="150" width="1400" as="geometry" />
+        </mxCell>
+        <mxCell id="client_app" parent="zone_client" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;shape=mxgraph.office.devices.laptop;" value="FanOps Web App&#xa;(React/Vite)" vertex="1">
+          <mxGeometry height="50" width="80" x="660" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c_req" edge="1" parent="1" source="client_app" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;exitX=0.5;exitY=1;strokeColor=#4285F4;strokeWidth=2;" target="proc_valid" value="HTTPS POST (JSON)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
