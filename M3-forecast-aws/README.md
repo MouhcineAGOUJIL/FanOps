@@ -1,125 +1,77 @@
-# 🤖 M3 - Forecast Match Attendance (AWS)
+# 🔮 M3: Forecast Service (AWS)
 
-**AWS Serverless** | **Python 3.9** | **Scikit-Learn** | **Amazon S3**
+**Predicting the Future of Fan Attendance**
 
-> **Microservice for predictive analysis of match attendance using Machine Learning on AWS.**
+The **M3 Forecast Service** is a predictive analytics engine powered by **Machine Learning** on **AWS**. It allows stadium operators to anticipate crowd levels days in advance, enabling proactive resource allocation (security staff, catering, gates).
 
-[![AWS](https://img.shields.io/badge/AWS-Lambda-232F3E?style=for-the-badge&logo=aws-lambda&logoColor=white)](https://aws.amazon.com/lambda/)
-[![Python](https://img.shields.io/badge/Python-3.9-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://python.org)
-[![Serverless](https://img.shields.io/badge/Serverless-Framework-FD5750?style=for-the-badge&logo=serverless&logoColor=white)](https://www.serverless.com/)
-[![ML](https://img.shields.io/badge/ML-Scikit--Learn-F7931E?style=for-the-badge&logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
-
----
-
-## 📋 Table of Contents
-
-- [Overview](#overview)
-- [Architecture](#-architecture)
-- [Machine Learning Model](#-machine-learning-model)
-- [Deployment](#-deployment)
-- [API Documentation](#-api-documentation)
-- [Testing](#-testing)
-- [Project Structure](#-project-structure)
+<div align="center">
+  <img src="Assets/M3_Arch.png" alt="M3 Architecture Diagram" width="100%" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin: 20px 0;"/>
+</div>
 
 ---
 
-## 🎯 Overview
+## 🎯 Key Capabilities
 
-**M3** is the attendance forecasting engine for the CAN 2025 FanOps platform. It allows stadium operators and security teams to anticipate crowd levels days or weeks in advance.
+### 1. Smart Forecasting
+*   **Context-Aware AI**: The model doesn't just guess; it analyzes factors like:
+    *   **Team Popularity**: (e.g., Morocco vs. Brazil draws more than Team A vs. Team B).
+    *   **Time of Day**: Night matches have different attendance patterns.
+    *   **Tournament Stage**: Finals > Group Stages.
+    *   **Stadium**: Capacity and location constraints.
 
-**Key Features:**
-- ✅ **Predictive Modeling**: Uses Random Forest Regression to estimate attendance.
-- ✅ **Context Aware**: Considers teams, stadium capacity, time of day, and tournament stage.
-- ✅ **Serverless Inference**: Zero-idle cost using AWS Lambda.
-- ✅ **Decoupled Model**: Model artifacts stored in S3 for independent lifecycle management.
+### 2. Decision Support
+The service outputs actionable intelligence, not just numbers.
+
+*   **Prediction**: "Expected Attendance: 45,120"
+*   **Confidence Interval**: "Range: 42,000 - 48,000"
+*   **Fill Rate**: "67% Capacity"
+
+<div align="center">
+  <img src="Assets/Forecast_Prediction.png" alt="Forecast Prediction Dashboard" width="90%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 20px;"/>
+</div>
 
 ---
 
-## 🏗️ Architecture
+## 🏗️ Technical Architecture
 
-The service leverages a **FaaS (Function-as-a-Service)** architecture on AWS, using Lambda Layers to manage heavy ML dependencies.
-
-```mermaid
-graph LR
-    User[📱 Client / Frontend] -->|HTTPS POST| APIG[API Gateway]
-    APIG -->|Trigger| Lambda[AWS Lambda<br/>(Python 3.9)]
-    
-    subgraph "AWS Cloud"
-        Lambda -->|Load Model| S3[(Amazon S3<br/>Model Store)]
-        Lambda -->|Inference| Layer[Lambda Layer<br/>(Scikit-Learn/Pandas)]
-    end
-    
-    style Lambda fill:#FF9900,color:white
-    style S3 fill:#3B48CC,color:white
-    style APIG fill:#8C4FFF,color:white
-    style Layer fill:#E7157B,color:white
-```
+This service is optimized for **Cold-Start Performance** and scale.
 
 ### Components
+1.  **Compute**: **AWS Lambda** (Python 3.9) executes the inference.
+2.  **Model Store**: **Amazon S3** holds the trained `model.joblib` artifacts. The Lambda downloads and caches this model primarily in `/tmp` to minimize S3 costs and latency on subsequent runs.
+3.  **Dependencies**: **Lambda Layers** are used to package heavy data science libraries (`scikit-learn`, `pandas`, `numpy`) separately from the business logic, keeping the deployment package lightweight.
 
-| Component | AWS Service | Purpose |
-|-----------|-------------|---------|
-| **Compute** | **AWS Lambda** | Runs the Python inference code on-demand. |
-| **API** | **API Gateway** | Exposes the function as a secure REST endpoint. |
-| **Storage** | **Amazon S3** | Stores the serialized model (`model.joblib`). |
-| **Runtime** | **Lambda Layers** | Hosts heavy libraries (`pandas`, `scikit-learn`) to keep function size small. |
-
----
-
-## 🧠 Machine Learning Model
-
-### Algorithm
-- **Type**: Random Forest Regressor
-- **Framework**: Scikit-Learn
-
-### Features (inputs)
-The model is trained on historical and synthetic data using the following features:
-1.  **Team A / Team B**: The competing nations (e.g., "Morocco", "Senegal").
-2.  **Stadium**: Venue impact (capacity, location).
-3.  **Time**: "Afternoon", "Evening", "Night".
-4.  **Stage**: "Group Stage", "Quarter-Final", "Final".
-
-### Training Pipeline
-```python
-# Simplified pipeline structure
-pipeline = Pipeline([
-    ('preprocessor', ColumnTransformer([...])), # One-Hot Encoding
-    ('regressor', RandomForestRegressor(...))   # Inference
-])
-```
+### Workflow
+1.  **Training (Offline)**: `train_model.py` runs on a developer machine or CI pipeline to generate a new model artifact.
+2.  **Upload**: The artifact is pushed to the S3 Bucket `m3-forecast-models-can2025`.
+3.  **Inference (Online)**:
+    *   Frontend sends a JSON payload to **API Gateway**.
+    *   Lambda wakes up, checks for a cached model.
+    *   If cold, downloads model from S3.
+    *   Runs Random Forest regression.
+    *   Returns JSON response.
 
 ---
 
-## 🚀 Deployment
+## 🚀 Setup & Usage
 
 ### Prerequisites
-- AWS CLI configured
-- Node.js & Serverless Framework (`npm i -g serverless`)
-- Python 3.9 & pip
+*   Python 3.9+
+*   AWS CLI & Serverless Framework
 
-### Step-by-Step Guide
+### 1. Train the Model
+Generate a fresh model artifact based on the latest dataset.
 
-#### 1. Train the Model
-Generate the model artifact locally.
 ```bash
 python train_model.py
-# Output: model.joblib
+# Output: model.joblib (Saved locally)
 ```
 
-#### 2. Prepare AWS Resources
-Create the S3 bucket and upload the model.
-```bash
-# Create bucket (if not exists)
-aws s3 mb s3://m3-forecast-models-can2025
+### 2. Deploy Dependencies
+Install the heavy libraries into a compatible Lambda Layer.
 
-# Upload model
-aws s3 cp model.joblib s3://m3-forecast-models-can2025/model.joblib
-```
-
-#### 3. Build & Deploy Lambda
-We use a Dockerized approach or a manual pip install for the Lambda Layer to ensure Linux binary compatibility.
 ```bash
-# Install dependencies into layer/ directory
+# Install binary-compatible Linux wheels
 python -m pip install \
    --platform manylinux2014_x86_64 \
    --target layer/python \
@@ -128,35 +80,35 @@ python -m pip install \
    --only-binary=:all: \
    --upgrade pandas scikit-learn scipy
 
-# Clean unnecessary files to reduce size
+# Optimize size
 python clean_layer.py
+```
 
-# Deploy with Serverless
+### 3. Deploy Service
+```bash
 serverless deploy
 ```
 
 ---
 
-## 📡 API Documentation
+## 📡 API Reference
 
-### Forecast Attendance
+### `POST /predict`
 
-**Endpoint**: `POST /predict`
+Predict attendance for a specific match scenario.
 
-**URL**: `https://sfg82p344i.execute-api.us-east-1.amazonaws.com/dev/predict`
-
-#### Request Body
+**Request:**
 ```json
 {
   "team_a": "Morocco",
-  "team_b": "Senegal",
-  "stadium": "Stade Mohamed V (Casablanca)",
-  "time": "Evening",
-  "stage": "Final"
+  "team_b": "France",
+  "stadium": "Grand Stade de Marrakech",
+  "time": "Night",
+  "stage": "Semi-Final"
 }
 ```
 
-#### Response (200 OK)
+**Response:**
 ```json
 {
   "predicted_attendance": 45120,
@@ -165,55 +117,3 @@ serverless deploy
   "fill_rate": 0.67
 }
 ```
-
----
-
-## 🧪 Testing
-
-### 1. Verify API
-Use the provided script to test the live endpoint.
-```bash
-python verify_api.py
-```
-
-### 2. Manual Curl Test
-```bash
-curl -X POST https://sfg82p344i.execute-api.us-east-1.amazonaws.com/dev/predict \
-  -H "Content-Type: application/json" \
-  -d '{
-    "team_a": "Morocco",
-    "team_b": "France",
-    "stadium": "Grand Stade de Marrakech",
-    "time": "Night",
-    "stage": "Semi-Final"
-  }'
-```
-
----
-
-## 📂 Project Structure
-
-```bash
-M3-forecast-aws/
-├── 📄 lambda_function.py    # Main Lambda Handler
-├── 📄 train_model.py        # ML Training Script
-├── 📄 serverless.yml        # Infrastructure as Code
-├── 📂 layer/                # Python Dependencies Layer
-├── 📄 clean_layer.py        # Layer Optimization Tool
-├── 📄 verify_api.py         # Testing Script
-└── 📄 README.md             # This Documentation
-```
-
----
-
-## 👥 Team & Credits
-
-- **Cloud Provider**: AWS
-- **Tech Stack**: Python, Scikit-Learn, Serverless
-- **Maintainer**: Cloud Computing Team (Can 2025)
-
----
-
-<div align="center">
-  <sub>Built for CAN 2025 FanOps Platform</sub>
-</div>
