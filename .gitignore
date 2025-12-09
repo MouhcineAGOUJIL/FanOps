@@ -1,31 +1,9 @@
-# Logs
-logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-node_modules
-dist
-dist-ssr
-*.local
-
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
 # Dependencies
 node_modules/
-/.pnp
+.pnp
 .pnp.js
+.venv/
+venv/
 
 # Testing
 /coverage
@@ -33,32 +11,44 @@ node_modules/
 # Production
 /build
 /dist
+dist-ssr
 
-# Misc
-.DS_Store
+# Environment Variables & Secrets
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+*.p12
+
+# Azure Functions & Azurite
+bin
+obj
+secrets.json
+local.settings.json
+__azurite_*
+__blobstorage__
+__queuestorage__
+
+# IDEs
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
 
 # Logs
+logs
+*.log
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Editor
-
-.idea/
-*.swp
-*.swo
-*~
-
-# Vite
+# Misc
+.DS_Store
 *.local
-
-# Lock files (optionnel, mais recommandé pour garder package-lock.json)
-# package-lock.json
-# yarn.lock
