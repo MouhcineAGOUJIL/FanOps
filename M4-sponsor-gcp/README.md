@@ -1,252 +1,111 @@
-# 🤖 M4 - Sponsor AI Microservice
+# 📢 M4: Sponsor AI (Google Cloud)
 
-> Microservice d'intelligence artificielle pour recommandations de sponsors en temps réel lors de la CAN 2025.
+**Delivering the Right Message at the Right Moment**
 
-[![GCP](https://img.shields.io/badge/GCP-Cloud%20Functions-4285F4?logo=google-cloud)](https://cloud.google.com/functions)
-[![Python](https://img.shields.io/badge/Python-3.10-3776AB?logo=python)](https://www.python.org/)
-[![ML](https://img.shields.io/badge/ML-Random%20Forest-FF6F00?logo=scikit-learn)](https://scikit-learn.org/)
-[![Status](https://img.shields.io/badge/Status-Production-success)](https://europe-west1-can2025-fanops.cloudfunctions.net/m4-sponsor-ai)
+The **M4 Sponsor AI** is a real-time recommendation engine running on **Google Cloud Platform (GCP)**. It leverages **scikit-learn** decision trees to push personalized, context-aware sponsor advertisements to fans' mobile devices during the match.
 
-## 📋 Table des Matières
+<div align="center">
+  <img src="Assets/M4_Arch.png" alt="M4 Architecture Diagram" width="100%" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); margin: 20px 0;"/>
+</div>
 
-- [Vue d'Ensemble](#-vue-densemble)
-- [Architecture](#-architecture)
-- [Installation](#-installation)
-- [Tests](#-tests)
-- [Déploiement](#%EF%B8%8F-déploiement)
-- [API Documentation](#-api-documentation)
-- [Structure du Projet](#-structure-du-projet)
-- [Sponsors Configurés](#-sponsors-configurés)
+---
 
-## 🎯 Vue d'Ensemble
+## 🎯 Key Capabilities
 
-Le microservice M4 utilise un modèle **Random Forest** pour analyser le contexte d'un match (score, événements, météo, zone du stade) et recommander le sponsor le plus pertinent avec un message marketing personnalisé.
+### 1. Context-Aware Marketing
+Instead of generic ads, the AI analyzes real-time signals to choose the perfect sponsor:
+*   **High Temp (>30°C)** → Recommends **Sidi Ali / Coca-Cola** (Refreshments).
+*   **Goal Scored** → Recommends **Puma / Adidas** (Celebration).
+*   **Halftime** → Recommends **Inwi / Orange** (Data/Connect).
+*   **VIP Zone** → Recommends **Royal Air Maroc / OCP** (Premium services).
 
-### Problématique
-Comment maximiser l'impact des publicités en affichant le bon sponsor, au bon moment, dans la bonne zone du stade ?
+### 2. Live Recommendation Engine
+The frontend queries this microservice to get a JSON payload containing the banner image URL, promo text, and tracking ID.
 
-### Solution
-Un système ML serverless qui :
-- ✅ Analyse 6 variables contextuelles en temps réel
-- ✅ Prédit parmi 12 sponsors configurés
-- ✅ Retourne un message marketing personnalisé
-- ✅ Répond en <200ms (warm start)
-```
+<div align="center">
+  <img src="Assets/Sponsor_Recommendation.png" alt="Sponsor Recommendation Example" width="90%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 20px;"/>
+</div>
 
-### Dépendances Principales
-- `functions-framework` : Émule Cloud Functions localement
-- `scikit-learn` : Modèle Random Forest
-- `pandas` : Manipulation de données
-- `google-cloud-storage` : Accès à GCS
+---
 
-## 🧪 Tests
+## 🏗️ Technical Architecture
 
-### 1️⃣ Test Rapide (Sans Serveur)
-Vérifie la logique du modèle avec des scénarios prédéfinis.
+This service uses **Google Cloud Functions Gen 2** for high scalability and concurrency.
 
-```bash
-python verify_local.py
-```
+### Stack
+1.  **Compute**: **Cloud Functions (Python 3.10)** handles the logic. It's stateless and scales to zero when not in use.
+2.  **Storage**:
+    *   **Cloud Storage**: Stores the trained ML model (`model.joblib`) and sponsor asset images (logos, banners).
+3.  **ML Core**: A **Random Forest Classifier** trained on 10,000+ historical scenarios to predict the highest conversion probability for each sponsor.
 
-**Sortie attendue :**
-```
-🧪 Test 1: Canicule
-   Sponsor: Sidi Ali
-   Message: Rafraîchissez-vous avec Sidi Ali !
-   ✅ Logique correcte
+### Data Flow
+1.  **Frontend Request**: Sends `{"temperature": 28, "match_minute": 45, "event": "Goal", "zone": "East"}`.
+2.  **Inference**:
+    *   Function loads model from `/tmp` (warm start) or GCS (cold start).
+    *   Predicts the best sponsor category.
+    *   Selects specific creative asset.
+3.  **Response**: Returns `{"sponsor": "Puma", "message": "GOAL! Get 20% off jerseys.", "image": "https://..."}`.
 
-🧪 Test 2: But Victorieux
-   Sponsor: Puma
-   Message: Victoire en Puma ! 🦁
-   ✅ Logique correcte
-```
+---
 
-### 2️⃣ Test avec Serveur Local
-Simule une vraie API HTTP.
+## 🚀 Setup & Deployment
+
+### Prerequisites
+*   Google Cloud SDK (`gcloud`)
+*   Python 3.10 & pip
+
+### 1. Train Model
+Generate the decision tree artifacts locally.
 
 ```bash
-# Terminal 1 : Lancer le serveur
-python -m functions_framework --target=sponsor_recommendation --debug --port=8080
-
-# Terminal 2 : Envoyer une requête
-curl -X POST http://localhost:8080/ \
-   -H "Content-Type: application/json" \
-   -d '{"temperature": 35, "match_minute": 20, "zone": "North"}'
+python train_model.py
+# Output: model.joblib, model_columns.joblib
 ```
 
-### 3️⃣ Test en Production (Postman)
-**URL** : `https://europe-west1-can2025-fanops.cloudfunctions.net/m4-sponsor-ai`
+### 2. Upload Artifacts
+Push the model to a GCS bucket so the function can access it.
 
-**Exemple de Requête :**
-```json
-{
-  "match_minute": 89,
-  "score_diff": 1,
-  "event": "Goal",
-  "temperature": 24,
-  "zone": "VIP",
-  "crowd_density": 0.95
-}
-```
-
-**Réponse Attendue :**
-```json
-{
-  "recommended_sponsor": "Puma",
-  "confidence": 0.92,
-  "campaign_message": "Victoire en Puma ! 🦁",
-  "category": "Sports Equipment",
-  "context_used": { ... }
-}
-```
-
-## ☁️ Déploiement
-
-### Méthode 1 : Script Automatisé
-```bash
-chmod +x deploy.sh
-./deploy.sh
-```
-
-### Méthode 2 : Commande Manuelle
-```bash
-gcloud functions deploy m4-sponsor-ai \
-  --gen2 \
-  --region=europe-west1 \
-  --runtime=python310 \
-  --memory=512MB \
-  --trigger-http \
-  --entry-point=sponsor_recommendation \
-  --allow-unauthenticated \
-  --set-env-vars GCP_MODEL_BUCKET=fanops-m4-models
-```
-
-### Étapes de Déploiement
-1. **Upload du Modèle** : `gcloud storage cp model.joblib gs://fanops-m4-models/`
-2. **Déploiement** : `./deploy.sh` (2-3 minutes)
-3. **Vérification** : Test avec Postman
-
-## 📖 API Documentation
-
-### OpenAPI Specification
-Le fichier [`openapi.yaml`](./openapi.yaml) contient la spécification complète.
-
-**Visualiser** : [Swagger Editor](https://editor.swagger.io/)
-
-### Endpoint Principal
-
-**POST** `/`
-
-**Headers :**
-```
-Content-Type: application/json
-```
-
-**Body :**
-| Champ | Type | Requis | Description | Exemple |
-|-------|------|--------|-------------|---------|
-| `match_minute` | int | Non | Minute du match (0-120) | `45` |
-| `score_diff` | int | Non | Différence de score | `1` |
-| `temperature` | float | Non | Température en °C | `28.5` |
-| `crowd_density` | float | Non | Densité foule (0-1) | `0.85` |
-| `zone` | string | **Oui** | Zone du stade | `"VIP"` |
-| `event` | string | Non | Événement significatif | `"Goal"` |
-
-**Valeurs Possibles :**
-- `zone` : `VIP`, `North`, `South`, `East`, `West`
-- `event` : `None`, `Goal`, `Card`, `VAR`, `Halftime`, `Kickoff`, `FinalWhistle`
-
-**Réponse (200 OK) :**
-```json
-{
-  "recommended_sponsor": "string",
-  "confidence": 0.92,
-  "campaign_message": "string",
-  "category": "string",
-  "context_used": { ... }
-}
-```
-
-## 📁 Structure du Projet
-
-```
-M4-sponsor-gcp/
-├── main.py                    # Cloud Function (API)
-├── train_model.py             # Entraînement du modèle ML
-├── sponsors_config.py         # Configuration des 12 sponsors
-├── verify_local.py            # Tests locaux
-├── requirements.txt           # Dépendances Python
-├── deploy.sh                  # Script de déploiement
-├── openapi.yaml               # Spécification API
-├── README.md                  # Ce fichier
-├── ARCHITECTURE.md            # Documentation architecture
-├── PRESENTATION_GUIDE.md      # Guide pour présentation
-├── .gitignore                 # Fichiers à ignorer
-├── model.joblib               # Modèle ML (ignoré par Git)
-└── model_columns.joblib       # Colonnes du modèle (ignoré par Git)
-```
-
-## 🏢 Sponsors Configurés
-
-| Sponsor | Catégorie | Déclencheur Principal |
-|---------|-----------|----------------------|
-| **Sidi Ali** | Beverage | Température > 30°C |
-| **Coca-Cola** | Beverage | Mi-temps, Pause |
-| **Orange** | Telecom | Zones VIP, Connectivité |
-| **Inwi** | Telecom | Zones populaires |
-| **Puma** | Sports | Buts, Victoires |
-| **Adidas** | Sports | Performance, Compétition |
-| **Royal Air Maroc** | Travel | Zones VIP, International |
-| **OCP** | Industry | Zones VIP, Prestige |
-
-**Sortie :**
-```
-✅ Données générées : 10,000 scénarios
-✅ Modèle entraîné : Random Forest (100 arbres)
-✅ Précision : 87.3%
-✅ Fichiers sauvegardés :
-   - model.joblib (106.7 MB)
-   - model_columns.joblib (240 B)
-```
-
-**Puis redéployer :**
 ```bash
 gcloud storage cp model.joblib gs://fanops-m4-models/
 gcloud storage cp model_columns.joblib gs://fanops-m4-models/
 ```
 
-## 📊 Performance
+### 3. Deploy Function
+Deploy directly to GCP using the `deploy.sh` script or `gcloud` command.
 
-| Métrique | Valeur |
-|----------|--------|
-| Cold Start | 3-5 secondes |
-| Warm Start | 100-200 ms |
-| Précision ML | 87% |
-| Disponibilité | 99.9% (SLA GCP) |
-| Coût | 0€ (Free Tier) |
-
-## 🎓 Présentation Professeur
-
-Consultez [PRESENTATION_GUIDE.md](./PRESENTATION_GUIDE.md) pour :
-- Script de présentation (20 min)
-- Démonstrations live
-- Questions fréquentes
-- Checklist avant présentation
-
-## 🤝 Contribution
-
-Ce projet fait partie du système FanOps CAN 2025.
-
-**Modules :**
-- M1 (Azure) : Gestion des flux
-- M2 (AWS) : Sécurité
-- M3 (GCP) : Prévisions météo
-- **M4 (GCP)** : Sponsor AI ← Ce module
-
-## 📝 Licence
-
-Projet académique - CAN 2025
+```bash
+./deploy.sh
+# OR manually:
+gcloud functions deploy m4-sponsor-ai \
+  --gen2 --region=europe-west1 --runtime=python310 --memory=512MB \
+  --trigger-http --allow-unauthenticated
+```
 
 ---
 
-**Développé avec ❤️ pour la CAN 2025**
+## 🧪 Testing
+
+### Local Unit Test
+Verify the logic without deploying.
+
+```bash
+python verify_local.py
+```
+
+### Live Endpoint
+Once deployed, test with `curl`:
+
+```bash
+curl -X POST https://europe-west1-can2025-fanops.cloudfunctions.net/m4-sponsor-ai \
+   -H "Content-Type: application/json" \
+   -d '{"temperature": 35, "match_minute": 20, "zone": "North", "event": "None"}'
+```
+
+**Expected Response:**
+```json
+{
+  "recommended_sponsor": "Sidi Ali",
+  "campaign_message": "Stay hydrated! 1 Free bottle with any meal.",
+  "confidence": 0.89
+}
+```
