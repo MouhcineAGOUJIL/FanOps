@@ -25,12 +25,32 @@ The **M1 Flow Controller** is a sophisticated Operational Intelligence service b
     *   Sending staff alerts.
     *   Broadcasting announcements.
 
-### 3. Root Cause Analysis (The "Detective")
+### 3. **Root Cause Analysis (The "Detective")**
 When an anomaly is detected (e.g., Gate 4 sudden deadlock), the **RCA Engine** activates:
 1.  **Hypothesis Generation**: The AI generates potential causes (e.g., "Scanner Failure", "Fan Brawl").
 2.  **Evidence Testing**: It runs automated tests against system metrics (Weather, Hardware logs).
 3.  **Bayesian Ranking**: Calculates the most probable cause mathematically.
 4.  **Mitigation**: Auto-generates a playbook for operations staff to resolve the issue.
+
+---
+
+## 🖥️ Dashboard Interface
+
+The backend data is visualized in the FanOps Frontend, providing real-time situational awareness.
+
+### 🚦 Real-Time Flow Dashboard
+*Monitor gate status, wait times, and throughput velocities in real-time.*
+
+<div align="center">
+  <img src="Assets/Flow_Dashboard.png" alt="Real-Time Flow Dashboard" width="90%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 20px;"/>
+</div>
+
+### 🕵️ AI Investigation Console
+*Deep-dive into anomalies with AI-generated hypotheses and mitigation plans.*
+
+<div align="center">
+  <img src="Assets/Investigation.png" alt="AI Investigation Console" width="90%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"/>
+</div>
 
 ---
 
