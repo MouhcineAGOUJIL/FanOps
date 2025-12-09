@@ -1,0 +1,276 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/143.0.0.0 Safari/537.36" version="29.2.6">
+  <diagram id="M2-Secure-Gates-Professional" name="M2 Secure Gates Architecture">
+    <mxGraphModel dx="1665" dy="831" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="zone_aws" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#FF9900;fontColor=#FFFFFF;strokeColor=#FF9900;rounded=1;arcSize=10;swimlaneFillColor=#FFF8E1;" value="AWS Cloud (M2 - Backend &amp; Compute)" vertex="1">
+          <mxGeometry height="920" width="1400" x="60" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="api_gw" parent="zone_aws" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.api_gateway;" value="API Gateway" vertex="1">
+          <mxGeometry height="78" width="78" x="661" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_sec_serv" connectable="0" parent="zone_aws" style="group" value="Security Services" vertex="1">
+          <mxGeometry height="340" width="160" x="80" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="bg_sec_serv" parent="grp_sec_serv" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#666666;dashed=1;" value="" vertex="1">
+          <mxGeometry height="340" width="160" as="geometry" />
+        </mxCell>
+        <mxCell id="kms" parent="grp_sec_serv" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#DD344C;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.key_management_service;" value="AWS KMS&#xa;(Encryption)" vertex="1">
+          <mxGeometry height="78" width="78" x="41" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="ssm" parent="grp_sec_serv" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#E7157B;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.parameter_store;" value="SSM Parameter&#xa;Store" vertex="1">
+          <mxGeometry height="78" width="75" x="42" y="180" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_lambda" parent="zone_aws" style="swimlane;whiteSpace=wrap;html=1;fillColor=#FFF3E0;strokeColor=#F58534;fontColor=#000000;rounded=1;" value="Lambda Functions (Serverless Compute)" vertex="1">
+          <mxGeometry height="550" width="700" x="350" y="200" as="geometry">
+            <mxRectangle height="30" width="260" x="350" y="200" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="lambda_auth" parent="grp_lambda" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" value="Auth Service&#xa;(Login/Logout)" vertex="1">
+          <mxGeometry height="78" width="78" x="60" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lambda_verify" parent="grp_lambda" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" value="Verify Ticket&#xa;(Core Security)" vertex="1">
+          <mxGeometry height="78" width="78" x="311" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lambda_report" parent="grp_lambda" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" value="Report Gate&#xa;(Monitoring)" vertex="1">
+          <mxGeometry height="78" width="78" x="540" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="lambda_metrics" parent="grp_lambda" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" value="Get Metrics&#xa;(Dashboard)" vertex="1">
+          <mxGeometry height="78" width="78" x="60" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="lambda_log_analyzer" parent="grp_lambda" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" value="Log Analyzer&#xa;(Audit Stream)" vertex="1">
+          <mxGeometry height="78" width="78" x="311" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="lambda_rotate" parent="grp_lambda" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" value="Rotate Key&#xa;(Scheduled)" vertex="1">
+          <mxGeometry height="78" width="78" x="540" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="lambda_sentinel" parent="grp_lambda" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;" value="Sentinel Shipper&#xa;(To Azure)" vertex="1">
+          <mxGeometry height="78" width="78" x="311" y="400" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ver_kms" edge="1" parent="grp_lambda" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;exitX=0;exitY=0.5;dashed=1;" value="Decrypt">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="269.95000000000005" y="71" />
+              <mxPoint x="269.95000000000005" y="51" />
+            </Array>
+            <mxPoint x="310.95000000000005" y="70" as="sourcePoint" />
+            <mxPoint x="-151.04999999999978" y="50" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="grp_ddb" parent="zone_aws" style="swimlane;whiteSpace=wrap;html=1;fillColor=#E1F5FE;strokeColor=#2E73B8;fontColor=#000000;rounded=1;" value="DynamoDB (Storage)" vertex="1">
+          <mxGeometry height="550" width="220" x="1120" y="200" as="geometry">
+            <mxRectangle height="30" width="160" x="1120" y="200" as="alternateBounds" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ddb_users" parent="grp_ddb" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.dynamo_db;fillColor=#2E73B8;gradientColor=none;" value="Users Table" vertex="1">
+          <mxGeometry height="81" width="72" x="70" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="ddb_tickets" parent="grp_ddb" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.dynamo_db;fillColor=#2E73B8;gradientColor=none;" value="Sold Tickets" vertex="1">
+          <mxGeometry height="81" width="72" x="70" y="170" as="geometry" />
+        </mxCell>
+        <mxCell id="ddb_jti" parent="grp_ddb" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.dynamo_db;fillColor=#2E73B8;gradientColor=none;" value="Used JTI&#xa;(Anti-Replay)" vertex="1">
+          <mxGeometry height="81" width="72" x="70" y="290" as="geometry" />
+        </mxCell>
+        <mxCell id="ddb_audit" parent="grp_ddb" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.dynamo_db;fillColor=#2E73B8;gradientColor=none;" value="Audit Logs&#xa;(Stream Enabled)" vertex="1">
+          <mxGeometry height="81" width="72" x="70" y="410" as="geometry" />
+        </mxCell>
+        <mxCell id="sqs" parent="zone_aws" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#E7157B;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.sqs;" value="SQS Queue&#xa;(Security Alerts)" vertex="1">
+          <mxGeometry height="78" width="78" x="972" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="cw" parent="zone_aws" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch;" value="CloudWatch&#xa;Logs" vertex="1">
+          <mxGeometry height="78" width="78" x="390" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="grp_audit" connectable="0" parent="zone_aws" style="group" value="Security Audit" vertex="1">
+          <mxGeometry height="150" width="220" x="1120" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="bg_audit" parent="grp_audit" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#E05243;dashed=1;" value="" vertex="1">
+          <mxGeometry height="150" width="220" as="geometry" />
+        </mxCell>
+        <mxCell id="ec2" parent="grp_audit" style="outlineConnect=0;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;shape=mxgraph.aws3.ec2;fillColor=#F58534;gradientColor=none;" value="EC2 Instance&#xa;(ZAP Scanner)" vertex="1">
+          <mxGeometry height="93" width="76.5" x="20" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="s3" parent="grp_audit" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#7AA116;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;" value="S3 Reports&#xa;Bucket" vertex="1">
+          <mxGeometry height="78" width="78" x="120" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c_s3" edge="1" parent="grp_audit" source="ec2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=1;exitX=1;exitY=0.5;" target="s3" value="Put Report">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_gw_auth" edge="1" parent="zone_aws" source="api_gw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;exitX=0;exitY=0.5;" target="lambda_auth" value="/auth">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="450" y="90" />
+              <mxPoint x="450" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_gw_verify" edge="1" parent="zone_aws" source="api_gw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;exitX=0.5;exitY=1;" target="lambda_verify" value="/verify">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_gw_report" edge="1" parent="zone_aws" source="api_gw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;exitX=1;exitY=0.5;" target="lambda_report" value="/report">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="930" y="90" />
+              <mxPoint x="930" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_gw_metrics" edge="1" parent="zone_aws" source="api_gw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;exitX=0;exitY=0.5;dashed=1;dashPattern=1 2;" target="lambda_metrics" value="/metrics">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="600" y="90" />
+              <mxPoint x="600" y="160" />
+              <mxPoint x="380" y="160" />
+              <mxPoint x="380" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_auth_ssm" edge="1" parent="zone_aws" source="lambda_auth" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;exitX=0;exitY=0.5;dashed=1;" target="ssm" value="Get Secret">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="380" y="300" />
+              <mxPoint x="380" y="420" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_auth_user" edge="1" parent="zone_aws" source="lambda_auth" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;exitX=1;exitY=0.5;" target="ddb_users" value="Read User">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ver_tick" edge="1" parent="zone_aws" source="lambda_verify" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;exitX=1;exitY=0.5;" target="ddb_tickets" value="Validate">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="739" y="300" />
+              <mxPoint x="790" y="300" />
+              <mxPoint x="790" y="411" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_ver_jti" edge="1" parent="zone_aws" source="lambda_verify" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;exitX=1;exitY=0.5;" target="ddb_jti" value="Check/Write JTI">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="739" y="300" />
+              <mxPoint x="770" y="300" />
+              <mxPoint x="770" y="531" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZnWaB1HZxWPwHeI3pcfl-5" connectable="0" parent="c_ver_jti" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Text" vertex="1">
+          <mxGeometry relative="1" x="-0.6121" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_ver_audit" edge="1" parent="zone_aws" source="lambda_verify" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.25;exitX=1;exitY=0.5;" target="ddb_audit" value="Log Entry">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="739" y="300" />
+              <mxPoint x="760" y="300" />
+              <mxPoint x="760" y="630" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_rep_audit" edge="1" parent="zone_aws" source="lambda_report" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.75;exitX=0.5;exitY=1;" target="ddb_audit" value="Log Status">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="929" y="360" />
+              <mxPoint x="1080" y="360" />
+              <mxPoint x="1080" y="671" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_rep_sqs" edge="1" parent="zone_aws" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;strokeColor=#E05243;strokeWidth=2;" value="Send Alert">
+          <mxGeometry relative="1" x="0.0943" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="980" y="310" />
+              <mxPoint x="1010" y="310" />
+            </Array>
+            <mxPoint x="970" y="310" as="sourcePoint" />
+            <mxPoint x="1010" y="800" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_stream" edge="1" parent="zone_aws" source="ddb_audit" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;exitX=0.5;exitY=1;dashed=1;fontColor=#2E73B8;" target="lambda_log_analyzer" value="DDB Stream">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1230" y="720" />
+              <mxPoint x="800" y="720" />
+              <mxPoint x="800" y="480" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_cw_sent" edge="1" parent="zone_aws" source="cw" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=1;exitX=0.5;exitY=0;dashed=1;" target="lambda_sentinel" value="Sub filter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_scan" edge="1" parent="zone_aws" source="ec2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;exitX=0;exitY=0.5;strokeColor=#E05243;" target="api_gw" value="Daily Attack Sim">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1100" y="120" />
+              <mxPoint x="1100" y="90" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zone_client" connectable="0" parent="1" style="group" value="Client / Frontend Layer" vertex="1">
+          <mxGeometry height="160" width="1400" x="60" y="40" as="geometry" />
+        </mxCell>
+        <mxCell id="zone_client_bg" parent="zone_client" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;dashed=1;" value="" vertex="1">
+          <mxGeometry height="160" width="1400" as="geometry" />
+        </mxCell>
+        <mxCell id="client_app" parent="zone_client" style="sketch=0;pointerEvents=1;shadow=0;dashed=0;html=1;strokeColor=none;fillColor=#505050;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;outlineConnect=0;shape=mxgraph.office.devices.laptop;" value="FanOps Web App&#xa;(React/Vite)" vertex="1">
+          <mxGeometry height="50" width="80" x="470" y="64" as="geometry" />
+        </mxCell>
+        <mxCell id="amplify" parent="zone_client" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[0,1,0],[0.25,1,0],[0.5,1,0],[0.75,1,0],[1,1,0],[0,0.25,0],[0,0.5,0],[0,0.75,0],[1,0.25,0],[1,0.5,0],[1,0.75,0]];outlineConnect=0;fontColor=#232F3E;fillColor=#DD344C;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.amplify;" value="AWS Amplify&#xa;(Hosting &amp; CI/CD)" vertex="1">
+          <mxGeometry height="78" width="78" x="660" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c_https" edge="1" parent="zone_client" source="client_app" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" target="amplify" value="HTTPS">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="605" y="90" />
+              <mxPoint x="605" y="89" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c_api" edge="1" parent="1" source="amplify" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0.5;entryY=0;" target="api_gw" value="REST API">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="760" y="180" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZnWaB1HZxWPwHeI3pcfl-1" connectable="0" parent="c_api" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="Text" vertex="1">
+          <mxGeometry relative="1" x="-0.5931" y="2" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="zone_azure" parent="1" style="swimlane;whiteSpace=wrap;html=1;startSize=30;fillColor=#E1F5FE;fontColor=#0078D4;strokeColor=#0078D4;rounded=1;arcSize=10;swimlaneFillColor=#FFFFFF;" value="Azure Cloud (Security Operations)" vertex="1">
+          <mxGeometry height="240" width="1400" x="60" y="1200" as="geometry" />
+        </mxCell>
+        <mxCell id="azure_sentinel" parent="zone_azure" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Azure_Sentinel.svg;" value="Microsoft Sentinel&#xa;(SIEM/SOAR)" vertex="1">
+          <mxGeometry height="50" width="44" x="680" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="azure_log_analytics" parent="zone_azure" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/management_governance/Log_Analytics_Workspaces.svg;" value="Log Analytics&#xa;Workspace" vertex="1">
+          <mxGeometry height="64" width="64" x="500" y="53" as="geometry" />
+        </mxCell>
+        <mxCell id="azure_app_insights" parent="zone_azure" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/Application_Insights.svg;" value="Application&#xa;Insights" vertex="1">
+          <mxGeometry height="50" width="32" x="850" y="60" as="geometry" />
+        </mxCell>
+        <mxCell id="c_sent_sent" edge="1" parent="zone_azure" source="azure_log_analytics" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=0;entryY=0.5;exitX=1;exitY=0.5;strokeColor=#0078D4;" target="azure_sentinel" value="Ingest">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_ai_sent" edge="1" parent="zone_azure" source="azure_app_insights" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;entryX=1;entryY=0.5;exitX=0;exitY=0.5;strokeColor=#0078D4;" target="azure_sentinel" value="Logs">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_sent_ext" edge="1" parent="1" source="lambda_sentinel" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=0.5;exitY=1;entryX=0.5;entryY=0;dashed=1;fontColor=#0078d4;strokeColor=#0078D4;" target="azure_log_analytics" value="HTTPS (Forwarder)">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c_amp_ai" edge="1" parent="1" source="amplify" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;exitX=1;exitY=0.5;dashed=1;fontColor=#0078d4;strokeColor=#0078D4;exitDx=0;exitDy=0;exitPerimeter=0;" value="Telemetry">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1480" y="129" />
+              <mxPoint x="1480" y="1280" />
+            </Array>
+            <mxPoint x="950" y="1280" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
