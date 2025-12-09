@@ -2,7 +2,9 @@ import axios from 'axios';
 
 // M1 Flow Management API (Azure Functions)
 // Note: Azure Functions deployed with authentication require function keys
-const M1_BASE_URL = 'https://func-m1-fanops-comehdi-fwgeaxhwambjcsev.francecentral-01.azurewebsites.net/api/flow';
+// Use environment variable for API URL
+const API_URL = import.meta.env.VITE_API_URL || 'https://func-m1-fanops-comehdi.azurewebsites.net/api';
+const M1_BASE_URL = `${API_URL}/flow`;
 
 // Function key - get this from Azure Portal → Function App → App keys
 // If your functions are set to "anonymous" (no auth), leave empty
@@ -128,6 +130,23 @@ export const flowService = {
 
       throw error;
     }
+  },
+
+  // Subscribe to gate updates (polling)
+  subscribeToGateUpdates: (stadiumId, callback) => {
+    const intervalId = setInterval(async () => {
+      try {
+        const data = await flowService.getGateStatus(stadiumId);
+        callback(data);
+      } catch (error) {
+        console.error('Polling error:', error);
+      }
+    }, 3000);
+
+    // Initial fetch
+    flowService.getGateStatus(stadiumId).then(callback).catch(console.error);
+
+    return () => clearInterval(intervalId);
   },
 
   // Test connection to M1 service
