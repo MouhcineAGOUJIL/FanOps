@@ -141,14 +141,14 @@ Security is not an afterthought; it is baked into every layer ("Shift Left").
 
 ## 👥 Team
 
-Built with ❤️ by the **Cloud Computing S5 Team**.
+Built with ❤️ by the **Cloud Computing 2.0 Team**.
 
 | Member | Role | Focus Area |
 |:---|:---|:---|
-| **Mouhcine AGOUJIL** | M2 Security Lead (AWS) | AWS Lambda, DynamoDB, Cryptography |
-| **El Mehdi OUGHEGI** | M1 Architect (Azure) | Azure Functions, AI Model, Flow Logic |
+| [**Mouhcine AGOUJIL**](https://github.com/MouhcineAGOUJIL) | M2 Security Lead (AWS) | AWS Lambda, DynamoDB, Cryptography |
+| [**El Mehdi OUGHEGI**](https://github.com/comehdi) | M1 Architect (Azure) | Azure Functions, AI Model, Flow Logic |
 | **Omar TADLAOUI** | M3 Forecast Lead (AWS) | Scikit-Learn, Lambda, S3, Predictions |
-| **Mohamed LAMZIOUAQ** | M4 Data Eng (GCP) | GCP Cloud Functions, Sponsor Pipelines |
+| [**Mohamed LAMZIOUAQ**](https://github.com/medlamziouaq) | M4 Data Eng (GCP) | GCP Cloud Functions, Sponsor Pipelines |
 
 ---
 
