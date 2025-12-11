@@ -1,13 +1,14 @@
 name: Security Scan
 
 on:
-  push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main, develop ]
-  schedule:
-    # Run weekly on Monday at 9am UTC
-    - cron: '0 9 * * 1'
+  workflow_dispatch:
+  # push:
+  #   branches: [ main, develop ]
+  # pull_request:
+  #   branches: [ main, develop ]
+  # schedule:
+  #   # Run weekly on Monday at 9am UTC
+  #   - cron: '0 9 * * 1'
 
 jobs:
   sca-scan:

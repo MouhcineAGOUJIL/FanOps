@@ -1,10 +1,11 @@
 name: Security Scan (OWASP ZAP)
 
 on:
-  push:
-    branches: [ main ]
-  schedule:
-    - cron: '0 2 * * *' # Daily at 2am
+  workflow_dispatch:
+  # push:
+  #   branches: [ main ]
+  # schedule:
+  #   - cron: '0 2 * * *' # Daily at 2am
 
 jobs:
   zap_scan:
